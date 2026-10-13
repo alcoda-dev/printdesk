@@ -1,0 +1,36 @@
+/**
+ * @since 1.0.0
+ */
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import * as DynamoDBClientInstance from "@effect-aws/client-dynamodb/DynamoDBClientInstance";
+import * as Context from "effect/Context";
+import * as Effect from "effect/Effect";
+import * as Layer from "effect/Layer";
+
+import * as DynamoDBDocumentServiceConfig from "./DynamoDBDocumentServiceConfig.js";
+
+/**
+ * @since 1.0.0
+ * @category tags
+ */
+export class DynamoDBDocumentClientInstance extends Context.Service<
+  DynamoDBDocumentClientInstance,
+  DynamoDBDocumentClient
+>()("@effect-aws/dynamodb/DynamoDBDocumentClientInstance") {}
+
+/**
+ * @since 1.0.0
+ * @category constructors
+ */
+export const make = Effect.all([
+  DynamoDBClientInstance.DynamoDBClientInstance,
+  DynamoDBDocumentServiceConfig.toTranslateConfig,
+]).pipe(Effect.map(([client, config]) => DynamoDBDocumentClient.from(client, config)));
+
+/**
+ * @since 1.0.0
+ * @category layers
+ */
+export const layer = Layer.effect(DynamoDBDocumentClientInstance, make).pipe(
+  Layer.provide(DynamoDBClientInstance.layer),
+);

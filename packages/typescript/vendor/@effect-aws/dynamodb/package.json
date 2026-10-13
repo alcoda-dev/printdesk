@@ -1,0 +1,19 @@
+{
+  "name": "@printdesk/effect-aws-dynamodb",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "catalog:",
+    "@aws-sdk/lib-dynamodb": "^3.1146.0",
+    "@effect-aws/client-dynamodb": "workspace:@printdesk/effect-aws-client-dynamodb@*",
+    "@effect-aws/commons": "workspace:@printdesk/effect-aws-commons@*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:"
+  }
+}

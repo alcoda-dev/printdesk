@@ -1,0 +1,16 @@
+{
+  "name": "@printdesk/effect-aws-dsql",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/dsql-signer": "^3.1146.0",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:"
+  }
+}

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@effect-aws/lambda": "catalog:",
+    "@effect-aws/lambda": "workspace:@printdesk/effect-aws-lambda@*",
     "@effect/platform-node": "catalog:",
     "@printdesk/core": "workspace:^",
     "drizzle-orm": "catalog:",

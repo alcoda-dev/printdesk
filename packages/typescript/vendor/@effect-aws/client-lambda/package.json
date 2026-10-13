@@ -1,0 +1,17 @@
+{
+  "name": "@printdesk/effect-aws-client-lambda",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.1146.0",
+    "@effect-aws/commons": "workspace:@printdesk/effect-aws-commons@*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:"
+  }
+}
