@@ -4,15 +4,15 @@ version = "0.0.0"
 requires-python = "==3.14.*"
 dependencies = [
   "aws-lambda-powertools>=3.35.0",
-  "boto3>=1.43.109",
+  "boto3>=1.43.112",
   "pulumi>=3.268.0",
-  "pulumi-aws>=7.49.0",
+  "pulumi-aws>=7.50.0",
   "pulumi-cloudflare>=6.22.0",
   "pulumiverse-time>=0.1.1",
   "pyawscron>=1.0.7",
   "pydantic>=2.13.5",
   "sst-sdk>=4.17.2",
-  "types-boto3-lambda>=1.43.91",
+  "types-boto3-lambda>=1.43.112",
 ]
 
 [build-system]
