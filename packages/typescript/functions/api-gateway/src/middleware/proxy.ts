@@ -41,7 +41,7 @@ const headerRemovalFilterSet = HashSet.make(
 export const proxy = (service: keyof typeof services) =>
   every(
     ratelimit(service),
-    createMiddleware<BlankInput, `/${string}/:path{.+}`, BlankInput>(function (c) {
+    createMiddleware<BlankInput, `/${string}/:path{.+}`>(function (c) {
       const { baseUrl, customFetch } = services[service];
 
       const url = new URL(c.req.param("path"), baseUrl);
