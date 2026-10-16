@@ -3,10 +3,9 @@ import { char, customType, integer, varchar as pgVarchar } from "drizzle-orm/pg-
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import * as SchemaBinary from "effect/unstable/encoding/SchemaBinary";
 
 import { CryptoContract } from "../crypto/contract";
-import { EntityId, generateEntityId, separatedString, ShortId, TenantId, Version } from "../utils";
+import { EntityId, generateEntityId, ShortId, TenantId, Version } from "../utils";
 import { Constants } from "../utils/constants";
 
 import type { Writable } from "drizzle-orm";
@@ -17,9 +16,7 @@ export namespace Columns {
     TMember extends string,
     TEnum extends Readonly<[TMember, ...Array<TMember>]>,
   >(
-    config: PgVarcharConfig<TEnum | Writable<TEnum>> = {
-      length: Constants.VARCHAR_LENGTH,
-    },
+    config: PgVarcharConfig<TEnum | Writable<TEnum>> = { length: Constants.VARCHAR_LENGTH },
   ) => pgVarchar(config);
 
   export const byteSize = customType<{
@@ -50,50 +47,12 @@ export namespace Columns {
     toDriver: CryptoContract.HashFromString.pipe(Schema.encodeSync),
   });
 
-  export function jsonb<TType, TEncoded>(schema: Schema.Codec<TType, TEncoded>) {
-    const Jsonb = schema.pipe(SchemaBinary.toCodec);
-
-    const make = customType<{
-      driverData: typeof Jsonb.Encoded;
-      data: typeof Jsonb.Type;
-    }>({
-      dataType: () => "bytea",
-      fromDriver: Jsonb.pipe(Schema.decodeSync),
-      toDriver: Jsonb.pipe(Schema.encodeSync),
-    });
-
-    return make();
-  }
-
-  export function redactedUuid() {
-    const RedactedUuid = Schema.String.pipe(Schema.check(Schema.isUUID()), Schema.Redacted);
-
-    const make = customType<{
-      driverData: typeof RedactedUuid.Encoded;
-      data: typeof RedactedUuid.Type;
-    }>({
-      dataType: () => "uuid",
-      fromDriver: RedactedUuid.pipe(Schema.decodeSync),
-      toDriver: RedactedUuid.pipe(Schema.encodeSync),
-    });
-
-    return make();
-  }
-
-  export function stringArray(separator = "," as const) {
-    const StringArray = separatedString(separator);
-
-    const make = customType<{
-      driverData: typeof StringArray.Encoded;
-      data: typeof StringArray.Type;
-    }>({
-      dataType: () => "text",
-      fromDriver: StringArray.pipe(Schema.decodeSync),
-      toDriver: StringArray.pipe(Schema.encodeSync),
-    });
-
-    return make();
-  }
+  export const jsonb = <TType, TEncoded extends object>(schema: Schema.Codec<TType, TEncoded>) =>
+    customType<{ driverData: TEncoded; data: TType }>({
+      dataType: () => "jsonb",
+      fromDriver: schema.pipe(Schema.decodeSync),
+      toDriver: schema.pipe(Schema.encodeSync),
+    })();
 
   export function union<const TMember extends string>(
     members: ReadonlyArray<TMember>,
@@ -101,10 +60,7 @@ export namespace Columns {
   ) {
     const Union = Schema.Literals(members).pipe(Schema.check(Schema.isMaxLength(length)));
 
-    const make = customType<{
-      driverData: typeof Union.Encoded;
-      data: typeof Union.Type;
-    }>({
+    const make = customType<{ driverData: typeof Union.Encoded; data: typeof Union.Type }>({
       dataType: () => `varchar(${length})`,
       fromDriver: Union.pipe(Schema.decodeSync),
       toDriver: Union.pipe(Schema.encodeSync),
@@ -116,9 +72,7 @@ export namespace Columns {
   /**
    * NanoID column
    */
-  export function id<T>() {
-    return char({ length: Constants.NANOID_LENGTH }).$type<T>();
-  }
+  export const id = <T>() => char({ length: Constants.NANOID_LENGTH }).$type<T>();
 
   /**
    * Primary key nanoID column

@@ -21,6 +21,9 @@ export namespace ClientsContract {
   ]);
   export type Role = typeof Role.Type;
 
+  export const Scopes = Schema.NonEmptyString.pipe(Schema.Array);
+  export type Scopes = typeof Scopes.Type;
+
   export class Table extends TablesContract.Table<ClientsTable>("clients")(
     {
       ...TablesContract.BaseModel.fields,
@@ -28,7 +31,7 @@ export namespace ClientsContract {
       secretHash: CryptoContract.HashFromString,
       status: Status.pipe(Schema.withDecodingDefaultType(Effect.succeed("active"))),
       role: Role,
-      scopes: Schema.NonEmptyString.pipe(Schema.Array),
+      scopes: Scopes,
       callbackId: CallbackId.pipe(
         Schema.NullOr,
         Schema.withDecodingDefaultType(Effect.succeed(null)),
