@@ -10,7 +10,7 @@ import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
 import * as Struct from "effect/Struct";
 
-import { s3ClientCacheLayer } from "./aws";
+import { s3ServiceCacheLayer } from "./aws";
 import { SstResource } from "./sst";
 
 export const makeAssetsS3Bucket = Effect.gen(function* () {
@@ -35,5 +35,5 @@ export const assetsS3BucketLayer = makeAssetsS3Bucket.pipe(
 export const imagesLayer = ImagesFetcher.layer.pipe(
   Layer.merge(ImagesPresigner.layer),
   Layer.provide([AssetsFetcher.layer, AssetsPresigner.layer]),
-  Layer.provide([assetsS3BucketLayer, s3ClientCacheLayer]),
+  Layer.provide([assetsS3BucketLayer, s3ServiceCacheLayer]),
 );

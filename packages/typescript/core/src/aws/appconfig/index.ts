@@ -74,8 +74,14 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
         ),
     });
 
-    const client = AwsCredentialIdentityProvider.provide.pipe(
-      Effect.flatMap((credentials) => clientCache.pipe(Cache.get(credentials))),
+    const useClient = Effect.fn("Appconfig.useClient")(
+      <TSuccess, TError, TServices>(
+        callback: (client: AppConfigClient) => Effect.Effect<TSuccess, TError, TServices>,
+      ) =>
+        AwsCredentialIdentityProvider.provide.pipe(
+          Effect.flatMap((credentials) => clientCache.pipe(Cache.get(credentials))),
+          Effect.flatMap(callback),
+        ),
     );
 
     const version = Effect.fn("Appconfig.version")(function* <
@@ -86,49 +92,45 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
       const encode = args.Codec.pipe(Schema.fromJsonString, Schema.encodeEffect);
       const Content = yield* encode(args.value);
 
-      return yield* client.pipe(
-        Effect.flatMap((client) =>
-          Effect.tryPromise({
-            try: (abortSignal) =>
-              client.send(
-                new CreateHostedConfigurationVersionCommand({
-                  ApplicationId: application.id,
-                  ConfigurationProfileId: args.profileId,
-                  Content,
-                  ContentType: "application/json",
-                }),
-                { abortSignal },
-              ),
-            catch: (cause) => new VersionError({ cause }),
-          }).pipe(
-            Effect.map(Struct.get("VersionNumber")),
-            Effect.filterOrFail(
-              Predicate.isNotUndefined,
-              () => new VersionError({ cause: new Error("undefined version number") }),
+      return yield* useClient((client) =>
+        Effect.tryPromise({
+          try: (abortSignal) =>
+            client.send(
+              new CreateHostedConfigurationVersionCommand({
+                ApplicationId: application.id,
+                ConfigurationProfileId: args.profileId,
+                Content,
+                ContentType: "application/json",
+              }),
+              { abortSignal },
             ),
-          ),
+          catch: (cause) => new VersionError({ cause }),
+        }),
+      ).pipe(
+        Effect.map(Struct.get("VersionNumber")),
+        Effect.filterOrFail(
+          Predicate.isNotUndefined,
+          () => new VersionError({ cause: new Error("undefined version number") }),
         ),
       );
     });
 
     const deploy = Effect.fn("Appconfig.deploy")((args: DeployArgs) =>
-      client.pipe(
-        Effect.flatMap((client) =>
-          Effect.tryPromise({
-            try: (abortSignal) =>
-              client.send(
-                new StartDeploymentCommand({
-                  ApplicationId: application.id,
-                  EnvironmentId: environment.id,
-                  ConfigurationProfileId: args.profileId,
-                  ConfigurationVersion: String(args.version),
-                  DeploymentStrategyId: args.deploymentStrategyId,
-                }),
-                { abortSignal },
-              ),
-            catch: (cause) => new DeployError({ cause }),
-          }),
-        ),
+      useClient((client) =>
+        Effect.tryPromise({
+          try: (abortSignal) =>
+            client.send(
+              new StartDeploymentCommand({
+                ApplicationId: application.id,
+                EnvironmentId: environment.id,
+                ConfigurationProfileId: args.profileId,
+                ConfigurationVersion: String(args.version),
+                DeploymentStrategyId: args.deploymentStrategyId,
+              }),
+              { abortSignal },
+            ),
+          catch: (cause) => new DeployError({ cause }),
+        }),
       ),
     );
 
@@ -146,6 +148,7 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
     );
 
     return {
+      useClient,
       version,
       deploy,
       publish,

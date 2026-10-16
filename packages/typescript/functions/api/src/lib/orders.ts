@@ -8,12 +8,12 @@ import * as OrdersRepositories from "@printdesk/core/orders/repositories/layers"
 import { SstResource } from "@printdesk/core/sst/resource";
 import * as Layer from "effect/Layer";
 
-import { s3ClientCacheLayer } from "./aws";
+import { s3ServiceCacheLayer } from "./aws";
 import { databaseLayer } from "./database";
 
 export const orderObjectsPresignerLayer = OrderObjectsPresigner.layer.pipe(
   Layer.provide([AssetsPresigner.layer, OrderObjectMetadataRepositories.repositoryLayer]),
-  Layer.provide([assetsS3BucketLayer, databaseLayer, s3ClientCacheLayer]),
+  Layer.provide([assetsS3BucketLayer, databaseLayer, s3ServiceCacheLayer]),
   Layer.provide(SstResource.layer),
 );
 

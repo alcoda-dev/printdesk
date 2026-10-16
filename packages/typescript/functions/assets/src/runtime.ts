@@ -10,7 +10,7 @@ import * as ManagedRuntime from "effect/ManagedRuntime";
 
 import { assetsS3BucketLayer } from "./lib/assets";
 import { entraIdClientCredentials, openauthLayer } from "./lib/auth";
-import { s3ClientCacheLayer } from "./lib/aws";
+import { s3ServiceCacheLayer } from "./lib/aws";
 import { cloudflareLayer } from "./lib/cloudflare";
 import { SstResource } from "./lib/sst";
 
@@ -28,7 +28,7 @@ export const runtime = ManagedRuntime.make(
   ).pipe(
     Layer.provideMerge([FetchHttpClient.layer, NodeCrypto.layer]),
     Layer.provide(AssetsPresigner.layer),
-    Layer.provide([assetsS3BucketLayer, s3ClientCacheLayer]),
+    Layer.provide([assetsS3BucketLayer, s3ServiceCacheLayer]),
     Layer.tapCause(Effect.logError),
   ),
   { memoMap },

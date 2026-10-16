@@ -3,16 +3,18 @@ import * as Cache from "effect/Cache";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import * as Struct from "effect/Struct";
 
 import { Constants } from "../../utils/constants";
-import { AwsCredentialIdentityProvider, type AwsCredentialIdentity } from "../credential-identity";
+import { AwsCredentialIdentityProvider } from "../credential-identity";
 
-export class S3ClientCache extends Context.Service<S3ClientCache>()(
-  "@printdesk/core/aws/S3ClientCache",
+import type { S3Service$ } from "@effect-aws/client-s3";
+import type { AwsCredentialIdentity } from "../credential-identity";
+
+export class S3ServiceCache extends Context.Service<S3ServiceCache>()(
+  "@printdesk/core/aws/S3ServiceCache",
   {
     make: Effect.fn(function* (endpoint: string) {
-      const cache = yield* Cache.make({
+      const serviceCache = yield* Cache.make({
         capacity: Constants.DEFAULT_CACHE_CAPACITY,
         lookup: Effect.fn(function* (credentials: AwsCredentialIdentity) {
           return yield* makeS3Service.pipe(
@@ -26,18 +28,22 @@ export class S3ClientCache extends Context.Service<S3ClientCache>()(
         }),
       });
 
-      const get = AwsCredentialIdentityProvider.provide.pipe(
-        Effect.flatMap((credentials) => cache.pipe(Cache.get(credentials))),
+      const useS3 = Effect.fn("S3ClientCache.useS3")(
+        <TSuccess, TError, TServices>(
+          callback: (client: S3Service$) => Effect.Effect<TSuccess, TError, TServices>,
+        ) =>
+          AwsCredentialIdentityProvider.provide.pipe(
+            Effect.flatMap((credentials) => serviceCache.pipe(Cache.get(credentials))),
+            Effect.flatMap(callback),
+          ),
       );
 
       return {
-        get,
+        useS3,
       } as const;
     }),
   },
 ) {
-  public static readonly get = this.useSync(Struct.get("get"));
-
   public static readonly layer = (...args: Parameters<typeof this.make>) =>
     this.make(...args).pipe(Layer.effect(this));
 }

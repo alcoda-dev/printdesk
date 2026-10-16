@@ -68,28 +68,28 @@ export const makeSigV4Signer = Effect.fn(function* (service: NonEmptyString) {
       ),
   });
 
-  const sigv4 = AwsCredentialIdentityProvider.provide.pipe(
-    Effect.flatMap((credentials) => sigv4Cache.pipe(Cache.get(credentials))),
-  );
+  const useSigv4 = <TSuccess, TError, TServices>(
+    callback: (sigv4: SignatureV4) => Effect.Effect<TSuccess, TError, TServices>,
+  ) =>
+    AwsCredentialIdentityProvider.provide.pipe(
+      Effect.flatMap((credentials) => sigv4Cache.pipe(Cache.get(credentials))),
+      Effect.flatMap(callback),
+    );
 
   const presign = (...args: Parameters<SignatureV4["presign"]>) =>
-    sigv4.pipe(
-      Effect.flatMap((sigv4) =>
-        Effect.tryPromise({
-          try: () => sigv4.presign(...args),
-          catch: (cause) => new SigningError({ service, cause }),
-        }),
-      ),
+    useSigv4((sigv4) =>
+      Effect.tryPromise({
+        try: () => sigv4.presign(...args),
+        catch: (cause) => new SigningError({ service, cause }),
+      }),
     );
 
   const sign = (...args: Parameters<SignatureV4["sign"]>) =>
-    sigv4.pipe(
-      Effect.flatMap((sigv4) =>
-        Effect.tryPromise({
-          try: () => sigv4.sign(...args),
-          catch: (cause) => new SigningError({ service, cause }),
-        }),
-      ),
+    useSigv4((sigv4) =>
+      Effect.tryPromise({
+        try: () => sigv4.sign(...args),
+        catch: (cause) => new SigningError({ service, cause }),
+      }),
     );
 
   const matchBody = Match.typeTags<HttpBody.HttpBody>()({
@@ -149,5 +149,11 @@ export const makeSigV4Signer = Effect.fn(function* (service: NonEmptyString) {
     return request.pipe(HttpClientRequest.setHeaders(headers));
   });
 
-  return { signRequest, presignRequest } as const;
+  return {
+    useSigv4,
+    presign,
+    sign,
+    presignRequest,
+    signRequest,
+  } as const;
 });
