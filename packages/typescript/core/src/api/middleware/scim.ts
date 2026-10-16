@@ -11,7 +11,7 @@ import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 import * as String from "effect/String";
 
-import { ActorLayerMap, type Actor } from "../../actors";
+import { ActorLayerMap } from "../../actors";
 import { Oauth } from "../../oauth";
 import { OauthContract } from "../../oauth/contract";
 import { Openauth } from "../../oauth/openauth";
@@ -19,6 +19,8 @@ import { ScimBulkIdMap } from "../../scim/bulk-id-map";
 import { ScimContract } from "../../scim/contract";
 import { ScimLocator } from "../../scim/locator";
 import { Constants } from "../../utils/constants";
+
+import type { Actor } from "../../actors";
 
 export class ScimAuthMiddleware extends HttpApiMiddleware.Service<
   ScimAuthMiddleware,

@@ -14,11 +14,12 @@ import * as Struct from "effect/Struct";
 import { Actor } from "../actors";
 import { AppsyncSigner } from "../aws/sigv4-signers/appsync";
 import { SstResource } from "../sst/resource";
-import { prefix, suffix, type TenantId } from "../utils";
+import { prefix, suffix } from "../utils";
 import { RealtimeContract } from "./contract";
 
 import type * as Duration from "effect/Duration";
 import type { AwsCredentialIdentityProvider } from "../aws/credential-identity";
+import type { TenantId } from "../utils";
 
 export class PublishRequest extends Request.Class<
   { eventHandler: RealtimeContract.EventHandler; tenantId: TenantId },
