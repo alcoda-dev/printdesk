@@ -1,5 +1,5 @@
 import { ErrorMiddleware } from "@printdesk/core/api/middleware/error";
-import * as HttpApi from "effect/unstable/httpapi/HttpApi";
+import * as HttpApi from "effect/http-api/HttpApi";
 
 import { Auth } from "./auth";
 import { Spa } from "./spa";

@@ -13,12 +13,12 @@ import { Constants } from "@printdesk/core/utils/constants";
 import * as ByteSize from "effect/ByteSize";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
+import * as HttpBody from "effect/http/HttpBody";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as Match from "effect/Match";
 import * as Schema from "effect/Schema";
 import * as Struct from "effect/Struct";
-import * as HttpBody from "effect/unstable/http/HttpBody";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 
 import { makeAssetsS3Bucket } from "./lib/assets";
 import { makeR2S3Credentials } from "./lib/cloudflare";

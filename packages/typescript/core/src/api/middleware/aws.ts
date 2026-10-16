@@ -1,7 +1,7 @@
 // oxlint-disable effecttsgo/strict-effect-provide
 import * as Effect from "effect/Effect";
+import * as HttpApiMiddleware from "effect/http-api/HttpApiMiddleware";
 import * as Layer from "effect/Layer";
-import * as HttpApiMiddleware from "effect/unstable/httpapi/HttpApiMiddleware";
 
 import { Actor } from "../../actors";
 import { ActorsContract } from "../../actors/contract";

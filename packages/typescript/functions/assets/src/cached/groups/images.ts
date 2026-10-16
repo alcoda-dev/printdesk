@@ -4,9 +4,9 @@ import { ImagesFetcher } from "@printdesk/core/images/fetcher";
 import { ImagesPresigner } from "@printdesk/core/images/presigner";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpApiError from "effect/http-api/HttpApiError";
 import * as Layer from "effect/Layer";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
-import * as HttpApiError from "effect/unstable/httpapi/HttpApiError";
 
 import { imagesLayer } from "../../lib/assets";
 import { errorMiddlewareLayer } from "../middleware/error";

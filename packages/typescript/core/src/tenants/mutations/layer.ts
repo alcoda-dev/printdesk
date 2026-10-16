@@ -1,7 +1,7 @@
 import * as Array from "effect/Array";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import * as SqlError from "effect/unstable/sql/SqlError";
+import * as SqlError from "effect/sql/SqlError";
 
 import { TenantsMutations } from ".";
 import { AccessControl } from "../../access-control";

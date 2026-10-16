@@ -3,14 +3,14 @@ import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Equal from "effect/Equal";
 import * as Exit from "effect/Exit";
+import * as HttpApiClient from "effect/http-api/HttpApiClient";
+import * as HttpClient from "effect/http/HttpClient";
 import * as Layer from "effect/Layer";
 import * as ManagedRuntime from "effect/ManagedRuntime";
 import * as Record from "effect/Record";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";
 import * as Struct from "effect/Struct";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpApiClient from "effect/unstable/httpapi/HttpApiClient";
 import { Replicache as ReplicacheClient } from "replicache";
 
 import { Actor } from "../actors";

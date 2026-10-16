@@ -4,11 +4,11 @@ import { Openauth } from "@printdesk/core/oauth/openauth";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import { Constants } from "@printdesk/core/utils/constants";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpEffect from "effect/http/HttpEffect";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
-import * as HttpEffect from "effect/unstable/http/HttpEffect";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { openauthLayer } from "../lib/auth";
 import { bootstrapLayer } from "../lib/bootstrap";

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@effect-aws/client-s3": "workspace:@printdesk/effect-aws-client-s3@*",
+    "@effect-aws/client-s3": "catalog:",
     "@effect/platform-node": "catalog:",
     "@printdesk/core": "workspace:^",
     "aws4fetch": "catalog:",

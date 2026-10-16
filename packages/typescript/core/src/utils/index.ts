@@ -3,6 +3,7 @@ import * as Chunk from "effect/Chunk";
 import * as Effect from "effect/Effect";
 import * as Filter from "effect/Filter";
 import * as Function from "effect/Function";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
 import * as Option from "effect/Option";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";
@@ -12,7 +13,6 @@ import * as SchemaTransformation from "effect/SchemaTransformation";
 import * as String from "effect/String";
 import * as Struct from "effect/Struct";
 import * as Tuple from "effect/Tuple";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
 import { customAlphabet } from "nanoid";
 
 import { Constants } from "./constants";

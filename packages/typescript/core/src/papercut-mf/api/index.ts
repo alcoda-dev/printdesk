@@ -8,9 +8,9 @@ import { SharedAccountsContract } from "../../shared-accounts/contracts";
 import { UsersContract } from "../../users/contract";
 import { separatedString, StringFromUnknown } from "../../utils";
 
-import type { HttpClientError } from "effect/unstable/http/HttpClientError";
-import type { HttpClientRequest } from "effect/unstable/http/HttpClientRequest";
-import type { HttpClientResponse } from "effect/unstable/http/HttpClientResponse";
+import type { HttpClientError } from "effect/http/HttpClientError";
+import type { HttpClientRequest } from "effect/http/HttpClientRequest";
+import type { HttpClientResponse } from "effect/http/HttpClientResponse";
 import type { Actor } from "../../actors";
 import type { ActorsContract } from "../../actors/contract";
 import type { Oauth } from "../../oauth";

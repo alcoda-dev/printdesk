@@ -11,6 +11,9 @@ import * as Cache from "effect/Cache";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import * as Layer from "effect/Layer";
 import * as Optic from "effect/Optic";
 import * as Option from "effect/Option";
@@ -20,9 +23,6 @@ import * as Request from "effect/Request";
 import * as RequestResolver from "effect/RequestResolver";
 import * as Schema from "effect/Schema";
 import * as Struct from "effect/Struct";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
 
 import { EntraId } from "../identity/entra-id";
 import { Constants } from "../utils/constants";
@@ -34,7 +34,7 @@ import type {
 } from "@microsoft/kiota-abstractions";
 import type { Middleware } from "@microsoft/kiota-http-fetchlibrary";
 import type { GraphServiceClient } from "@microsoft/msgraph-sdk";
-import type { HttpClientError } from "effect/unstable/http/HttpClientError";
+import type { HttpClientError } from "effect/http/HttpClientError";
 import type { GroupsContract } from "../groups/contracts";
 import type { OauthContract } from "../oauth/contract";
 import type { UsersContract } from "../users/contract";

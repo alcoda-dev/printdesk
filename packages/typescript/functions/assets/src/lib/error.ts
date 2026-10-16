@@ -3,10 +3,9 @@ import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as Cause from "effect/Cause";
 import * as Crypto from "effect/Crypto";
 import * as Effect from "effect/Effect";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as String from "effect/String";
-import * as Struct from "effect/Struct";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
 
 export const orErrorResponse = <TError, TServices>(
   self: Effect.Effect<HttpServerResponse.HttpServerResponse | Response, TError, TServices>,
@@ -19,7 +18,7 @@ export const orErrorResponse = <TError, TServices>(
     orDieWhenUnrespondable,
     Effect.tapCauseIf(Cause.hasFails, Effect.logError),
     Effect.catchDefect((defect) =>
-      Crypto.Crypto.use(Struct.get("randomUUIDv4")).pipe(
+      Crypto.Crypto.use((crypto) => crypto.randomUUIDv4()).pipe(
         Effect.orDie,
         Effect.map(String.slice(0, 8)),
         Effect.map((id) => `err_${id}` as const),

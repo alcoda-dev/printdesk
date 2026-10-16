@@ -3,12 +3,12 @@ import { AssetsContract } from "@printdesk/core/assets/contract";
 import { Openauth } from "@printdesk/core/oauth/openauth";
 import { Constants } from "@printdesk/core/utils/constants";
 import * as Effect from "effect/Effect";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Option from "effect/Option";
 import * as Record from "effect/Record";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
 
 import { orErrorResponse } from "./lib/error";
 import { runtime } from "./runtime";

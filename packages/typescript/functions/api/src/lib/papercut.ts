@@ -14,8 +14,8 @@ import * as SyncQueryBuilder from "@printdesk/core/sync/query-builder/layer";
 import * as UsersRepositories from "@printdesk/core/users/repositories/layers";
 import { Xml } from "@printdesk/core/xml";
 import { XmlRpc } from "@printdesk/core/xml/rpc";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Layer from "effect/Layer";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
 
 import { databaseLayer } from "./database";
 

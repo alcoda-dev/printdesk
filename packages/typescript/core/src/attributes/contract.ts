@@ -1,8 +1,8 @@
 import * as Effect from "effect/Effect";
+import * as NetAddress from "effect/net/NetAddress";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
 import * as SchemaIssue from "effect/SchemaIssue";
-import * as NetAddress from "effect/unstable/net/NetAddress";
 
 import { EntityId, Separator, ShortId, TenantId } from "../utils";
 import { Constants } from "../utils/constants";

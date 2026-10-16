@@ -1,6 +1,6 @@
 import type * as ByteSize from "effect/ByteSize";
 import type * as Duration from "effect/Duration";
-import type * as Cookies from "effect/unstable/http/Cookies";
+import type * as Cookies from "effect/http/Cookies";
 
 export namespace Constants {
   export const TENANT_ID_PLACEHOLDER = "{{tenant_id}}";
@@ -138,7 +138,7 @@ export namespace Constants {
   export const SOFT_DELETE_LIFETIME = "12 weeks" satisfies Duration.Input;
 
   export const NANOID_REGEX = new RegExp(
-    // oxlint-disable-next-line typescript/no-misused-spread
+    // oxlint-disable-next-line typescript/no-misused-spread effecttsgo/prefer-effect-array
     `^[${[...NANOID_ALPHABET].toSorted().join("")}]{${NANOID_LENGTH}}$`,
   );
   export const TENANT_SLUG_REGEX = new RegExp(/^[a-z0-9-]+$/);

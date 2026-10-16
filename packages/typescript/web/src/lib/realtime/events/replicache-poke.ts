@@ -1,8 +1,8 @@
 import { NetworkMonitor } from "@printdesk/core/network/client/monitor";
 import { Realtime } from "@printdesk/core/realtime/client";
 import * as Effect from "effect/Effect";
+import * as Atom from "effect/reactivity/Atom";
 import * as Struct from "effect/Struct";
-import * as Atom from "effect/unstable/reactivity/Atom";
 
 import { realtimeEventAtomLayer } from ".";
 import { realtimeAtom } from "..";

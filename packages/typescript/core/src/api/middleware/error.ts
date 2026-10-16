@@ -1,12 +1,12 @@
 import * as Cause from "effect/Cause";
 import * as Crypto from "effect/Crypto";
 import * as Effect from "effect/Effect";
+import * as HttpApiMiddleware from "effect/http-api/HttpApiMiddleware";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import * as String from "effect/String";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as HttpApiMiddleware from "effect/unstable/httpapi/HttpApiMiddleware";
 
 const unexpectedServerErrorMessage = "unexpected server error";
 export class UnexpectedServerError
@@ -35,7 +35,7 @@ export class ErrorMiddleware extends HttpApiMiddleware.Service<ErrorMiddleware>(
         httpEffect.pipe(
           Effect.tapCauseIf(Cause.hasFails, Effect.logError),
           Effect.catchDefect((defect) =>
-            crypto.randomUUIDv4.pipe(
+            crypto.randomUUIDv4().pipe(
               Effect.orDie,
               Effect.map(String.slice(0, 8)),
               Effect.map((id) => `err_${id}` as const),

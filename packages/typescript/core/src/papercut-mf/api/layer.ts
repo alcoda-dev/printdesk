@@ -1,6 +1,8 @@
 import * as Cache from "effect/Cache";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Predicate from "effect/Predicate";
@@ -10,8 +12,6 @@ import * as Schema from "effect/Schema";
 import * as SchemaTransformation from "effect/SchemaTransformation";
 import * as Stream from "effect/Stream";
 import * as Tuple from "effect/Tuple";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 
 import { PapercutMfApi, PapercutMfApiRequest, sharedAccountPropertySchemas } from ".";
 import { Actor } from "../../actors";
@@ -165,7 +165,7 @@ export const makeService = Effect.gen(function* () {
       Effect.flatMap(
         xmlRpc.response(
           XmlRpcContract.tupleResponse(
-            // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+            // oxlint-disable-next-line typescript/no-unsafe-type-assertion effecttsgo/prefer-effect-array
             ...(propertyKeys.map((key) => sharedAccountPropertySchemas[key]) as {
               [TKey in keyof TPropertyKeys]: SharedAccountPropertySchemas[TPropertyKeys[TKey]];
             }),

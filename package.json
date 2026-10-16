@@ -23,7 +23,7 @@
     "remeda": "^2.51.0",
     "sst": "catalog:",
     "typescript": "catalog:",
-    "vite-plus": "^1.0.0"
+    "vite-plus": "^1.2.0"
   },
   "browserslist": [
     "chrome >= 123",

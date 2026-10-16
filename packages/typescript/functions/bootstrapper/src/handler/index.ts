@@ -28,8 +28,8 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
+import * as SqlError from "effect/sql/SqlError";
 import * as Struct from "effect/Struct";
-import * as SqlError from "effect/unstable/sql/SqlError";
 
 import { papercutSyncClientAccessTokenLayer } from "../lib/auth";
 import { runtime } from "./runtime";

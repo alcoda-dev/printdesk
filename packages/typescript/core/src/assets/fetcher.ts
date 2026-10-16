@@ -2,8 +2,8 @@ import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Layer from "effect/Layer";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
 
 import { S3Bucket } from "../aws/s3/bucket";
 import { S3ClientCache } from "../aws/s3/client-cache";

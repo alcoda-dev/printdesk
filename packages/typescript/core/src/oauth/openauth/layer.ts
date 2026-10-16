@@ -5,12 +5,12 @@ import {
   InvalidRefreshTokenError,
 } from "@openauthjs/openauth/error";
 import * as Effect from "effect/Effect";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import * as Layer from "effect/Layer";
 import * as Match from "effect/Match";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
 
 import { Openauth } from ".";
 import { Constants } from "../../utils/constants";
@@ -123,9 +123,9 @@ export const makeService = Effect.fn(function* (input: OpenauthClientInput) {
         HttpClientRequest.toWeb,
       );
 
-      const response = (yield* Effect.tryPromise(
-        (signal) => (input.fetch || globalThis.fetch)(request, { signal }),
-        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      const response = (yield* Effect.tryPromise((signal) =>
+        (input.fetch || globalThis.fetch)(request, { signal }),
       )) as Response;
 
       const tokens = yield* HttpClientResponse.fromWeb(

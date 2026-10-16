@@ -1,10 +1,10 @@
 import * as Effect from "effect/Effect";
 import * as Latch from "effect/Latch";
 import * as Queue from "effect/Queue";
+import * as Atom from "effect/reactivity/Atom";
 import * as Stream from "effect/Stream";
 import * as Struct from "effect/Struct";
 import * as SubscriptionRef from "effect/SubscriptionRef";
-import * as Atom from "effect/unstable/reactivity/Atom";
 
 export namespace NetworkMonitor {
   export const make = Effect.gen(function* () {

@@ -2,14 +2,14 @@
 import * as Cause from "effect/Cause";
 import * as Crypto from "effect/Crypto";
 import * as Effect from "effect/Effect";
+import * as HttpApiMiddleware from "effect/http-api/HttpApiMiddleware";
+import * as HttpApiSchema from "effect/http-api/HttpApiSchema";
+import * as HttpApiSecurity from "effect/http-api/HttpApiSecurity";
 import * as Layer from "effect/Layer";
 import * as Match from "effect/Match";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 import * as String from "effect/String";
-import * as HttpApiMiddleware from "effect/unstable/httpapi/HttpApiMiddleware";
-import * as HttpApiSchema from "effect/unstable/httpapi/HttpApiSchema";
-import * as HttpApiSecurity from "effect/unstable/httpapi/HttpApiSecurity";
 
 import { ActorLayerMap, type Actor } from "../../actors";
 import { Oauth } from "../../oauth";
@@ -96,7 +96,7 @@ export class ScimErrorMiddleware extends HttpApiMiddleware.Service<ScimErrorMidd
         httpEffect.pipe(
           Effect.tapCauseIf(Cause.hasFails, Effect.logError),
           Effect.catchDefect((defect) =>
-            crypto.randomUUIDv4.pipe(
+            crypto.randomUUIDv4().pipe(
               Effect.orDie,
               Effect.map(String.slice(0, 8)),
               Effect.map((id) => `err_${id}` as const),

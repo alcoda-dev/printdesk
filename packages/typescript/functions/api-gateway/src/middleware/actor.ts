@@ -5,10 +5,10 @@ import * as Array from "effect/Array";
 import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import * as Struct from "effect/Struct";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
 import { createMiddleware } from "hono/factory";
 
 import { openauthRuntime } from "../lib/auth";

@@ -4,9 +4,9 @@ import * as Crypto from "@printdesk/core/crypto/layer";
 import { Graph } from "@printdesk/core/graph";
 import { ImagesPresigner } from "@printdesk/core/images/presigner";
 import * as Effect from "effect/Effect";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Layer from "effect/Layer";
 import * as ManagedRuntime from "effect/ManagedRuntime";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
 
 import { assetsS3BucketLayer } from "./lib/assets";
 import { entraIdClientCredentials, openauthLayer } from "./lib/auth";

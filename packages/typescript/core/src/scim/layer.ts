@@ -702,7 +702,7 @@ export const makeService = Effect.gen(function* () {
                     }),
                   ),
                 onFailure: (cause) =>
-                  crypto.randomUUIDv4.pipe(
+                  crypto.randomUUIDv4().pipe(
                     Effect.orDie,
                     Effect.map(String.slice(0, 8)),
                     Effect.map((id) => `err_${id}` as const),

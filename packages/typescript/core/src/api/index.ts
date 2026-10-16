@@ -1,4 +1,4 @@
-import * as HttpApi from "effect/unstable/httpapi/HttpApi";
+import * as HttpApi from "effect/http-api/HttpApi";
 
 import { Assets } from "./assets";
 import { Bootstrap } from "./bootstrap";

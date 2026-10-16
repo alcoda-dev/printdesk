@@ -5,13 +5,13 @@ import {
 } from "@openauthjs/openauth/error";
 import * as Array from "effect/Array";
 import * as Duration from "effect/Duration";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Record from "effect/Record";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
 import * as Struct from "effect/Struct";
 import * as Tuple from "effect/Tuple";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
 
 import { ActorsContract } from "../actors/contract";
 import { ClientsContract } from "../clients/contract";
@@ -87,6 +87,7 @@ export namespace OauthContract {
       HttpServerResponse.json(
         {
           error: "invalid_scope",
+          // oxlint-disable-next-line effecttsgo/prefer-effect-array
           error_description: `Invalid requested scopes: ${this.scopes.join(", ")}`,
         },
         { status: 400 },

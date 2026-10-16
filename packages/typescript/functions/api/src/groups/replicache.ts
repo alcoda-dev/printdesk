@@ -4,9 +4,9 @@ import { ReplicachePuller } from "@printdesk/core/replicache/puller";
 import { ReplicachePusher } from "@printdesk/core/replicache/pusher";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { replicacheLayer } from "../lib/replicache";
 import { authMiddlewareLayer } from "../middleware/auth";

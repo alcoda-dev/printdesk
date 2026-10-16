@@ -1,9 +1,9 @@
 import { LambdaHandler } from "@effect-aws/lambda";
 import { Api } from "@printdesk/core/api";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpServer from "effect/http/HttpServer";
 import * as Layer from "effect/Layer";
-import * as HttpServer from "effect/unstable/http/HttpServer";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { bootstrapGroupLayer } from "./groups/bootstrap";
 import { configGroupsLayer } from "./groups/config";

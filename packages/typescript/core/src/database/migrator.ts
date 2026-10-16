@@ -17,10 +17,10 @@ import * as Option from "effect/Option";
 import * as Schedule from "effect/Schedule";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
+import * as SqlError from "effect/sql/SqlError";
 import * as String from "effect/String";
 import * as Struct from "effect/Struct";
 import * as Tuple from "effect/Tuple";
-import * as SqlError from "effect/unstable/sql/SqlError";
 
 import { Drizzle } from "./drizzle";
 

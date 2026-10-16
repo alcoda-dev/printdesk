@@ -1,9 +1,9 @@
 import * as Array from "effect/Array";
+import * as HttpApiSchema from "effect/http-api/HttpApiSchema";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
 import * as SchemaTransformation from "effect/SchemaTransformation";
 import * as String from "effect/String";
-import * as HttpApiSchema from "effect/unstable/httpapi/HttpApiSchema";
 
 import { RealtimeEventHandlers } from "../handlers/realtime-events";
 import { TenantId } from "../utils";

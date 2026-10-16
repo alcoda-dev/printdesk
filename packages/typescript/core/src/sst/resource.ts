@@ -6,6 +6,7 @@ import { Resource } from "sst/resource";
 
 export class SstResource extends Context.Service<SstResource>()("@printdesk/core/sst/Resource", {
   make: Effect.succeed(
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     new Proxy(
       {},
       {
@@ -13,7 +14,6 @@ export class SstResource extends Context.Service<SstResource>()("@printdesk/core
         getOwnPropertyDescriptor: () => ({ configurable: true, enumerable: true }),
         ownKeys: () => Object.keys(Resource),
       },
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     ) as { readonly [TKey in keyof Resource]: Redacted.Redacted<Resource[TKey]> },
   ),
 }) {

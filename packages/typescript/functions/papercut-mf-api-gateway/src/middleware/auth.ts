@@ -5,14 +5,14 @@ import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Equal from "effect/Equal";
 import * as Exit from "effect/Exit";
+import * as HttpApiError from "effect/http-api/HttpApiError";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Match from "effect/Match";
 import * as Redacted from "effect/Redacted";
 import * as Result from "effect/Result";
 import * as Struct from "effect/Struct";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as HttpApiError from "effect/unstable/httpapi/HttpApiError";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 
@@ -61,10 +61,10 @@ export const auth = createMiddleware((c, next) =>
                   Effect.map(
                     (res) =>
                       new HTTPException(
+                        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
                         Match.value(res.status).pipe(
                           Match.when(Match.is(401), () => 407),
                           Match.orElse((status) => status),
-                          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
                         ) as ContentfulStatusCode,
                         { res, cause: respondable },
                       ),

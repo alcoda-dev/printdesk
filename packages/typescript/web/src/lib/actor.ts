@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
+import * as HttpApiClient from "effect/http-api/HttpApiClient";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
+import * as HttpClient from "effect/http/HttpClient";
+import * as Atom from "effect/reactivity/Atom";
 import * as Struct from "effect/Struct";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpApiClient from "effect/unstable/httpapi/HttpApiClient";
-import * as Atom from "effect/unstable/reactivity/Atom";
 
 import { Bff } from "../bff/contract";
 

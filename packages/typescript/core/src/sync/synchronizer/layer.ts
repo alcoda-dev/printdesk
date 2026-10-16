@@ -105,6 +105,7 @@ export const makeService = Effect.gen(function* () {
       Stream.Error<ReturnType<typeof streamer.streamUpdates | typeof streamer.streamDeletes>>,
       Stream.Services<ReturnType<typeof streamer.streamUpdates | typeof streamer.streamDeletes>>
     > = Stream.mergeAll(
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       [
         streamer
           .streamUpdates(clientView, userId)
@@ -112,7 +113,7 @@ export const makeService = Effect.gen(function* () {
         streamer
           .streamDeletes(clientView, userId)
           .pipe(Stream.map((delete_) => Object.assign(delete_, { _tag: "delete" }))),
-        // oxlint-disable-next-line typescript/no-explicit-any typescript/no-unsafe-type-assertion
+        // oxlint-disable-next-line typescript/no-explicit-any
       ] as any,
       { concurrency: "unbounded" },
     );

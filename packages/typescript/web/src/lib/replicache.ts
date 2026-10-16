@@ -2,10 +2,10 @@ import { ActorLayerMap } from "@printdesk/core/actors";
 import { ReadTransaction } from "@printdesk/core/database/client";
 import { Replicache } from "@printdesk/core/replicache/client";
 import * as Effect from "effect/Effect";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Layer from "effect/Layer";
+import * as Atom from "effect/reactivity/Atom";
 import * as Redacted from "effect/Redacted";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
-import * as Atom from "effect/unstable/reactivity/Atom";
 
 import { actorAtom } from "./actor";
 import { ViteResource } from "./sst";

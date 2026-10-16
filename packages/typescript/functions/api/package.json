@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@effect-aws/client-lambda": "workspace:@printdesk/effect-aws-client-lambda@*",
-    "@effect-aws/dynamodb": "workspace:@printdesk/effect-aws-dynamodb@*",
-    "@effect-aws/lambda": "workspace:@printdesk/effect-aws-lambda@*",
+    "@effect-aws/client-lambda": "catalog:",
+    "@effect-aws/dynamodb": "catalog:",
+    "@effect-aws/lambda": "catalog:",
     "@effect/platform-node": "catalog:",
     "@printdesk/core": "workspace:*",
     "drizzle-orm": "catalog:",

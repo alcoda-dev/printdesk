@@ -161,11 +161,11 @@ export namespace Mutation {
       return Effect.gen({ self: this }, function* () {
         const user = yield* Actor.pipe(Effect.flatMap(Struct.get("assertUser")));
 
+        // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         const mutation = (yield* this.#map.pipe(
           HashMap.get(name),
           Effect.fromOption,
           Effect.orDie,
-          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
         )) as Mutation<
           TName,
           THandlerRecord[TName]["Input"],

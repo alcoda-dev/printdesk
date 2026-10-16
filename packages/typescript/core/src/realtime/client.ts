@@ -7,21 +7,21 @@ import * as Deferred from "effect/Deferred";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Function from "effect/Function";
+import * as HttpApiClient from "effect/http-api/HttpApiClient";
+import * as HttpClient from "effect/http/HttpClient";
 import * as Option from "effect/Option";
 import * as Pull from "effect/Pull";
+import * as AsyncResult from "effect/reactivity/AsyncResult";
+import * as Atom from "effect/reactivity/Atom";
+import * as AtomRegistry from "effect/reactivity/AtomRegistry";
 import * as Result from "effect/Result";
 import * as Schedule from "effect/Schedule";
 import * as Scheduler from "effect/Scheduler";
 import * as Schema from "effect/Schema";
 import * as Sink from "effect/Sink";
+import * as Socket from "effect/socket/Socket";
 import * as Stream from "effect/Stream";
 import * as Struct from "effect/Struct";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpApiClient from "effect/unstable/httpapi/HttpApiClient";
-import * as AsyncResult from "effect/unstable/reactivity/AsyncResult";
-import * as Atom from "effect/unstable/reactivity/Atom";
-import * as AtomRegistry from "effect/unstable/reactivity/AtomRegistry";
-import * as Socket from "effect/unstable/socket/Socket";
 
 import { Api } from "../api";
 import { RealtimeEventHandlers } from "../handlers/realtime-events";
@@ -196,9 +196,9 @@ export namespace Realtime {
 
         yield* realtime.connection.pipe(Deferred.await);
 
-        const id = yield* crypto.randomUUIDv4.pipe(
-          Effect.flatMap((id) => RealtimeContract.SubscriptionId.makeEffect(id)),
-        );
+        const id = yield* crypto
+          .randomUUIDv4()
+          .pipe(Effect.flatMap((id) => RealtimeContract.SubscriptionId.makeEffect(id)));
 
         const handler = yield* RealtimeEventHandlers.registry.resolve(name);
 

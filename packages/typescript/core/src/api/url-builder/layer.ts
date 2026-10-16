@@ -1,8 +1,8 @@
 import * as Effect from "effect/Effect";
+import * as HttpApiClient from "effect/http-api/HttpApiClient";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
 import * as Struct from "effect/Struct";
-import * as HttpApiClient from "effect/unstable/httpapi/HttpApiClient";
 
 import { ApiUrlBuilder } from ".";
 import { Api } from "..";

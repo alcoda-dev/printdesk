@@ -4,7 +4,7 @@ import { Constants } from "@printdesk/core/utils/constants";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import * as Atom from "effect/unstable/reactivity/Atom";
+import * as Atom from "effect/reactivity/Atom";
 
 export class ViteResource extends Context.Service<ViteResource>()(
   "@printdesk/web/sst/ViteResource",

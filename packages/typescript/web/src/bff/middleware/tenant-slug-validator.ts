@@ -3,14 +3,14 @@ import { TenantSlug } from "@printdesk/core/tenants/slug";
 import { Constants } from "@printdesk/core/utils/constants";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
+import * as HttpApiError from "effect/http-api/HttpApiError";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
 import * as SchemaIssue from "effect/SchemaIssue";
 import * as Struct from "effect/Struct";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpApiError from "effect/unstable/httpapi/HttpApiError";
 
 import { Auth } from "../contract/auth";
 import { ViteResource } from "../lib/sst";

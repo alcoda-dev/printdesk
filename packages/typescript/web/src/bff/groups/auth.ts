@@ -4,13 +4,13 @@ import { TenantSlug } from "@printdesk/core/tenants/slug";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import { Constants } from "@printdesk/core/utils/constants";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
 import * as Struct from "effect/Struct";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { Bff } from "../contract";
 import { openauthLayer } from "../lib/auth";

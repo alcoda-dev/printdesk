@@ -1,18 +1,18 @@
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
+import * as HttpBody from "effect/http/HttpBody";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import * as SchemaGetter from "effect/SchemaGetter";
 import * as SchemaIssue from "effect/SchemaIssue";
 import * as Struct from "effect/Struct";
-import * as HttpBody from "effect/unstable/http/HttpBody";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 
 import { Xml } from ".";
 import { XmlRpcContract } from "./contracts";
 
+import type { HttpClientResponse } from "effect/http/HttpClientResponse";
 import type { ParseOptions } from "effect/SchemaAST";
-import type { HttpClientResponse } from "effect/unstable/http/HttpClientResponse";
 import type { SchemaAndValue } from "../utils";
 
 export namespace XmlRpc {
@@ -41,6 +41,7 @@ export namespace XmlRpc {
   ): SchemaAndValue<typeof XmlRpcContract.StringArray> => ({
     schema: XmlRpcContract.StringArray,
     value: XmlRpcContract.StringArray.make({
+      // oxlint-disable-next-line effecttsgo/prefer-effect-array
       value: { array: { data: { value: strings.map((string) => ({ string })) } } },
     }),
   });

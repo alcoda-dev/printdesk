@@ -1,10 +1,10 @@
 import { getConnInfo } from "@hono/cloudflare-workers";
 import { AttributesContract } from "@printdesk/core/attributes/contract";
 import * as Match from "effect/Match";
+import * as NetAddress from "effect/net/NetAddress";
 import * as Option from "effect/Option";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
-import * as NetAddress from "effect/unstable/net/NetAddress";
 import { createMiddleware } from "hono/factory";
 
 import { resource } from "../lib/sst";

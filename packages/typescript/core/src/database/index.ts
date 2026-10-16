@@ -8,8 +8,8 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schedule from "effect/Schedule";
 import * as Schema from "effect/Schema";
+import * as SqlError from "effect/sql/SqlError";
 import * as Struct from "effect/Struct";
-import * as SqlError from "effect/unstable/sql/SqlError";
 
 import { Constants } from "../utils/constants";
 import { Drizzle } from "./drizzle";

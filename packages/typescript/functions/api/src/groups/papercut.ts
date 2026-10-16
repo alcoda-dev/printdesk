@@ -7,8 +7,8 @@ import { layer as replicacheNotifierLayer } from "@printdesk/core/replicache/not
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as Array from "effect/Array";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
 import * as Layer from "effect/Layer";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { databaseLayer } from "../lib/database";
 import { papercutMfApiLayer, papercutMfSynchronizerLayer } from "../lib/papercut";

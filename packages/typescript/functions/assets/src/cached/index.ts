@@ -8,13 +8,13 @@ import { CloudflareClient } from "@printdesk/core/cloudflare/client";
 import * as Crypto from "@printdesk/core/crypto/layer";
 import { WorkerEntrypoint } from "cloudflare:workers";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpApiError from "effect/http-api/HttpApiError";
+import * as HttpRouter from "effect/http/HttpRouter";
+import * as HttpServer from "effect/http/HttpServer";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import * as HttpRouter from "effect/unstable/http/HttpRouter";
-import * as HttpServer from "effect/unstable/http/HttpServer";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
-import * as HttpApiError from "effect/unstable/httpapi/HttpApiError";
 
 import { assetsS3BucketLayer } from "../lib/assets";
 import { cloudflareLayer, r2S3CredentialsLayer } from "../lib/cloudflare";

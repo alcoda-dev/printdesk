@@ -1,12 +1,12 @@
 import { NetworkMonitor } from "@printdesk/core/network/client/monitor";
 import { Realtime } from "@printdesk/core/realtime/client";
 import * as Effect from "effect/Effect";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Layer from "effect/Layer";
+import * as Atom from "effect/reactivity/Atom";
 import * as Redacted from "effect/Redacted";
+import * as Socket from "effect/socket/Socket";
 import * as Struct from "effect/Struct";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
-import * as Atom from "effect/unstable/reactivity/Atom";
-import * as Socket from "effect/unstable/socket/Socket";
 
 import { ViteResource } from "../sst";
 

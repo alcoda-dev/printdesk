@@ -1,12 +1,12 @@
 // oxlint-disable typescript/no-unsafe-type-assertion
 import * as Array from "effect/Array";
 import * as Effect from "effect/Effect";
+import * as HttpApiSchema from "effect/http-api/HttpApiSchema";
+import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import * as Record from "effect/Record";
 import * as Schema from "effect/Schema";
 import * as Tuple from "effect/Tuple";
-import * as HttpServerRespondable from "effect/unstable/http/HttpServerRespondable";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as HttpApiSchema from "effect/unstable/httpapi/HttpApiSchema";
 
 import { Handler } from "../handlers";
 import { MutationHandlers } from "../handlers/mutations";

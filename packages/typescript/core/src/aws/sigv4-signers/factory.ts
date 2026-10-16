@@ -5,13 +5,13 @@ import * as Cache from "effect/Cache";
 import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
+import * as HttpClientError from "effect/http/HttpClientError";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as Match from "effect/Match";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 import * as String from "effect/String";
 import * as Struct from "effect/Struct";
-import * as HttpClientError from "effect/unstable/http/HttpClientError";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 
 import { SstResource } from "../../sst/resource";
 import { NonEmptyString } from "../../utils";
@@ -22,7 +22,7 @@ import type {
   RequestPresigningArguments as AwsSdkRequestPresigningArguments,
   RequestSigningArguments as AwsSdkRequestSigningArguments,
 } from "@aws-sdk/types";
-import type * as HttpBody from "effect/unstable/http/HttpBody";
+import type * as HttpBody from "effect/http/HttpBody";
 
 export class SignatureV4Error extends Schema.TaggedError<SignatureV4Error>()("SignatureV4Error", {
   cause: Schema.Defect(),

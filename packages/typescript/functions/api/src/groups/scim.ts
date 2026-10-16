@@ -7,11 +7,11 @@ import { ScimContract } from "@printdesk/core/scim/contract";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as ByteSize from "effect/ByteSize";
 import * as Effect from "effect/Effect";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpIncomingMessage from "effect/http/HttpIncomingMessage";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Struct from "effect/Struct";
-import * as HttpIncomingMessage from "effect/unstable/http/HttpIncomingMessage";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
 
 import { openauthLayer } from "../lib/auth";
 import { scimLayer, scimLocatorLayer } from "../lib/scim";

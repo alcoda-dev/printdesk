@@ -51,7 +51,10 @@ export default defineConfig({
     rules: {
       "@stylexjs/valid-styles": "error",
       "@stylexjs/sort-keys": "warn",
+      "effecttsgo/api-stability-leak": "off",
       "effecttsgo/async-function": "off",
+      "effecttsgo/schema-class-missing-brand": "off",
+      "effecttsgo/unstable-api-usage": "off",
       "eslint/no-new": "off",
       "eslint/no-param-reassign": "off",
       "eslint/no-shadow": "off",
@@ -76,7 +79,7 @@ export default defineConfig({
     ignorePatterns: ["**/sst-env.d.ts", "**/routeTree.gen.ts"],
     overrides: [
       {
-        files: ["sst.config.ts", "./infra/**", "packages/typescript/vendor/openauth/**"],
+        files: ["sst.config.ts", "./infra/**", "packages/typescript/vendor/**"],
         rules: {
           "effecttsgo/crypto-random-uuid": "off",
           "effecttsgo/extends-native-error": "off",
@@ -85,6 +88,8 @@ export default defineConfig({
           "effecttsgo/global-fetch": "off",
           "effecttsgo/process-env": "off",
           "effecttsgo/node-builtin-import": "off",
+          "effecttsgo/prefer-effect-array": "off",
+          "effecttsgo/prefer-effect-record": "off",
         },
       },
     ],
