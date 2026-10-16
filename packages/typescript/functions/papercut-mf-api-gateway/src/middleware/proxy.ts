@@ -8,7 +8,7 @@ import * as Redacted from "effect/Redacted";
 import * as Result from "effect/Result";
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
-import { proxy } from "hono/proxy";
+import { proxy as honoProxy } from "hono/proxy";
 
 import { resource } from "../lib/sst";
 
@@ -20,11 +20,11 @@ const url =
   resource.PORT.pipe(Redacted.value) +
   Constants.PAPERCUT_MF_API_PATH;
 
-const papercutApi = resource.PAPERCUT_API.pipe(Redacted.value);
+const papercutApi = resource.PAPERCUT_MF_API.pipe(Redacted.value);
 
-export const api = createMiddleware((c) =>
+export const proxy = createMiddleware((c) =>
   Effect.tryPromise((signal) =>
-    proxy(url, { raw: c.req.raw, signal, customFetch: (req) => papercutApi.fetch(req) }),
+    honoProxy(url, { raw: c.req.raw, signal, customFetch: (req) => papercutApi.fetch(req) }),
   )
     .pipe(
       Effect.timeout(Duration.seconds(10)),
