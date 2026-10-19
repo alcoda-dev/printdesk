@@ -33,10 +33,9 @@ export namespace AttributesContract {
     ),
   );
 
-  export class ServiceIp extends Schema.Class<ServiceIp>("ServiceIp")({
-    service: Schema.String,
-    ip: Schema.IpAddress,
-  }) {}
+  export class ServiceIp extends Schema.Class<ServiceIp, { readonly brand: unique symbol }>(
+    "ServiceIp",
+  )({ service: Schema.String, ip: Schema.IpAddress }) {}
   export const ServiceIpFromString = Schema.TemplateLiteralParser([
     Service,
     Separator,
@@ -106,11 +105,10 @@ export namespace AttributesContract {
     }),
   );
 
-  export class ServiceTenantClientId extends Schema.Class<ServiceTenantClientId>("TenantClientId")({
-    service: Schema.String,
-    tenantId: TenantId,
-    clientId: EntityId,
-  }) {}
+  export class ServiceTenantClientId extends Schema.Class<
+    ServiceTenantClientId,
+    { readonly brand: unique symbol }
+  >("TenantClientId")({ service: Schema.String, tenantId: TenantId, clientId: EntityId }) {}
   export const ServiceTenantClientIdFromString = Schema.TemplateLiteralParser([
     Service,
     Separator,
@@ -146,10 +144,10 @@ export namespace AttributesContract {
     }),
   );
 
-  export class TenantDeploymentId extends Schema.Class<TenantDeploymentId>("TenantDeploymentId")({
-    tenantId: TenantId,
-    deploymentId: EntityId,
-  }) {}
+  export class TenantDeploymentId extends Schema.Class<
+    TenantDeploymentId,
+    { readonly brand: unique symbol }
+  >("TenantDeploymentId")({ tenantId: TenantId, deploymentId: EntityId }) {}
   export const TenantDeploymentIdFromString = Schema.TemplateLiteralParser([
     Tenant,
     Separator,
@@ -176,10 +174,9 @@ export namespace AttributesContract {
     }),
   );
 
-  export class TenantRoomId extends Schema.Class<TenantRoomId>("TenantIdRoomId")({
-    tenantId: TenantId,
-    roomId: EntityId,
-  }) {}
+  export class TenantRoomId extends Schema.Class<TenantRoomId, { readonly brand: unique symbol }>(
+    "TenantIdRoomId",
+  )({ tenantId: TenantId, roomId: EntityId }) {}
   export const TenantRoomIdFromString = Schema.TemplateLiteralParser([
     Tenant,
     Separator,
@@ -203,11 +200,10 @@ export namespace AttributesContract {
     }),
   );
 
-  export class ServiceTenantUserId extends Schema.Class<ServiceTenantUserId>("TenantUserId")({
-    service: Schema.String,
-    tenantId: TenantId,
-    userId: EntityId,
-  }) {}
+  export class ServiceTenantUserId extends Schema.Class<
+    ServiceTenantUserId,
+    { readonly brand: unique symbol }
+  >("TenantUserId")({ service: Schema.String, tenantId: TenantId, userId: EntityId }) {}
   export const ServiceTenantUserIdFromString = Schema.TemplateLiteralParser([
     Service,
     Separator,

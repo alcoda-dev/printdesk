@@ -29,10 +29,7 @@ export namespace RealtimeContract {
   export type SubscriptionId = typeof SubscriptionId.Type;
 
   const success = <TKind extends string>(kind: TKind) =>
-    Schema.Struct({
-      type: Schema.tag(`${kind}_success`),
-      id: SubscriptionId,
-    });
+    Schema.Struct({ type: Schema.tag(`${kind}_success`), id: SubscriptionId });
 
   const error = <TKind extends string>(kind: TKind) =>
     Schema.Struct({
@@ -44,9 +41,10 @@ export namespace RealtimeContract {
       }).pipe(Schema.Array),
     });
 
-  export class ConnectionInit extends Schema.Class<ConnectionInit>("ConnectionInit")({
-    type: Schema.tag("connection_init"),
-  }) {}
+  export class ConnectionInit extends Schema.Class<
+    ConnectionInit,
+    { readonly brand: unique symbol }
+  >("ConnectionInit")({ type: Schema.tag("connection_init") }) {}
 
   export const ConnectionAck = Schema.Struct({
     type: Schema.tag("connection_ack"),
@@ -54,7 +52,9 @@ export namespace RealtimeContract {
   }).pipe(Schema.encodeKeys({ connectionTimeout: "connectionTimeoutMs" }));
   export type ConnectionAck = typeof ConnectionAck.Type;
 
-  export class Subscribe extends Schema.Class<Subscribe>("Subscribe")({
+  export class Subscribe extends Schema.Class<Subscribe, { readonly brand: unique symbol }>(
+    "Subscribe",
+  )({
     type: Schema.tag("subscribe"),
     id: SubscriptionId,
     channel: Channel,
@@ -67,7 +67,7 @@ export namespace RealtimeContract {
   export const SubscribeError = error("subscribe");
   export type SubscribeError = typeof SubscribeError.Type;
 
-  export class Data extends Schema.Class<Data>("Data")({
+  export class Data extends Schema.Class<Data, { readonly brand: unique symbol }>("Data")({
     type: Schema.tag("data"),
     id: SubscriptionId,
     event: Schema.Unknown.pipe(Schema.fromJsonString),
@@ -76,14 +76,13 @@ export namespace RealtimeContract {
   export const BroadcastError = error("broadcast");
   export type BroadcastError = typeof BroadcastError.Type;
 
-  export class KeepAlive extends Schema.Class<KeepAlive>("KeepAlive")({
-    type: Schema.tag("ka"),
-  }) {}
+  export class KeepAlive extends Schema.Class<KeepAlive, { readonly brand: unique symbol }>(
+    "KeepAlive",
+  )({ type: Schema.tag("ka") }) {}
 
-  export class Unsubscribe extends Schema.Class<Unsubscribe>("Unsubscribe")({
-    type: Schema.tag("unsubscribe"),
-    id: SubscriptionId,
-  }) {}
+  export class Unsubscribe extends Schema.Class<Unsubscribe, { readonly brand: unique symbol }>(
+    "Unsubscribe",
+  )({ type: Schema.tag("unsubscribe"), id: SubscriptionId }) {}
 
   export const UnsubscribeSuccess = success("unsubscribe");
   export type UnsubscribeSuccess = typeof UnsubscribeSuccess.Type;
@@ -118,7 +117,10 @@ export namespace RealtimeContract {
     }),
   );
 
-  export class PublishPayload extends Schema.Class<PublishPayload>("PublishPayload")({
+  export class PublishPayload extends Schema.Class<
+    PublishPayload,
+    { readonly brand: unique symbol }
+  >("PublishPayload")({
     channel: Channel,
     events: EventHandler.mapMembers(Array.map((member) => member.fields.input)).pipe(Schema.Array),
   }) {}

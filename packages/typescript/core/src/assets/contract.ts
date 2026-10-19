@@ -11,15 +11,19 @@ import { UsersContract } from "../users/contract";
 import { NonEmptyString, TenantId } from "../utils";
 
 export namespace AssetsContract {
-  export class PresignedUrlPayload extends Schema.Class<PresignedUrlPayload>("PresignedUrlPayload")(
-    {
-      expiresIn: Schema.DurationFromMillis.pipe(
-        Schema.withConstructorDefault(Effect.succeed(Duration.hours(1))),
-      ),
-    },
-  ) {}
+  export class PresignedUrlPayload extends Schema.Class<
+    PresignedUrlPayload,
+    { readonly brand: unique symbol }
+  >("PresignedUrlPayload")({
+    expiresIn: Schema.DurationFromMillis.pipe(
+      Schema.withConstructorDefault(Effect.succeed(Duration.hours(1))),
+    ),
+  }) {}
 
-  export class PresignedUrlSuccess extends Schema.Class<PresignedUrlSuccess>("PresignedUrlSuccess")(
+  export class PresignedUrlSuccess extends Schema.Class<
+    PresignedUrlSuccess,
+    { readonly brand: unique symbol }
+  >("PresignedUrlSuccess")(
     { url: Schema.URL, expiresAt: Schema.DateTimeUtc },
     { httpApiStatus: 200 },
   ) {}
@@ -31,7 +35,10 @@ export namespace AssetsContract {
   export const Props = ActorsContract.UserActor.mapFields(Struct.pick(["tenantId"]));
 
   export class InvalidPropsError
-    extends Schema.TaggedError<InvalidPropsError>()("InvalidPropsError", { cause: Schema.Defect() })
+    extends Schema.TaggedError<InvalidPropsError, { readonly brand: unique symbol }>()(
+      "InvalidPropsError",
+      { cause: Schema.Defect() },
+    )
     implements HttpServerRespondable.Respondable
   {
     public [HttpServerRespondable.symbol] = () =>
@@ -51,18 +58,18 @@ export namespace AssetsContract {
     eventTime: Schema.DateTimeUtcFromString,
   });
 
-  export class UserAvatarQueueMessage extends Schema.TaggedClass<UserAvatarQueueMessage>()(
-    "UserAvatarQueueMessage",
-    {
-      tenantId: TenantId,
-      identityProvider: IdentityProvidersContract.Table.Model.mapFields(
-        Struct.pick(["externalId", "kind"]),
-      ),
-      user: UsersContract.Table.Model.mapFields(Struct.pick(["id", "externalId"])).mapFields(
-        Struct.evolve({ id: (id) => id.from.schema.members[0] }),
-      ),
-    },
-  ) {}
+  export class UserAvatarQueueMessage extends Schema.TaggedClass<
+    UserAvatarQueueMessage,
+    { readonly brand: unique symbol }
+  >()("UserAvatarQueueMessage", {
+    tenantId: TenantId,
+    identityProvider: IdentityProvidersContract.Table.Model.mapFields(
+      Struct.pick(["externalId", "kind"]),
+    ),
+    user: UsersContract.Table.Model.mapFields(Struct.pick(["id", "externalId"])).mapFields(
+      Struct.evolve({ id: (id) => id.from.schema.members[0] }),
+    ),
+  }) {}
 
   export const QueueMessage = Schema.Union([
     InvalidationNotificationQueueMessage,

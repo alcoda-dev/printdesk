@@ -12,7 +12,10 @@ import { Constants } from "../utils/constants";
 import type { IdentityProvidersTable } from "./sql";
 
 export namespace IdentityProvidersContract {
-  export class ClientCredentials extends Schema.Class<ClientCredentials>("ClientCredentials")({
+  export class ClientCredentials extends Schema.Class<
+    ClientCredentials,
+    { readonly brand: unique symbol }
+  >("ClientCredentials")({
     id: Schema.NonEmptyString,
     secret: Schema.NonEmptyString.pipe(Schema.RedactedFromValue),
   }) {}
@@ -26,7 +29,9 @@ export namespace IdentityProvidersContract {
   export const ExternalId = Schema.NonEmptyString.pipe(Schema.brand("IdentityProviderExternalId"));
   export type ExternalId = typeof ExternalId.Type;
 
-  export class IdToken extends Schema.Class<IdToken>("IdentityProviderIdToken")({
+  export class IdToken extends Schema.Class<IdToken, { readonly brand: unique symbol }>(
+    "IdentityProviderIdToken",
+  )({
     kind: Kind,
     audience: Audience,
     externalId: ExternalId,
@@ -71,7 +76,7 @@ export namespace IdentityProvidersContract {
     }),
   );
 
-  export class User extends Schema.Opaque<User>()(
+  export class User extends Schema.Opaque<User, { readonly brand: unique symbol }>()(
     UsersContract.Table.Model.mapFields(
       Struct.pick(["displayName", "email", "externalId", "username"]),
     ),
@@ -103,7 +108,7 @@ export namespace IdentityProvidersContract {
     }),
   );
 
-  export class Group extends Schema.Opaque<Group>()(
+  export class Group extends Schema.Opaque<Group, { readonly brand: unique symbol }>()(
     GroupsContract.Table.Model.mapFields(Struct.pick(["externalId", "name"])),
   ) {}
 
@@ -127,13 +132,13 @@ export namespace IdentityProvidersContract {
     [],
   ) {}
 
-  export class NotFoundError extends Schema.TaggedError<NotFoundError>()(
-    "IdentityProviderNotFoundError",
-    Table.Dto.mapFields(Struct.pick(["kind", "externalId"])),
-  ) {}
+  export class NotFoundError extends Schema.TaggedError<
+    NotFoundError,
+    { readonly brand: unique symbol }
+  >()("IdentityProviderNotFoundError", Table.Dto.mapFields(Struct.pick(["kind", "externalId"]))) {}
 
   export class NotImplementedError
-    extends Schema.TaggedError<NotImplementedError>()(
+    extends Schema.TaggedError<NotImplementedError, { readonly brand: unique symbol }>()(
       "IdentityProviderNotImplementedError",
       { kind: Kind },
       { httpApiStatus: 501 },

@@ -9,7 +9,9 @@ import { TenantsContract } from "../tenants/contract";
 import { EntityId } from "../utils";
 
 export namespace BootstrapContract {
-  export class Payload extends Schema.Class<Payload>("BootstrapPayload")({
+  export class Payload extends Schema.Class<Payload, { readonly brand: unique symbol }>(
+    "BootstrapPayload",
+  )({
     licenseKeyPair: LicensesContract.KeyPairFromString,
     tenant: TenantsContract.Table.Model.mapFields(
       Struct.pick(["name", "slug", "tenantId"]),

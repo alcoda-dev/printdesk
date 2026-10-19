@@ -14,10 +14,10 @@ import { CloudflareContract } from "./contract";
 import type { MessagePushParams } from "cloudflare/resources/queues";
 import type { DistributivePick } from "../utils";
 
-export class CloudflareClientError extends Schema.TaggedError<CloudflareClientError>()(
-  "CloudflareClientError",
-  { cause: Schema.Defect() },
-) {}
+export class CloudflareClientError extends Schema.TaggedError<
+  CloudflareClientError,
+  { readonly brand: unique symbol }
+>()("CloudflareClientError", { cause: Schema.Defect() }) {}
 
 export interface CloudflareR2TemporaryCredentialsOptions {
   bucket: string;

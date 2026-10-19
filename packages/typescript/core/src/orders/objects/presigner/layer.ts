@@ -8,6 +8,7 @@ import * as Schema from "effect/Schema";
 
 import { OrderObjectsPresigner } from ".";
 import { Actor } from "../../../actors";
+import { AssetsContract } from "../../../assets/contract";
 import { AssetsPresigner } from "../../../assets/presigner";
 import { OrderObjectMetadataContract } from "../../contracts";
 import { OrderObjectMetadataRepository } from "../repositories";
@@ -44,7 +45,9 @@ export const makeService = Effect.gen(function* () {
           Expires: expiresAt.pipe(DateTime.toDateUtc),
         }),
       ),
-      Effect.map((url) => ({ url: new URL(url), expiresAt })),
+      Effect.map((url) =>
+        AssetsContract.PresignedUrlSuccess.make({ url: new URL(url), expiresAt }),
+      ),
     );
   });
 
@@ -84,7 +87,7 @@ export const makeService = Effect.gen(function* () {
 
     return yield* Effect.reduce(
       objectsMetadata,
-      Record.empty<OrderObjectMetadata["id"], { url: URL; expiresAt: DateTime.Utc }>,
+      Record.empty<OrderObjectMetadata["id"], AssetsContract.PresignedUrlSuccess>,
       (record, metadata) =>
         Effect.succeed({ orderId, objectId: metadata.id }).pipe(
           Effect.flatMap(Schema.encodeEffect(OrderObjectMetadataContract.Key)),
@@ -97,9 +100,15 @@ export const makeService = Effect.gen(function* () {
               Expires: expiresAt.pipe(DateTime.toDateUtc),
             }),
           ),
-          Effect.map((url) => Record.set(record, metadata.id, { url: new URL(url), expiresAt })),
+          Effect.map((url) =>
+            Record.set(
+              record,
+              metadata.id,
+              AssetsContract.PresignedUrlSuccess.make({ url: new URL(url), expiresAt }),
+            ),
+          ),
         ),
-    );
+    ).pipe(Effect.map((record) => OrderObjectMetadataContract.PresignedUrlsSuccess.make(record)));
   });
 
   const presignGetUrls = Effect.fn("OrderObjectsPresigner.presignGetUrls")(function* (
@@ -114,7 +123,7 @@ export const makeService = Effect.gen(function* () {
 
     return yield* Effect.reduce(
       objectsMetadataWithOrders,
-      Record.empty<OrderObjectMetadata["id"], { url: URL; expiresAt: DateTime.Utc }>,
+      Record.empty<OrderObjectMetadata["id"], AssetsContract.PresignedUrlSuccess>,
       (record, { order, metadata }) =>
         Effect.succeed({ orderId, objectId: metadata.id }).pipe(
           Effect.flatMap(Schema.encodeEffect(OrderObjectMetadataContract.Key)),
@@ -125,9 +134,15 @@ export const makeService = Effect.gen(function* () {
               ResponseExpires: expiresAt.pipe(DateTime.toDateUtc),
             }),
           ),
-          Effect.map((url) => Record.set(record, metadata.id, { url: new URL(url), expiresAt })),
+          Effect.map((url) =>
+            Record.set(
+              record,
+              metadata.id,
+              AssetsContract.PresignedUrlSuccess.make({ url: new URL(url), expiresAt }),
+            ),
+          ),
         ),
-    );
+    ).pipe(Effect.map((record) => OrderObjectMetadataContract.PresignedUrlsSuccess.make(record)));
   });
 
   return {

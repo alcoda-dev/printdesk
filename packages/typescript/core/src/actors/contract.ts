@@ -17,7 +17,7 @@ export namespace ActorsContract {
   }
 
   export class PublicActor
-    extends Schema.TaggedClass<PublicActor>()("PublicActor", {})
+    extends Schema.TaggedClass<PublicActor, { readonly brand: unique symbol }>()("PublicActor", {})
     implements Wrappable
   {
     public static readonly tag = this.fields._tag.schema.literal;
@@ -30,7 +30,7 @@ export namespace ActorsContract {
   }
 
   export class ClientActor
-    extends Schema.TaggedClass<ClientActor>()("ClientActor", {
+    extends Schema.TaggedClass<ClientActor, { readonly brand: unique symbol }>()("ClientActor", {
       id: EntityId,
       tenantId: TenantId,
       role: ClientsContract.Role,
@@ -46,7 +46,7 @@ export namespace ActorsContract {
   }
 
   export class UserActor
-    extends Schema.TaggedClass<UserActor>()("UserActor", {
+    extends Schema.TaggedClass<UserActor, { readonly brand: unique symbol }>()("UserActor", {
       id: EntityId,
       tenantId: TenantId,
       role: UsersContract.Role,
@@ -61,7 +61,9 @@ export namespace ActorsContract {
   }
 
   export class TenantActor
-    extends Schema.TaggedClass<TenantActor>()("TenantActor", { id: TenantId })
+    extends Schema.TaggedClass<TenantActor, { readonly brand: unique symbol }>()("TenantActor", {
+      id: TenantId,
+    })
     implements Wrappable
   {
     public static readonly tag = this.fields._tag.schema.literal;
@@ -71,9 +73,10 @@ export namespace ActorsContract {
     }
   }
 
-  export class Actor extends Schema.TaggedClass<Actor>()("Actor", {
-    properties: Schema.Union([PublicActor, ClientActor, UserActor, TenantActor]),
-  }) {
+  export class Actor extends Schema.TaggedClass<Actor, { readonly brand: unique symbol }>()(
+    "Actor",
+    { properties: Schema.Union([PublicActor, ClientActor, UserActor, TenantActor]) },
+  ) {
     #assert = <TActorTag extends Actor["properties"]["_tag"]>(actorTag: TActorTag) =>
       Effect.suspend(() => {
         if (this.properties._tag !== actorTag)
@@ -122,7 +125,7 @@ export namespace ActorsContract {
   }
 
   export class ForbiddenActorError
-    extends Schema.TaggedError<ForbiddenActorError>()(
+    extends Schema.TaggedError<ForbiddenActorError, { readonly brand: unique symbol }>()(
       "ForbiddenActorError",
       {
         actor: Schema.Literals(

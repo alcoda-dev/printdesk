@@ -117,30 +117,35 @@ export namespace Replicache {
     }
   }
 
-  export class ClientError extends Schema.TaggedError<ClientError>()("ReplicacheClientError", {
-    cause: Schema.Defect(),
-  }) {}
+  export class ClientError extends Schema.TaggedError<
+    ClientError,
+    { readonly brand: unique symbol }
+  >()("ReplicacheClientError", { cause: Schema.Defect() }) {}
 
-  export class QueryError extends Schema.TaggedError<QueryError>()("ReplicacheQueryError", {
-    cause: Schema.Defect(),
-  }) {}
+  export class QueryError extends Schema.TaggedError<
+    QueryError,
+    { readonly brand: unique symbol }
+  >()("ReplicacheQueryError", { cause: Schema.Defect() }) {}
 
-  export class SubscribeError extends Schema.TaggedError<SubscribeError>()(
-    "ReplicacheSubscribeError",
+  export class SubscribeError extends Schema.TaggedError<
+    SubscribeError,
+    { readonly brand: unique symbol }
+  >()("ReplicacheSubscribeError", { cause: Schema.Defect() }) {}
+
+  export class MutateError extends Schema.TaggedError<
+    MutateError,
+    { readonly brand: unique symbol }
+  >()("ReplicacheMutateError", { cause: Schema.Defect() }) {}
+
+  export class PullError extends Schema.TaggedError<PullError, { readonly brand: unique symbol }>()(
+    "ReplicachePullError",
     { cause: Schema.Defect() },
   ) {}
 
-  export class MutateError extends Schema.TaggedError<MutateError>()("ReplicacheMutateError", {
-    cause: Schema.Defect(),
-  }) {}
-
-  export class PullError extends Schema.TaggedError<PullError>()("ReplicachePullError", {
-    cause: Schema.Defect(),
-  }) {}
-
-  export class CloseError extends Schema.TaggedError<CloseError>()("ReplicacheCloseError", {
-    cause: Schema.Defect(),
-  }) {}
+  export class CloseError extends Schema.TaggedError<
+    CloseError,
+    { readonly brand: unique symbol }
+  >()("ReplicacheCloseError", { cause: Schema.Defect() }) {}
 
   export const repositoriesLayer = Layer.mergeAll(
     AnnouncementsRepository.layer,
@@ -260,7 +265,7 @@ export namespace Replicache {
         Effect.flatMap((payload) =>
           server.pull({
             payload,
-            headers: { "X-Replicache-RequestID": id },
+            headers: new ReplicacheContract.Headers({ "X-Replicache-RequestID": id }),
             responseMode: "decoded-and-response",
           }),
         ),
@@ -296,7 +301,7 @@ export namespace Replicache {
         Effect.flatMap((payload) =>
           server.push({
             payload,
-            headers: { "X-Replicache-RequestID": id },
+            headers: new ReplicacheContract.Headers({ "X-Replicache-RequestID": id }),
             responseMode: "decoded-and-response",
           }),
         ),

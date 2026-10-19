@@ -51,7 +51,7 @@ export const makeService = Effect.gen(function* () {
         Effect.flatMap((lastId) =>
           lastId.pipe(
             Ref.updateAndGet((id) => ShortId.make(id + 1)),
-            Effect.map((sk) => ({ pk, sk })),
+            Effect.map((sk) => new OrdersContract.Item({ pk, sk })),
             Effect.flatMap(Schema.encodeEffect(OrdersContract.Item)),
             Effect.flatMap((Item) =>
               ddb.put({

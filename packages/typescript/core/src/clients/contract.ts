@@ -43,12 +43,13 @@ export namespace ClientsContract {
     ["secretHash", "callbackId"],
   ) {}
 
-  export class NotFoundError extends Schema.TaggedError<NotFoundError>()("ClientNotFoundError", {
-    id: Table.Model.fields.id,
-  }) {}
+  export class NotFoundError extends Schema.TaggedError<
+    NotFoundError,
+    { readonly brand: unique symbol }
+  >()("ClientNotFoundError", { id: Table.Model.fields.id }) {}
 
-  export class InvalidStatusError extends Schema.TaggedError<InvalidStatusError>()(
-    "InvalidClientStatusError",
-    Table.Model.mapFields(Struct.pick(["id", "status"])),
-  ) {}
+  export class InvalidStatusError extends Schema.TaggedError<
+    InvalidStatusError,
+    { readonly brand: unique symbol }
+  >()("InvalidClientStatusError", Table.Model.mapFields(Struct.pick(["id", "status"]))) {}
 }

@@ -53,7 +53,6 @@ export default defineConfig({
       "@stylexjs/sort-keys": "warn",
       "effecttsgo/api-stability-leak": "off",
       "effecttsgo/async-function": "off",
-      "effecttsgo/schema-class-missing-brand": "off",
       "effecttsgo/unstable-api-usage": "off",
       "eslint/no-new": "off",
       "eslint/no-param-reassign": "off",

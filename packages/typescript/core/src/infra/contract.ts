@@ -11,7 +11,9 @@ import { CallbackId, EntityId } from "../utils";
 import { Constants } from "../utils/constants";
 
 export namespace InfraContract {
-  export class InputItem extends Schema.Class<InputItem>("InputItem")({
+  export class InputItem extends Schema.Class<InputItem, { readonly brand: unique symbol }>(
+    "InputItem",
+  )({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.InfraInput,
     [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentIdFromString,
@@ -25,7 +27,9 @@ export namespace InfraContract {
     Struct.pick([Constants.DYNAMO_KEYS.PK, Constants.DYNAMO_KEYS.SK]),
   );
 
-  export class OutputItem extends Schema.Class<OutputItem>("OutputItem")({
+  export class OutputItem extends Schema.Class<OutputItem, { readonly brand: unique symbol }>(
+    "OutputItem",
+  )({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.InfraOutput,
     [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentIdFromString,
@@ -43,9 +47,10 @@ export namespace InfraContract {
   );
 
   export class NotDeployedError
-    extends Schema.TaggedError<NotDeployedError>()("InfraNotDeployedError", {
-      deploymentId: EntityId,
-    })
+    extends Schema.TaggedError<NotDeployedError, { readonly brand: unique symbol }>()(
+      "InfraNotDeployedError",
+      { deploymentId: EntityId },
+    )
     implements HttpServerRespondable.Respondable
   {
     public [HttpServerRespondable.symbol] = () =>

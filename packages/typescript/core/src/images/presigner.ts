@@ -6,6 +6,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 
+import { AssetsContract } from "../assets/contract";
 import { AssetsPresigner } from "../assets/presigner";
 import { ImagesContract } from "./contract";
 
@@ -37,7 +38,11 @@ export class ImagesPresigner extends Context.Service<ImagesPresigner>()(
             ContentLength: ByteSize.toNumberUnsafe(content.length),
             Expires: expiresAt.pipe(DateTime.toDateUtc),
           })
-          .pipe(Effect.map((url) => ({ url: new URL(url), expiresAt })));
+          .pipe(
+            Effect.map((url) =>
+              AssetsContract.PresignedUrlSuccess.make({ url: new URL(url), expiresAt }),
+            ),
+          );
       });
 
       return {

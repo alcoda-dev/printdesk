@@ -21,7 +21,9 @@ export namespace ColumnsContract {
     Schema.withConstructorDefault(Effect.succeed(null)),
   );
 
-  export class Timestamps extends Schema.Class<Timestamps>("Timestamps")({
+  export class Timestamps extends Schema.Class<Timestamps, { readonly brand: unique symbol }>(
+    "Timestamps",
+  )({
     createdAt: Timestamp,
     updatedAt: Timestamp,
     deletedAt: NullableTimestamp,

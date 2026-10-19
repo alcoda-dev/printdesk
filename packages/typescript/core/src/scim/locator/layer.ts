@@ -3,9 +3,9 @@ import * as Layer from "effect/Layer";
 
 import { ScimLocator } from ".";
 import { ApiUrlBuilder } from "../../api/url-builder";
+import { ScimContract } from "../contract";
 
 import type { EntityId } from "../../utils";
-import type { ScimContract } from "../contract";
 
 export interface ServiceShape {
   readonly root: Effect.Effect<URL>;
@@ -50,17 +50,17 @@ export const makeService = Effect.gen(function* () {
     Effect.succeed(new URL(apiUrlBuilder.ScimV2Schemas.retrieve({ params: { id } }))),
   );
 
-  const groups = Effect.sync(() => new URL(apiUrlBuilder.ScimV2Groups.query({ query: {} }))).pipe(
-    Effect.withSpan("ScimLocator.groups"),
-  );
+  const groups = Effect.sync(
+    () => new URL(apiUrlBuilder.ScimV2Groups.query({ query: new ScimContract.V2QueryParams() })),
+  ).pipe(Effect.withSpan("ScimLocator.groups"));
 
   const group = Effect.fn("ScimLocator.group")((id: EntityId) =>
     Effect.succeed(new URL(apiUrlBuilder.ScimV2Groups.retrieve({ params: { id } }))),
   );
 
-  const users = Effect.sync(() => new URL(apiUrlBuilder.ScimV2Users.query({ query: {} }))).pipe(
-    Effect.withSpan("ScimLocator.users"),
-  );
+  const users = Effect.sync(
+    () => new URL(apiUrlBuilder.ScimV2Users.query({ query: new ScimContract.V2QueryParams() })),
+  ).pipe(Effect.withSpan("ScimLocator.users"));
 
   const user = Effect.fn("ScimLocator.user")((id: EntityId) =>
     Effect.succeed(new URL(apiUrlBuilder.ScimV2Users.retrieve({ params: { id } }))),

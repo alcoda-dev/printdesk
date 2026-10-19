@@ -3,10 +3,10 @@ import * as Redacted from "effect/Redacted";
 import { CryptoContract } from "../crypto/contract";
 import { EntityId } from "../utils";
 import { Constants } from "../utils/constants";
+import { OauthContract } from "./contract";
 
 import type { Provider } from "@openauthjs/openauth/provider/provider";
 import type { ClientsContract } from "../clients/contract";
-import type { OauthContract } from "./contract";
 
 export type ClientCredentialsProviderVerifyResult = Pick<
   typeof ClientsContract.Table.Model.Type,
@@ -32,7 +32,10 @@ export const ClientCredentialsProvider = (
     const id = EntityId.make(input.clientID);
 
     const result = await config.verify(
-      { id, secret: CryptoContract.Secret.make(Redacted.make(input.clientSecret)) },
+      new OauthContract.ClientCredentials({
+        id,
+        secret: CryptoContract.Secret.make(Redacted.make(input.clientSecret)),
+      }),
       input.params.scope?.split(" ").filter(Boolean),
     );
 

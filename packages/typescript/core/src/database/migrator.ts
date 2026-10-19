@@ -40,10 +40,10 @@ export const MigratorConfig = Context.Reference<MigrationConfig>(
   },
 );
 
-export class ReadMigrationsError extends Schema.TaggedError<ReadMigrationsError>()(
-  "ReadMigrationsError",
-  { cause: Schema.Defect() },
-) {}
+export class ReadMigrationsError extends Schema.TaggedError<
+  ReadMigrationsError,
+  { readonly brand: unique symbol }
+>()("ReadMigrationsError", { cause: Schema.Defect() }) {}
 
 export class MigrationKey extends Data.Class<{ migrationHash: string; statementIndex: number }> {}
 

@@ -75,27 +75,37 @@ export namespace GroupsContract {
     Output: Schema.Void,
   });
 
-  export class Dtos extends Schema.Class<Dtos>("Dtos")({
-    group: Table.Dto,
-    groupMemberships: GroupMembershipsContract.Table.Dto.pipe(Schema.Array),
-  }) {}
+  export class Dtos extends Schema.Opaque<Dtos, { readonly brand: unique symbol }>()(
+    Schema.Struct({
+      group: Table.Dto,
+      groupMemberships: GroupMembershipsContract.Table.Dto.pipe(Schema.Array),
+    }),
+  ) {}
 
-  export class ProvisionalDtos extends Schema.Class<ProvisionalDtos>("ProvisionalDtos")({
-    group: Table.Dto.mapFields(
-      Struct.pick(["name", "externalId", "identityProviderId", "tenantId"]),
-    ),
-    groupMemberships: GroupMembershipsContract.Table.Dto.mapFields(
-      Struct.pick(["userId", "tenantId"]),
-    ).pipe(Schema.Array),
-  }) {}
+  export class ProvisionalDtos extends Schema.Opaque<
+    ProvisionalDtos,
+    { readonly brand: unique symbol }
+  >()(
+    Schema.Struct({
+      group: Table.Dto.mapFields(
+        Struct.pick(["name", "externalId", "identityProviderId", "tenantId"]),
+      ),
+      groupMemberships: GroupMembershipsContract.Table.Dto.mapFields(
+        Struct.pick(["userId", "tenantId"]),
+      ).pipe(Schema.Array),
+    }),
+  ) {}
 
-  export class BulkProvisionalDtos extends Schema.Class<BulkProvisionalDtos>("BulkProvisionalDtos")(
-    {
+  export class BulkProvisionalDtos extends Schema.Opaque<
+    BulkProvisionalDtos,
+    { readonly brand: unique symbol }
+  >()(
+    Schema.Struct({
       group: ProvisionalDtos.fields.group,
       groupMemberships: ProvisionalDtos.fields.groupMemberships.value
         .mapFields(Struct.evolve({ userId: () => BulkId }))
         .pipe(Schema.Array),
-    },
+    }),
   ) {
     public static get ToNonBulk() {
       return this.pipe(

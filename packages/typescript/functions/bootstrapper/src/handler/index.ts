@@ -2,6 +2,7 @@
 import { DynamoDBDocument } from "@effect-aws/dynamodb";
 import { ActorLayerMap } from "@printdesk/core/actors";
 import { ActorsContract } from "@printdesk/core/actors/contract";
+import { AttributesContract } from "@printdesk/core/attributes/contract";
 import { AppconfigCredentialIdentityProviderLayerMap } from "@printdesk/core/aws/credential-identity/appconfig";
 import { AppsyncPublisherCredentialIdentityProviderLayerMap } from "@printdesk/core/aws/credential-identity/appsync";
 import { BootstrapContract } from "@printdesk/core/bootstrap/contract";
@@ -12,6 +13,7 @@ import { RealtimeEventHandlers } from "@printdesk/core/handlers/realtime-events"
 import { IdentityProvidersRepository } from "@printdesk/core/identity/repository";
 import { InfraContract } from "@printdesk/core/infra/contract";
 import { LicensesManager } from "@printdesk/core/licenses/manager";
+import { OauthContract } from "@printdesk/core/oauth/contract";
 import { PapercutMfContract } from "@printdesk/core/papercut-mf/contract";
 import { PapercutMfSynchronizer } from "@printdesk/core/papercut-mf/synchronizer";
 import { Realtime } from "@printdesk/core/realtime";
@@ -107,7 +109,10 @@ export async function handler(
 
         const Item = yield* InfraContract.InputItem.makeEffect({
           [Constants.DYNAMO_KEYS.PK]: tenantId,
-          [Constants.DYNAMO_KEYS.GSI1_PK]: { tenantId, deploymentId },
+          [Constants.DYNAMO_KEYS.GSI1_PK]: new AttributesContract.TenantDeploymentId({
+            tenantId,
+            deploymentId,
+          }),
           callbackId: Option.some(CallbackId.make(callbackId)),
           papercutMfConfig,
         });
@@ -152,7 +157,7 @@ export async function handler(
           .pipe(
             Effect.andThen(({ id }) =>
               config.setInvoicesProcessorClientCredentials(
-                { id, secret: invoicesProcessorClientSecret },
+                new OauthContract.ClientCredentials({ id, secret: invoicesProcessorClientSecret }),
                 "fast",
               ),
             ),
@@ -184,7 +189,7 @@ export async function handler(
             .pipe(
               Effect.andThen(({ id }) =>
                 config.setPapercutMfSyncClientCredentials(
-                  { id, secret: papercutMfSyncClientSecret },
+                  new OauthContract.ClientCredentials({ id, secret: papercutMfSyncClientSecret }),
                   "fast",
                 ),
               ),

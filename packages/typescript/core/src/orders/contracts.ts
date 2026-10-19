@@ -30,7 +30,10 @@ export namespace OrdersContract {
   export const submittedStatus = "submitted";
   export const Status = Schema.Literals([draftStatus, submittedStatus]);
 
-  export class AttributesV1 extends Schema.TaggedClass<AttributesV1>()("OrderAttributesV1", {
+  export class AttributesV1 extends Schema.TaggedClass<
+    AttributesV1,
+    { readonly brand: unique symbol }
+  >()("OrderAttributesV1", {
     // Product name
     productName: Schema.String,
 
@@ -228,33 +231,37 @@ export namespace OrdersContract {
     ["create", "read", "update", "delete"],
   ) {}
 
-  export class ActiveDraftRoomWorkflowStatusModel extends Schema.Class<ActiveDraftRoomWorkflowStatusModel>(
-    "ActiveDraftRoomWorkflowStatusModel",
-  )(
+  export class ActiveDraftRoomWorkflowStatusModel extends Schema.Class<
+    ActiveDraftRoomWorkflowStatusModel,
+    { readonly brand: unique symbol }
+  >("ActiveDraftRoomWorkflowStatusModel")(
     Struct.evolve(DraftRoomWorkflowStatusModel.fields, {
       deletedAt: (deletedAt) => deletedAt.schema.from.schema.members[0].members[1],
     }),
   ) {}
 
-  export class ActiveDraftSharedAccountWorkflowStatusModel extends Schema.Class<ActiveDraftSharedAccountWorkflowStatusModel>(
-    "ActiveDraftSharedAccountWorkflowStatusModel",
-  )(
+  export class ActiveDraftSharedAccountWorkflowStatusModel extends Schema.Class<
+    ActiveDraftSharedAccountWorkflowStatusModel,
+    { readonly brand: unique symbol }
+  >("ActiveDraftSharedAccountWorkflowStatusModel")(
     Struct.evolve(DraftSharedAccountWorkflowStatusModel.fields, {
       deletedAt: (deletedAt) => deletedAt.schema.from.schema.members[0].members[1],
     }),
   ) {}
 
-  export class ActiveSubmittedRoomWorkflowStatusModel extends Schema.Class<ActiveSubmittedRoomWorkflowStatusModel>(
-    "ActiveSubmittedRoomWorkflowStatusModel",
-  )(
+  export class ActiveSubmittedRoomWorkflowStatusModel extends Schema.Class<
+    ActiveSubmittedRoomWorkflowStatusModel,
+    { readonly brand: unique symbol }
+  >("ActiveSubmittedRoomWorkflowStatusModel")(
     Struct.evolve(SubmittedRoomWorkflowStatusModel.fields, {
       deletedAt: (deletedAt) => deletedAt.schema.from.schema.members[0].members[1],
     }),
   ) {}
 
-  export class ActiveSubmittedSharedAccountWorkflowStatusModel extends Schema.Class<ActiveSubmittedSharedAccountWorkflowStatusModel>(
-    "ActiveSubmittedSharedAccountWorkflowStatusModel",
-  )(
+  export class ActiveSubmittedSharedAccountWorkflowStatusModel extends Schema.Class<
+    ActiveSubmittedSharedAccountWorkflowStatusModel,
+    { readonly brand: unique symbol }
+  >("ActiveSubmittedSharedAccountWorkflowStatusModel")(
     Struct.evolve(SubmittedSharedAccountWorkflowStatusModel.fields, {
       deletedAt: (deletedAt) => deletedAt.schema.from.schema.members[0].members[1],
     }),
@@ -299,7 +306,7 @@ export namespace OrdersContract {
     ActiveSubmittedManagerAuthorizedRoomWorkflowStatusModel.fields,
   ]) {}
 
-  export class Item extends Schema.Class<Item>("Item")({
+  export class Item extends Schema.Class<Item, { readonly brand: unique symbol }>("Item")({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantRoomIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.OrderShortIdFromString,
   }) {}
@@ -495,7 +502,10 @@ export namespace OrdersContract {
   });
 
   export class NotFoundError
-    extends Schema.TaggedError<NotFoundError>()("OrderNotFoundError", { id: EntityId })
+    extends Schema.TaggedError<NotFoundError, { readonly brand: unique symbol }>()(
+      "OrderNotFoundError",
+      { id: EntityId },
+    )
     implements HttpServerRespondable.Respondable
   {
     public [HttpServerRespondable.symbol] = () =>
@@ -635,7 +645,10 @@ export namespace OrderObjectMetadataContract {
   ).pipe(HttpApiSchema.status(200));
 
   export class NotFoundError
-    extends Schema.TaggedError<NotFoundError>()("OrderObjectNotFoundError", { id: EntityId })
+    extends Schema.TaggedError<NotFoundError, { readonly brand: unique symbol }>()(
+      "OrderObjectNotFoundError",
+      { id: EntityId },
+    )
     implements HttpServerRespondable.Respondable
   {
     public [HttpServerRespondable.symbol] = () =>

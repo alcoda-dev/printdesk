@@ -39,9 +39,10 @@ import type { GroupsContract } from "../groups/contracts";
 import type { OauthContract } from "../oauth/contract";
 import type { UsersContract } from "../users/contract";
 
-export class GraphError extends Schema.TaggedError<GraphError>()("GraphError", {
-  cause: Schema.Defect(),
-}) {}
+export class GraphError extends Schema.TaggedError<GraphError, { readonly brand: unique symbol }>()(
+  "GraphError",
+  { cause: Schema.Defect() },
+) {}
 
 type AnyRequestBuilder = BaseRequestBuilder<any>;
 

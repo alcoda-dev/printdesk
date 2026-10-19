@@ -28,9 +28,10 @@ export class PublishRequest extends Request.Class<
   AwsCredentialIdentityProvider
 > {}
 
-export class PublishError extends Schema.TaggedError<PublishError>()("PublishError", {
-  cause: Schema.Defect(),
-}) {}
+export class PublishError extends Schema.TaggedError<
+  PublishError,
+  { readonly brand: unique symbol }
+>()("PublishError", { cause: Schema.Defect() }) {}
 
 export class Realtime extends Context.Service<Realtime>()("@printdesk/core/realtime/Realtime", {
   make: Effect.gen(function* () {
@@ -72,10 +73,12 @@ export class Realtime extends Context.Service<Realtime>()("@printdesk/core/realt
           resolver: (entries, channel) =>
             HttpClientRequest.post(baseUrl).pipe(
               HttpClientRequest.appendUrl("/event"),
-              HttpClientRequest.schemaBodyJson(RealtimeContract.PublishPayload)({
-                channel,
-                events: Array.map(entries, (entry) => entry.request.eventHandler.input),
-              }),
+              HttpClientRequest.schemaBodyJson(RealtimeContract.PublishPayload)(
+                new RealtimeContract.PublishPayload({
+                  channel,
+                  events: Array.map(entries, (entry) => entry.request.eventHandler.input),
+                }),
+              ),
               Effect.flatMap(signer.signRequest),
               Effect.flatMap(httpClient.execute),
               Effect.asVoid,

@@ -12,29 +12,33 @@ import { CallbackId, Ipv4, NonEmptyString } from "../utils";
 import { Constants } from "../utils/constants";
 
 export namespace PapercutMfContract {
-  export class ApiHostNameConfig extends Schema.TaggedClass<ApiHostNameConfig>()(
-    "PapercutMfApiHostNameConfig",
-    {
-      name: NonEmptyString,
-      resolverIps: Ipv4.pipe(
-        Schema.Array,
-        Schema.withDecodingDefaultType(Effect.sync(Array.empty<Schema.Schema.Type<typeof Ipv4>>)),
-      ),
-    },
-  ) {}
+  export class ApiHostNameConfig extends Schema.TaggedClass<
+    ApiHostNameConfig,
+    { readonly brand: unique symbol }
+  >()("PapercutMfApiHostNameConfig", {
+    name: NonEmptyString,
+    resolverIps: Ipv4.pipe(
+      Schema.Array,
+      Schema.withDecodingDefaultType(Effect.sync(Array.empty<Schema.Schema.Type<typeof Ipv4>>)),
+    ),
+  }) {}
 
-  export class ApiHostIpv4Config extends Schema.TaggedClass<ApiHostIpv4Config>()(
-    "PapercutMfApiHostIpv4Config",
-    { ipv4: Ipv4 },
-  ) {}
+  export class ApiHostIpv4Config extends Schema.TaggedClass<
+    ApiHostIpv4Config,
+    { readonly brand: unique symbol }
+  >()("PapercutMfApiHostIpv4Config", { ipv4: Ipv4 }) {}
 
-  export class ApiConfig extends Schema.Class<ApiConfig>("ApiConfig")({
+  export class ApiConfig extends Schema.Class<ApiConfig, { readonly brand: unique symbol }>(
+    "ApiConfig",
+  )({
     protocol: Schema.Literals(["http", "https"]),
     host: Schema.Union([ApiHostNameConfig, ApiHostIpv4Config]).pipe(Schema.toTaggedUnion("_tag")),
     port: Schema.Int.pipe(Schema.check(Schema.isGreaterThan(0), Schema.isLessThan(2 ** 16))),
   }) {}
 
-  export class SyncConfig extends Schema.Class<SyncConfig>("SyncConfig")({
+  export class SyncConfig extends Schema.Class<SyncConfig, { readonly brand: unique symbol }>(
+    "SyncConfig",
+  )({
     cronExpression: AwsCron.Expression.pipe(
       Schema.withConstructorDefault(
         Effect.succeed(Constants.DEFAULT_PAPERCUT_MF_SYNC_CRON_EXPRESSION),
@@ -43,13 +47,18 @@ export namespace PapercutMfContract {
     timezone: Schema.TimeZoneNamedFromString,
   }) {}
 
-  export class EnabledConfig extends Schema.Class<EnabledConfig>("EnabledConfig")({
+  export class EnabledConfig extends Schema.Class<EnabledConfig, { readonly brand: unique symbol }>(
+    "EnabledConfig",
+  )({
     enabled: Schema.Literal(true).pipe(Schema.withConstructorDefault(Effect.succeed(true))),
     api: ApiConfig,
     sync: SyncConfig,
   }) {}
 
-  export class DisabledConfig extends Schema.Class<DisabledConfig>("DisabledConfig")({
+  export class DisabledConfig extends Schema.Class<
+    DisabledConfig,
+    { readonly brand: unique symbol }
+  >("DisabledConfig")({
     enabled: Schema.Literal(false).pipe(Schema.withConstructorDefault(Effect.succeed(false))),
   }) {}
 
@@ -62,7 +71,9 @@ export namespace PapercutMfContract {
   );
   export type ApiAuthToken = typeof ApiAuthToken.Type;
 
-  export class ApiCallback extends Schema.Class<ApiCallback>("ApiCallback")({
+  export class ApiCallback extends Schema.Class<ApiCallback, { readonly brand: unique symbol }>(
+    "ApiCallback",
+  )({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.PapercutMfApiCallback,
     id: CallbackId,
@@ -75,11 +86,10 @@ export namespace PapercutMfContract {
   });
 
   export class SharedAccountBalanceAdjustmentFailure
-    extends Schema.TaggedError<SharedAccountBalanceAdjustmentFailure>()(
-      "SharedAccountBalanceAdjustmentFailure",
-      {},
-      { httpApiStatus: 502 },
-    )
+    extends Schema.TaggedError<
+      SharedAccountBalanceAdjustmentFailure,
+      { readonly brand: unique symbol }
+    >()("SharedAccountBalanceAdjustmentFailure", {}, { httpApiStatus: 502 })
     implements HttpServerRespondable.Respondable
   {
     public [HttpServerRespondable.symbol] = () =>
@@ -87,7 +97,7 @@ export namespace PapercutMfContract {
   }
 
   export class UserAndGroupSyncFailure
-    extends Schema.TaggedError<UserAndGroupSyncFailure>()(
+    extends Schema.TaggedError<UserAndGroupSyncFailure, { readonly brand: unique symbol }>()(
       "UserAndGroupSyncFailure",
       {},
       { httpApiStatus: 502 },
@@ -98,11 +108,16 @@ export namespace PapercutMfContract {
       HttpServerResponse.schemaJson(UserAndGroupSyncFailure)(this, { status: 502 });
   }
 
-  export class HealthSuccess extends Schema.Class<HealthSuccess>("HealthSuccess")({
+  export class HealthSuccess extends Schema.Class<HealthSuccess, { readonly brand: unique symbol }>(
+    "HealthSuccess",
+  )({
     healthy: Schema.Boolean,
   }) {}
 
-  export class TaskStatusSuccess extends Schema.Class<TaskStatusSuccess>("TaskStatusSuccess")({
+  export class TaskStatusSuccess extends Schema.Class<
+    TaskStatusSuccess,
+    { readonly brand: unique symbol }
+  >("TaskStatusSuccess")({
     completed: Schema.Boolean,
     message: Schema.String,
   }) {}

@@ -11,12 +11,12 @@ export namespace CryptoContract {
   );
   export type Secret = typeof Secret.Type;
 
-  export class InvalidSecretError extends Schema.TaggedError<InvalidSecretError>()(
-    "InvalidSecretError",
-    {},
-  ) {}
+  export class InvalidSecretError extends Schema.TaggedError<
+    InvalidSecretError,
+    { readonly brand: unique symbol }
+  >()("InvalidSecretError", {}) {}
 
-  export class Hash extends Schema.Class<Hash>("Hash")({
+  export class Hash extends Schema.Class<Hash, { readonly brand: unique symbol }>("Hash")({
     salt: Base64.pipe(Schema.decodeTo(Secret)),
     derivedKey: Base64.pipe(Schema.decodeTo(Secret)),
   }) {}

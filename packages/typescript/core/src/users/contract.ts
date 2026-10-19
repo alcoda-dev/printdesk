@@ -118,17 +118,20 @@ export namespace UsersContract {
     Output: Table.Dto,
   });
 
-  export class NotFoundError extends Schema.TaggedError<NotFoundError>()("NotFoundError", {
+  export class NotFoundError extends Schema.TaggedError<
+    NotFoundError,
+    { readonly brand: unique symbol }
+  >()("NotFoundError", {
     id: Schema.TaggedUnion({
       external: { value: Table.Model.fields.externalId },
       internal: { value: Table.Model.fields.id },
     }),
   }) {}
 
-  export class InvalidStatusError extends Schema.TaggedError<InvalidStatusError>()(
-    "InvalidUserStatusError",
-    Table.Model.mapFields(Struct.pick(["id", "status"])),
-  ) {}
+  export class InvalidStatusError extends Schema.TaggedError<
+    InvalidStatusError,
+    { readonly brand: unique symbol }
+  >()("InvalidUserStatusError", Table.Model.mapFields(Struct.pick(["id", "status"]))) {}
 
   export const ProvisionalDto = UsersContract.Table.Dto.mapFields(
     Struct.pick([

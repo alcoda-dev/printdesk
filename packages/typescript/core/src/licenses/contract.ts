@@ -16,7 +16,7 @@ export namespace LicensesContract {
   export const Key = CryptoContract.Secret;
   export type Key = typeof Key.Type;
 
-  export class KeyPair extends Schema.Class<KeyPair>("KeyPair")({
+  export class KeyPair extends Schema.Class<KeyPair, { readonly brand: unique symbol }>("KeyPair")({
     id: EntityId,
     key: Key,
   }) {}
@@ -24,7 +24,9 @@ export namespace LicensesContract {
   export const KeyPairFromString = Schema.TemplateLiteralParser([EntityId, Separator, Key]).pipe(
     Schema.decodeTo(KeyPair, {
       decode: SchemaGetter.transformEffect(([id, , key]) =>
-        Schema.encodeEffect(KeyPair)({ id, key }).pipe(Effect.mapError(Struct.get("issue"))),
+        Schema.encodeEffect(KeyPair)(new KeyPair({ id, key })).pipe(
+          Effect.mapError(Struct.get("issue")),
+        ),
       ),
       encode: SchemaGetter.transformEffect(({ id, key }) =>
         Schema.decodeEffect(KeyPair)({ id, key }).pipe(
@@ -49,7 +51,7 @@ export namespace LicensesContract {
   ) {}
 
   export class InvalidLicenseKeyError
-    extends Schema.TaggedError<InvalidLicenseKeyError>()(
+    extends Schema.TaggedError<InvalidLicenseKeyError, { readonly brand: unique symbol }>()(
       "InvalidLicenseKeyError",
       { id: EntityId },
       { httpApiStatus: 400 },
@@ -61,7 +63,7 @@ export namespace LicensesContract {
   }
 
   export class ExpiredLicenseError
-    extends Schema.TaggedError<ExpiredLicenseError>()(
+    extends Schema.TaggedError<ExpiredLicenseError, { readonly brand: unique symbol }>()(
       "ExpiredLicenseError",
       { expiredAt: Schema.DateTimeUtc },
       { httpApiStatus: 403 },
@@ -73,7 +75,7 @@ export namespace LicensesContract {
   }
 
   export class LicenseConflictError
-    extends Schema.TaggedError<LicenseConflictError>()(
+    extends Schema.TaggedError<LicenseConflictError, { readonly brand: unique symbol }>()(
       "LicenseConflictError",
       { id: EntityId },
       { httpApiStatus: 409 },
@@ -85,7 +87,7 @@ export namespace LicensesContract {
   }
 
   export class NoSuchLicenseError
-    extends Schema.TaggedError<NoSuchLicenseError>()(
+    extends Schema.TaggedError<NoSuchLicenseError, { readonly brand: unique symbol }>()(
       "NoSuchLicenseError",
       { id: EntityId },
       { httpApiStatus: 422 },

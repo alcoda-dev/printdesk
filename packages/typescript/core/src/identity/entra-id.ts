@@ -15,10 +15,10 @@ export namespace EntraId {
     IdentityProvidersContract.ClientCredentials
   >()("@printdesk/core/identity/entra-id/ClientCredentials") {}
 
-  export class AuthProviderError extends Schema.TaggedError<AuthProviderError>()(
-    "EntraIdAuthProviderError",
-    { cause: Schema.Defect() },
-  ) {}
+  export class AuthProviderError extends Schema.TaggedError<
+    AuthProviderError,
+    { readonly brand: unique symbol }
+  >()("EntraIdAuthProviderError", { cause: Schema.Defect() }) {}
 
   // @effect-leakable-service
   export class AuthProvider extends Context.Service<

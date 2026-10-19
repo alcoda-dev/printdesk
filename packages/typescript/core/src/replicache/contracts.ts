@@ -17,50 +17,61 @@ import { ChunkFromArray, EntityId, Version } from "../utils";
 import { Constants } from "../utils/constants";
 
 export namespace ReplicacheContract {
+  export class Headers extends Schema.Class<Headers, { readonly brand: unique symbol }>("Headers")({
+    "X-Replicache-RequestID": Schema.String,
+  }) {}
+
   export const ClientGroupId = Schema.String.pipe(
     Schema.check(Schema.isUUID()),
     Schema.brand("ClientGroupId"),
   );
   export type ClientGroupId = typeof ClientGroupId.Type;
 
-  export class ClientStateNotFoundResponse extends Schema.Class<ClientStateNotFoundResponse>(
-    "ClientStateNotFoundResponse",
-  )({ error: Schema.tag("ClientStateNotFound") }) {}
+  export class ClientStateNotFoundResponse extends Schema.Class<
+    ClientStateNotFoundResponse,
+    { readonly brand: unique symbol }
+  >("ClientStateNotFoundResponse")({ error: Schema.tag("ClientStateNotFound") }) {}
 
-  export class ClientStateNotFoundError extends Schema.TaggedError<ClientStateNotFoundError>()(
-    "ClientStateNotFoundError",
-    {
-      response: ClientStateNotFoundResponse.pipe(
-        Schema.withConstructorDefault(Effect.succeed(new ClientStateNotFoundResponse())),
-      ),
-    },
-  ) {}
+  export class ClientStateNotFoundError extends Schema.TaggedError<
+    ClientStateNotFoundError,
+    { readonly brand: unique symbol }
+  >()("ClientStateNotFoundError", {
+    response: ClientStateNotFoundResponse.pipe(
+      Schema.withConstructorDefault(Effect.succeed(new ClientStateNotFoundResponse())),
+    ),
+  }) {}
 
-  export class VersionNotSupportedResponse extends Schema.Class<VersionNotSupportedResponse>(
-    "VersionNotSupportedResponse",
-  )({
+  export class VersionNotSupportedResponse extends Schema.Class<
+    VersionNotSupportedResponse,
+    { readonly brand: unique symbol }
+  >("VersionNotSupportedResponse")({
     error: Schema.tag("VersionNotSupported"),
     versionType: Schema.Literals(["push", "pull", "schema"]).pipe(Schema.optional),
   }) {}
 
-  export class VersionNotSupportedError extends Schema.TaggedError<VersionNotSupportedError>()(
-    "VersionNotSupportedError",
-    { response: VersionNotSupportedResponse },
-  ) {
+  export class VersionNotSupportedError extends Schema.TaggedError<
+    VersionNotSupportedError,
+    { readonly brand: unique symbol }
+  >()("VersionNotSupportedError", { response: VersionNotSupportedResponse }) {
     public static readonly new = (
       versionType: NonNullable<typeof this.Type.response.versionType>,
     ) => new this({ response: new VersionNotSupportedResponse({ versionType }) });
   }
 
-  export class PullPermission extends Schema.TaggedClass<PullPermission>()(
-    "ReplicachePullPermission",
-    { permission: Schema.Literals(Permissions.syncReadPermissions) },
-  ) {}
+  export class PullPermission extends Schema.TaggedClass<
+    PullPermission,
+    { readonly brand: unique symbol }
+  >()("ReplicachePullPermission", {
+    permission: Schema.Literals(Permissions.syncReadPermissions),
+  }) {}
 
   export const PullPolicy = PolicyHandlers.registry.ReplicachePullPolicySchema;
   export type PullPolicy = typeof PullPolicy.Type;
 
-  export class Notification extends Schema.TaggedClass<Notification>()("ReplicacheNotification", {
+  export class Notification extends Schema.TaggedClass<
+    Notification,
+    { readonly brand: unique symbol }
+  >()("ReplicacheNotification", {
     clientGroupId: ClientGroupId,
     data: Schema.Union([PullPermission, PullPolicy]).pipe(Schema.Array),
   }) {}
@@ -79,10 +90,6 @@ export namespace ReplicacheContract {
 }
 
 export namespace ReplicachePullerContract {
-  export class Headers extends Schema.Class<Headers>("Headers")({
-    "X-Replicache-RequestID": Schema.String,
-  }) {}
-
   export const Cookie = Schema.Struct({ order: Version }).pipe(Schema.NullOr);
 
   export const RequestV0 = Schema.Struct({
@@ -129,9 +136,10 @@ export namespace ReplicachePullerContract {
     typeof tableKey<TName>
   >["Type"];
 
-  export class PutSyncStateOperation extends Schema.Class<PutSyncStateOperation>(
-    "PutSyncStateOperation",
-  )({
+  export class PutSyncStateOperation extends Schema.Class<
+    PutSyncStateOperation,
+    { readonly brand: unique symbol }
+  >("PutSyncStateOperation")({
     op: Schema.tag("put"),
     key: Schema.tag(Constants.REPLICACHE_SYNC_STATE_KEY),
     value: Schema.Literals(["PARTIAL", "COMPLETE"]),
@@ -202,14 +210,17 @@ export namespace ReplicachePullerContract {
   export const DeleteOperation = DeleteTableOperation;
   export type DeleteOperation = typeof DeleteOperation.Type;
 
-  export class ClearOperation extends Schema.Class<ClearOperation>("Clear")({
-    op: Schema.tag("clear"),
-  }) {}
+  export class ClearOperation extends Schema.Class<
+    ClearOperation,
+    { readonly brand: unique symbol }
+  >("Clear")({ op: Schema.tag("clear") }) {}
 
   export const PatchOperation = Schema.Union([PutOperation, DeleteOperation, ClearOperation]);
   export type PatchOperation = typeof PatchOperation.Type;
 
-  export class ResponseOkV0 extends Schema.Class<ResponseOkV0>("ResponseOkV0")({
+  export class ResponseOkV0 extends Schema.Class<ResponseOkV0, { readonly brand: unique symbol }>(
+    "ResponseOkV0",
+  )({
     cookie: Cookie,
     lastMutationID: Schema.Int,
     patch: PatchOperation.pipe(ChunkFromArray),
@@ -247,10 +258,6 @@ export namespace ReplicachePullerContract {
 }
 
 export namespace ReplicachePusherContract {
-  export class Headers extends Schema.Class<Headers>("Headers")({
-    "X-Replicache-RequestID": Schema.String,
-  }) {}
-
   export const MutationV0 = MutationHandlers.registry.ReplicacheMutationV0Schema;
   export type MutationV0 = typeof MutationV0.Type;
 
@@ -261,7 +268,7 @@ export namespace ReplicachePusherContract {
   export type Mutation = typeof Mutation.Type;
 
   export class FutureMutationError
-    extends Schema.TaggedError<FutureMutationError>()(
+    extends Schema.TaggedError<FutureMutationError, { readonly brand: unique symbol }>()(
       "FutureMutationError",
       { mutationId: Schema.Int },
       { httpApiStatus: 400 },

@@ -1,6 +1,7 @@
 import { AccessControl } from "@printdesk/core/access-control";
 import { Api } from "@printdesk/core/api";
 import { PapercutMfApi } from "@printdesk/core/papercut-mf/api";
+import { PapercutMfContract } from "@printdesk/core/papercut-mf/contract";
 import { PapercutMfSynchronizer } from "@printdesk/core/papercut-mf/synchronizer";
 import { ReplicacheNotifier } from "@printdesk/core/replicache/notifier";
 import { layer as replicacheNotifierLayer } from "@printdesk/core/replicache/notifier/layer";
@@ -33,9 +34,9 @@ export const basePapercutMfGroupLayer = HttpApiBuilder.group(
               HttpClientError: () => Effect.succeed(false),
               FaultError: () => Effect.succeed(false),
             }),
-            orDieWhenUnrespondable,
-            Effect.map((healthy) => ({ healthy })),
+            Effect.map((healthy) => new PapercutMfContract.HealthSuccess({ healthy })),
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_api_gateway:read")),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -43,12 +44,15 @@ export const basePapercutMfGroupLayer = HttpApiBuilder.group(
         "taskStatus",
         Effect.fn("Api.PapercutMf.taskStatus")(() =>
           api.getTaskStatus.pipe(
-            Effect.map((taskStatus) => ({
-              completed: taskStatus[0].value.boolean,
-              message: taskStatus[1].value,
-            })),
-            orDieWhenUnrespondable,
+            Effect.map(
+              (taskStatus) =>
+                new PapercutMfContract.TaskStatusSuccess({
+                  completed: taskStatus[0].value.boolean,
+                  message: taskStatus[1].value,
+                }),
+            ),
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_api_gateway:read")),
+            orDieWhenUnrespondable,
           ),
         ),
       );
@@ -74,8 +78,8 @@ export const basePapercutMfSyncGroupLayer = HttpApiBuilder.group(
             Effect.map(Array.flatten),
             Effect.filterOrElse(Array.isArrayEmpty, () => replicacheNotifier.poke),
             Effect.asVoid,
-            orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_sync:create")),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -85,8 +89,8 @@ export const basePapercutMfSyncGroupLayer = HttpApiBuilder.group(
           syncer.syncSharedAccounts.pipe(
             Effect.filterOrElse(Array.isArrayEmpty, () => replicacheNotifier.poke),
             Effect.asVoid,
-            orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_sync:create")),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -96,8 +100,8 @@ export const basePapercutMfSyncGroupLayer = HttpApiBuilder.group(
           syncer.syncSharedAccountCustomerAccess.pipe(
             Effect.filterOrElse(Array.isArrayEmpty, () => replicacheNotifier.poke),
             Effect.asVoid,
-            orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_sync:create")),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -107,8 +111,8 @@ export const basePapercutMfSyncGroupLayer = HttpApiBuilder.group(
           syncer.syncSharedAccountCustomerGroupAccess.pipe(
             Effect.filterOrElse(Array.isArrayEmpty, () => replicacheNotifier.poke),
             Effect.asVoid,
-            orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_sync:create")),
+            orDieWhenUnrespondable,
           ),
         ),
       );

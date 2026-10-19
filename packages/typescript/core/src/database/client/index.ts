@@ -15,10 +15,10 @@ export class ReadTransaction extends Context.Service<ReadTransaction, Replicache
   "@printdesk/core/database/client/ReadTransaction",
 ) {}
 
-export class ReadTransactionError extends Schema.TaggedError<ReadTransactionError>()(
-  "ReadTransactionError",
-  { cause: Schema.Defect() },
-) {}
+export class ReadTransactionError extends Schema.TaggedError<
+  ReadTransactionError,
+  { readonly brand: unique symbol }
+>()("ReadTransactionError", { cause: Schema.Defect() }) {}
 
 // @effect-leakable-service
 export class WriteTransaction extends Context.Service<
@@ -26,10 +26,10 @@ export class WriteTransaction extends Context.Service<
   ReplicacheWriteTransaction
 >()("@printdesk/core/database/client/WriteTransaction") {}
 
-export class WriteTransactionError extends Schema.TaggedError<WriteTransactionError>()(
-  "WriteTransactionError",
-  { cause: Schema.Defect() },
-) {}
+export class WriteTransactionError extends Schema.TaggedError<
+  WriteTransactionError,
+  { readonly brand: unique symbol }
+>()("WriteTransactionError", { cause: Schema.Defect() }) {}
 
 export class Database extends Context.Service<Database>()(
   "@printdesk/core/database/client/Database",

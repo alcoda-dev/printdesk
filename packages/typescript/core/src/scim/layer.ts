@@ -87,7 +87,7 @@ export const makeService = Effect.gen(function* () {
           Stream.filter(Predicate.isNotNull),
           Stream.filter((membership) => membership.deletedAt === null),
           Stream.runCollect,
-          Effect.map((groupMemberships) => ({ group, groupMemberships })),
+          Effect.map((groupMemberships) => GroupsContract.Dtos.make({ group, groupMemberships })),
         ),
       ),
       Stream.filter(({ group }) => group.deletedAt === null),
@@ -235,6 +235,9 @@ export const makeService = Effect.gen(function* () {
       ),
   );
 
+  const userAttributes = yield* ScimContract.v2UserSchemaAttributes;
+  const groupAttributes = yield* ScimContract.v2GroupSchemaAttributes;
+
   const discoverSchemas = Effect.sync(function () {
     const record = Effect.all({
       [ScimContract.v2UserUri]: locator.schema(ScimContract.v2UserUri).pipe(
@@ -245,7 +248,7 @@ export const makeService = Effect.gen(function* () {
               id: ScimContract.v2UserUri,
               name: "User",
               description: "User account",
-              attributes: ScimContract.V2SchemaAttribute.userAttributes,
+              attributes: userAttributes,
               meta: { resourceType: "Schema", location },
             }),
         ),
@@ -258,7 +261,7 @@ export const makeService = Effect.gen(function* () {
               id: ScimContract.v2GroupUri,
               name: "Group",
               description: "Group account",
-              attributes: ScimContract.V2SchemaAttribute.groupAttributes,
+              attributes: groupAttributes,
               meta: { resourceType: "Schema", location },
             }),
         ),
@@ -369,7 +372,7 @@ export const makeService = Effect.gen(function* () {
 
           return yield* groupMembershipsRef.pipe(
             Ref.get,
-            Effect.map((groupMemberships) => ({ group, groupMemberships })),
+            Effect.map((groupMemberships) => GroupsContract.Dtos.make({ group, groupMemberships })),
           );
         }),
       ),
@@ -413,7 +416,7 @@ export const makeService = Effect.gen(function* () {
 
           return yield* groupMembershipsRef.pipe(
             Ref.get,
-            Effect.map((groupMemberships) => ({ group, groupMemberships })),
+            Effect.map((groupMemberships) => GroupsContract.Dtos.make({ group, groupMemberships })),
           );
         }),
       ),

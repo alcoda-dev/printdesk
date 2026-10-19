@@ -36,7 +36,7 @@ export namespace TenantsContract {
   ) {}
 
   export class TenantSlugConflictError
-    extends Schema.TaggedError<TenantSlugConflictError>()(
+    extends Schema.TaggedError<TenantSlugConflictError, { readonly brand: unique symbol }>()(
       "TenantSlugConflictError",
       { slug: Slug },
       { httpApiStatus: 409 },
@@ -47,10 +47,10 @@ export namespace TenantsContract {
       HttpServerResponse.schemaJson(TenantSlugConflictError)(this, { status: 409 });
   }
 
-  export class InvalidStatusError extends Schema.TaggedError<InvalidStatusError>()(
-    "InvalidTenantStatusError",
-    Table.Model.mapFields(Struct.pick(["id", "status"])),
-  ) {}
+  export class InvalidStatusError extends Schema.TaggedError<
+    InvalidStatusError,
+    { readonly brand: unique symbol }
+  >()("InvalidTenantStatusError", Table.Model.mapFields(Struct.pick(["id", "status"]))) {}
 
   export const edit = new Handler.Handler({
     name: "editTenant",

@@ -6,6 +6,7 @@ import * as Option from "effect/Option";
 
 import { OrdersMutations } from ".";
 import { AccessControl } from "../../access-control";
+import { AttributesContract } from "../../attributes/contract";
 import { Transaction } from "../../database/transaction";
 import { Mutation } from "../../mutations";
 import { ReplicacheContract } from "../../replicache/contracts";
@@ -72,18 +73,25 @@ export const makeService = Effect.gen(function* () {
       // TODO: Verify workflow status is correct
       repository.createWithRoomId({ ...order, status: OrdersContract.draftStatus, tenantId }).pipe(
         Effect.tap((order) =>
-          shortIdGenerator.generate({ tenantId: order.tenantId, roomId: order.roomId }).pipe(
-            Effect.flatMap((shortId) =>
-              repository.updateById(order.id, { shortId }, order.tenantId),
-            ),
-            Effect.catch((error) =>
-              Effect.logError(
-                `[Orders.Mutations]: Failed to save short ID for order "${order.id}":`,
-                error,
+          shortIdGenerator
+            .generate(
+              new AttributesContract.TenantRoomId({
+                tenantId: order.tenantId,
+                roomId: order.roomId,
+              }),
+            )
+            .pipe(
+              Effect.flatMap((shortId) =>
+                repository.updateById(order.id, { shortId }, order.tenantId),
               ),
+              Effect.catch((error) =>
+                Effect.logError(
+                  `[Orders.Mutations]: Failed to save short ID for order "${order.id}":`,
+                  error,
+                ),
+              ),
+              Transaction.after(),
             ),
-            Transaction.after(),
-          ),
         ),
         Effect.tap(notify),
       ),

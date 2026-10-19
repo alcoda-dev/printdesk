@@ -18,9 +18,10 @@ import type { JWTHeaderParameters, KeyInput } from "jose";
 
 export type ServiceShape = Effect.Success<typeof makeService>;
 
-export class JwtSignError extends Schema.TaggedError<JwtSignError>()("JwtSignError", {
-  cause: Schema.Defect(),
-}) {}
+export class JwtSignError extends Schema.TaggedError<
+  JwtSignError,
+  { readonly brand: unique symbol }
+>()("JwtSignError", { cause: Schema.Defect() }) {}
 
 export interface SignJwtOptions {
   audience: string;

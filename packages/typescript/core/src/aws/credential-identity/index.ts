@@ -12,11 +12,10 @@ import type {
 } from "@aws-sdk/types";
 
 export class AwsCredentialIdentityProviderError
-  extends Schema.TaggedError<AwsCredentialIdentityProviderError>()(
-    "AwsCredentialIdentityProviderError",
-    { cause: Schema.Defect() },
-    { httpApiStatus: 500 },
-  )
+  extends Schema.TaggedError<
+    AwsCredentialIdentityProviderError,
+    { readonly brand: unique symbol }
+  >()("AwsCredentialIdentityProviderError", { cause: Schema.Defect() }, { httpApiStatus: 500 })
   implements HttpServerRespondable.Respondable
 {
   // oxlint-disable-next-line class-methods-use-this
@@ -24,9 +23,10 @@ export class AwsCredentialIdentityProviderError
     HttpServerResponse.empty({ status: 500 }).pipe(Effect.succeed);
 }
 
-export class AwsCredentialIdentity extends Schema.Class<AwsCredentialIdentity>(
-  "AwsCredentialIdentity",
-)({
+export class AwsCredentialIdentity extends Schema.Class<
+  AwsCredentialIdentity,
+  { readonly brand: unique symbol }
+>("AwsCredentialIdentity")({
   accessKeyId: Schema.String.pipe(Schema.RedactedFromValue),
   secretAccessKey: Schema.String.pipe(Schema.RedactedFromValue),
   sessionToken: Schema.String.pipe(Schema.RedactedFromValue, Schema.optional),

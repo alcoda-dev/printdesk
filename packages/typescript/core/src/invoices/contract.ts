@@ -19,7 +19,10 @@ export namespace InvoicesContract {
   export const Status = Schema.Literals(["processing", "charged", "error"]);
   export type Status = typeof Status.Type;
 
-  export class LineItemV1 extends Schema.TaggedClass<LineItemV1>()("InvoiceLineItemV1", {
+  export class LineItemV1 extends Schema.TaggedClass<
+    LineItemV1,
+    { readonly brand: unique symbol }
+  >()("InvoiceLineItemV1", {
     name: Schema.String,
     description: Schema.String,
     cost: Schema.Finite,
@@ -61,7 +64,9 @@ export namespace InvoicesContract {
     Output: Table.Dto,
   });
 
-  export class Estimate extends Schema.Class<Estimate>("Estimate")({
+  export class Estimate extends Schema.Class<Estimate, { readonly brand: unique symbol }>(
+    "Estimate",
+  )({
     total: Schema.Finite,
     description: Schema.String.pipe(Schema.optional),
     items: LineItem.pipe(Schema.Array),

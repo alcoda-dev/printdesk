@@ -24,14 +24,15 @@ import type {
 } from "@aws-sdk/types";
 import type * as HttpBody from "effect/http/HttpBody";
 
-export class SignatureV4Error extends Schema.TaggedError<SignatureV4Error>()("SignatureV4Error", {
-  cause: Schema.Defect(),
-}) {}
+export class SignatureV4Error extends Schema.TaggedError<
+  SignatureV4Error,
+  { readonly brand: unique symbol }
+>()("SignatureV4Error", { cause: Schema.Defect() }) {}
 
-export class SigningError extends Schema.TaggedError<SigningError>()("SigningError", {
-  service: NonEmptyString,
-  cause: Schema.Defect(),
-}) {}
+export class SigningError extends Schema.TaggedError<
+  SigningError,
+  { readonly brand: unique symbol }
+>()("SigningError", { service: NonEmptyString, cause: Schema.Defect() }) {}
 
 export interface RequestPresigningArguments extends Omit<
   AwsSdkRequestPresigningArguments,

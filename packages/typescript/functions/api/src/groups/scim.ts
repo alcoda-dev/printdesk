@@ -148,7 +148,6 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
         "create",
         Effect.fn("Api.ScimV2Groups.create")(({ payload }) =>
           scim.createGroup(payload).pipe(
-            orDieWhenUnrespondable,
             AccessControl.enforce(
               AccessControl.every(
                 AccessControl.permissionPolicy("groups:create"),
@@ -162,6 +161,7 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
               AccessDeniedError: (error) =>
                 new ScimContract.V2ForbiddenError({ detail: error.message }),
             }),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -178,7 +178,6 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 }),
             ),
             Effect.flatMap(scim.replaceGroup),
-            orDieWhenUnrespondable,
             AccessControl.enforce(
               AccessControl.every(
                 AccessControl.permissionPolicy("groups:update"),
@@ -192,6 +191,7 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
               AccessDeniedError: (error) =>
                 new ScimContract.V2ForbiddenError({ detail: error.message }),
             }),
+            orDieWhenUnrespondable,
           ),
         ),
       )
@@ -199,7 +199,6 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
         "modify",
         Effect.fn("Api.ScimV2Groups.modify")(({ params, payload }) =>
           scim.modifyGroup(params.id, payload.Operations).pipe(
-            orDieWhenUnrespondable,
             AccessControl.enforce(
               AccessControl.every(
                 AccessControl.permissionPolicy("groups:update"),
@@ -213,6 +212,7 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
               AccessDeniedError: (error) =>
                 new ScimContract.V2ForbiddenError({ detail: error.message }),
             }),
+            orDieWhenUnrespondable,
           ),
         ),
       )

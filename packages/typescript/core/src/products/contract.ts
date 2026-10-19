@@ -15,20 +15,23 @@ export namespace ProductsContract {
   export const Status = Schema.Literals(["draft", "published"]);
   export type Status = typeof Status.Type;
 
-  export class Option extends Schema.Class<Option>("Option")({
+  export class Option extends Schema.Class<Option, { readonly brand: unique symbol }>("Option")({
     name: Schema.Trim,
     image: Schema.String,
     description: Schema.Trim.pipe(Schema.optional),
     cost: Cost,
   }) {}
-  export class Field extends Schema.Class<Field>("Field")({
+  export class Field extends Schema.Class<Field, { readonly brand: unique symbol }>("Field")({
     name: Schema.Trim,
     required: Schema.Boolean,
     options: Option.pipe(Schema.Array),
   }) {}
   const fallbackBoolean = (fallback = true) =>
     Schema.Boolean.pipe(Schema.catchDecoding(() => Effect.succeedSome(fallback)));
-  export class AttributesV1 extends Schema.TaggedClass<AttributesV1>()("ProductAttributesV1", {
+  export class AttributesV1 extends Schema.TaggedClass<
+    AttributesV1,
+    { readonly brand: unique symbol }
+  >()("ProductAttributesV1", {
     copies: Schema.Struct({ visible: fallbackBoolean() }),
     printColor: Schema.Struct({ visible: fallbackBoolean() }),
     singleOrDoubleSided: Schema.Struct({ visible: fallbackBoolean() }),
@@ -81,38 +84,36 @@ export namespace ProductsContract {
       }).pipe(Schema.optional),
     }),
   }) {}
-  export class ConfigurationV1 extends Schema.TaggedClass<ConfigurationV1>()(
-    "ProductConfigurationV1",
-    {
-      image: Schema.String,
-      status: Status.pipe(Schema.withDecodingDefaultType(Effect.succeed("draft"))),
-      orderAttachments: Schema.Struct({
-        fileUploadEnabled: Schema.Boolean,
-        physicalCopyEnabled: Schema.Boolean,
-        byteSizeLimit: Schema.ByteSizeFromString.pipe(
-          Schema.withConstructorDefault(
-            Effect.succeed(
-              ByteSize.fromInputUnsafe(Constants.DEFAULT_ORDER_OBJECT_BYTE_SIZE_LIMIT),
-            ),
-          ),
-          Schema.check(
-            Schema.makeFilter((byteSize) => {
-              if (
-                byteSize &&
-                ByteSize.isGreaterThan(
-                  byteSize,
-                  ByteSize.fromInputUnsafe(Constants.DEFAULT_ORDER_OBJECT_BYTE_SIZE_LIMIT),
-                )
-              )
-                return "Order attachment byte size limit exceeded";
-            }),
-          ),
+  export class ConfigurationV1 extends Schema.TaggedClass<
+    ConfigurationV1,
+    { readonly brand: unique symbol }
+  >()("ProductConfigurationV1", {
+    image: Schema.String,
+    status: Status.pipe(Schema.withDecodingDefaultType(Effect.succeed("draft"))),
+    orderAttachments: Schema.Struct({
+      fileUploadEnabled: Schema.Boolean,
+      physicalCopyEnabled: Schema.Boolean,
+      byteSizeLimit: Schema.ByteSizeFromString.pipe(
+        Schema.withConstructorDefault(
+          Effect.succeed(ByteSize.fromInputUnsafe(Constants.DEFAULT_ORDER_OBJECT_BYTE_SIZE_LIMIT)),
         ),
-        mimeTypeAllowlist: NonEmptyString.pipe(Schema.Array, Schema.optional),
-      }).pipe(Schema.optional),
-      attributes: AttributesV1,
-    },
-  ) {
+        Schema.check(
+          Schema.makeFilter((byteSize) => {
+            if (
+              byteSize &&
+              ByteSize.isGreaterThan(
+                byteSize,
+                ByteSize.fromInputUnsafe(Constants.DEFAULT_ORDER_OBJECT_BYTE_SIZE_LIMIT),
+              )
+            )
+              return "Order attachment byte size limit exceeded";
+          }),
+        ),
+      ),
+      mimeTypeAllowlist: NonEmptyString.pipe(Schema.Array, Schema.optional),
+    }).pipe(Schema.optional),
+    attributes: AttributesV1,
+  }) {
     public static readonly statusLens = this.pipe(Schema.toIso).key("status");
 
     public isValidOrderAttachment(metadata: { mimeType: string; byteSize: ByteSize.ByteSize }) {

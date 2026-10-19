@@ -17,10 +17,10 @@ import { Transaction } from "./transaction";
 
 import type { AnyPgSelectQueryBuilder, PgSelectDynamic } from "drizzle-orm/pg-core";
 
-export class QueryBuilderError extends Schema.TaggedError<QueryBuilderError>()(
-  "QueryBuilderError",
-  { cause: Schema.Defect() },
-) {}
+export class QueryBuilderError extends Schema.TaggedError<
+  QueryBuilderError,
+  { readonly brand: unique symbol }
+>()("QueryBuilderError", { cause: Schema.Defect() }) {}
 
 export class Database extends Context.Service<Database>()("@printdesk/core/database/Database", {
   make: Effect.gen(function* () {

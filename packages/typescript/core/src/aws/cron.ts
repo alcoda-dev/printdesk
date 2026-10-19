@@ -5,10 +5,10 @@ import * as Schema from "effect/Schema";
 import { NonEmptyString } from "../utils";
 
 export namespace AwsCron {
-  export class ParseExpressionError extends Schema.TaggedError<ParseExpressionError>()(
-    "AwsCronParseExpressionError",
-    { cause: Schema.Defect() },
-  ) {}
+  export class ParseExpressionError extends Schema.TaggedError<
+    ParseExpressionError,
+    { readonly brand: unique symbol }
+  >()("AwsCronParseExpressionError", { cause: Schema.Defect() }) {}
 
   export const parseExpression = (expression: string) =>
     Result.try({

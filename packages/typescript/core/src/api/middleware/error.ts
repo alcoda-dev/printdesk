@@ -10,7 +10,9 @@ import * as String from "effect/String";
 
 const unexpectedServerErrorMessage = "unexpected server error";
 export class UnexpectedServerError
-  extends Schema.Class<UnexpectedServerError>("UnexpectedServerError")(
+  extends Schema.Class<UnexpectedServerError, { readonly brand: unique symbol }>(
+    "UnexpectedServerError",
+  )(
     {
       message: Schema.Literal(unexpectedServerErrorMessage).pipe(
         Schema.withConstructorDefault(Effect.succeed(unexpectedServerErrorMessage)),

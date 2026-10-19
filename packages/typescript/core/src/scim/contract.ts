@@ -32,17 +32,45 @@ export namespace ScimContract {
   ]);
   export type V2ResourceTypeName = typeof V2ResourceTypeName.Type;
 
-  export class V2SchemaAttribute extends Schema.Class<V2SchemaAttribute>("V2SchemaAttribute")({
+  const V2SchemaAttributeType = Schema.Literals([
+    "string",
+    "boolean",
+    "decimal",
+    "integer",
+    "dateTime",
+    "reference",
+    "complex",
+  ]);
+
+  const V2SchemaAttributeMutability = Schema.Literals([
+    "readOnly",
+    "readWrite",
+    "immutable",
+    "writeOnly",
+  ]);
+
+  const V2SchemaAttributeReturned = Schema.Literals(["always", "never", "default", "request"]);
+
+  const V2SchemaAttributeUniqueness = Schema.Literals(["none", "server", "global"]);
+
+  interface V2SchemaAttribute {
+    readonly name: string;
+    readonly type: typeof V2SchemaAttributeType.Type;
+    readonly subAttributes?: ReadonlyArray<V2SchemaAttribute>;
+    readonly multiValued: boolean;
+    readonly description: string;
+    readonly required: boolean;
+    readonly canonicalValues?: ReadonlyArray<string>;
+    readonly caseExact?: boolean;
+    readonly mutability: typeof V2SchemaAttributeMutability.Type;
+    readonly returned: typeof V2SchemaAttributeReturned.Type;
+    readonly uniqueness?: typeof V2SchemaAttributeUniqueness.Type;
+    readonly referenceTypes?: ReadonlyArray<string>;
+  }
+
+  export const V2SchemaAttribute = Schema.Struct({
     name: Schema.NonEmptyString,
-    type: Schema.Literals([
-      "string",
-      "boolean",
-      "decimal",
-      "integer",
-      "dateTime",
-      "reference",
-      "complex",
-    ]),
+    type: V2SchemaAttributeType,
     subAttributes: Schema.suspend((): Schema.Codec<V2SchemaAttribute> => V2SchemaAttribute).pipe(
       Schema.Array,
       Schema.optionalKey,
@@ -52,218 +80,228 @@ export namespace ScimContract {
     required: Schema.Boolean,
     canonicalValues: Schema.String.pipe(Schema.Array, Schema.optionalKey),
     caseExact: Schema.Boolean.pipe(Schema.optionalKey),
-    mutability: Schema.Literals(["readOnly", "readWrite", "immutable", "writeOnly"]),
-    returned: Schema.Literals(["always", "never", "default", "request"]),
-    uniqueness: Schema.Literals(["none", "server", "global"]).pipe(Schema.optionalKey),
+    mutability: V2SchemaAttributeMutability,
+    returned: V2SchemaAttributeReturned,
+    uniqueness: V2SchemaAttributeUniqueness.pipe(Schema.optionalKey),
     referenceTypes: Schema.String.pipe(Schema.Array, Schema.optionalKey),
-  }) {
-    public static get userAttributes() {
-      return [
-        new this({
-          name: "id",
-          type: "string",
-          multiValued: false,
-          description: "Unique identifier for the user.",
-          required: true,
-          caseExact: true,
-          mutability: "readOnly",
-          returned: "default",
-          uniqueness: "server",
-        }),
-        new this({
-          name: "externalId",
-          type: "string",
-          multiValued: false,
-          description: "Unique external identifier for the user.",
-          required: false,
-          caseExact: true,
-          mutability: "readWrite",
-          returned: "default",
-          uniqueness: "server",
-        }),
-        new this({
-          name: "userName",
-          type: "string",
-          multiValued: false,
-          description: "Unique identifier for the user to use when logging in.",
-          required: true,
-          caseExact: true,
-          mutability: "readWrite",
-          returned: "default",
-          uniqueness: "server",
-        }),
-        new this({
-          name: "displayName",
-          type: "string",
-          multiValued: false,
-          description: "The name of the user suitable for displaying to end-users.",
-          required: true,
-          caseExact: true,
-          mutability: "readWrite",
-          returned: "default",
-          uniqueness: "none",
-        }),
-        new this({
-          name: "active",
-          type: "boolean",
-          multiValued: false,
-          description: "A boolean value to indicate whether the user status is active.",
-          required: false,
-          mutability: "readWrite",
-          returned: "default",
-        }),
-        new this({
-          name: "emails",
-          type: "complex",
-          subAttributes: [
-            new this({
-              name: "primary",
-              type: "boolean",
-              multiValued: false,
-              description:
-                "A boolean value indicating the 'primary' or preferred attribute value for this attribute, e.g., the preferred mailing address or primary email address. The primary attribute value 'true' MUST appear no more than once.",
-              required: true,
-              mutability: "readWrite",
-              returned: "default",
-            }),
-            new this({
-              name: "value",
-              type: "string",
-              multiValued: false,
-              description: "The user's email address.",
-              required: true,
-              caseExact: false,
-              mutability: "readWrite",
-              returned: "default",
-              uniqueness: "server",
-            }),
-          ],
-          multiValued: true,
-          description: "Email addresses for the user.",
-          required: true,
-          mutability: "readWrite",
-          returned: "default",
-        }),
-        new this({
-          name: "roles",
-          type: "complex",
-          subAttributes: [
-            new this({
-              name: "value",
-              type: "string",
-              multiValued: false,
-              description: "The value of a role.",
-              required: true,
-              caseExact: false,
-              mutability: "readOnly",
-              returned: "default",
-              uniqueness: "none",
-              canonicalValues: UsersContract.Role.literals,
-            }),
-            new this({
-              name: "display",
-              type: "string",
-              multiValued: false,
-              description: "A human-readable name, primarily used for display purposes.",
-              required: false,
-              caseExact: false,
-              mutability: "readOnly",
-              returned: "default",
-              uniqueness: "none",
-            }),
-            new this({
-              name: "type",
-              type: "string",
-              multiValued: false,
-              description: "A label indicating the attribute's function.",
-              required: false,
-              caseExact: false,
-              mutability: "readOnly",
-              returned: "default",
-              uniqueness: "none",
-            }),
-            new this({
-              name: "primary",
-              type: "boolean",
-              multiValued: false,
-              description:
-                "A boolean value indicating the 'primary' or preferred attribute value for this attribute. The primary attribute value 'true' MUST appear no more than once.",
-              required: true,
-              mutability: "readOnly",
-              returned: "default",
-            }),
-          ],
-          multiValued: true,
-          description: "Roles for the user.",
-          required: false,
-          mutability: "readOnly",
-          returned: "default",
-        }),
-      ] as const;
-    }
+  });
 
-    public static get groupAttributes() {
-      return [
-        new this({
-          name: "id",
-          type: "string",
-          multiValued: false,
-          description: "Unique identifier for the group.",
-          required: true,
-          caseExact: true,
-          mutability: "readOnly",
-          returned: "default",
-          uniqueness: "server",
-        }),
-        new this({
-          name: "displayName",
-          type: "string",
-          multiValued: false,
-          description: "The name of the group suitable to display to end-users.",
-          required: true,
-          caseExact: true,
-          mutability: "readWrite",
-          returned: "default",
-          uniqueness: "none",
-        }),
-        new this({
-          name: "members",
-          type: "complex",
-          subAttributes: [
-            new this({
-              name: "value",
-              type: "string",
-              multiValued: false,
-              description: "Identifier of the member of the group.",
-              required: true,
-              caseExact: false,
-              mutability: "immutable",
-              returned: "default",
-              uniqueness: "none",
-            }),
-            new this({
-              name: "$ref",
-              type: "reference",
-              referenceTypes: ["User", "Group"],
-              multiValued: false,
-              description:
-                "The URI corresponding to a SCIM resource that is a member of this group.",
-              required: true,
-              caseExact: false,
-              mutability: "immutable",
-              returned: "default",
-              uniqueness: "none",
-            }),
-          ],
-          multiValued: true,
-          description: "A list of members of the group.",
-          required: true,
-          mutability: "readWrite",
-          returned: "default",
-        }),
-      ] as const;
-    }
-  }
+  export const v2UserSchemaAttributes = Effect.sync(() =>
+    Array.make(
+      V2SchemaAttribute.make({
+        name: "id",
+        type: "string",
+        multiValued: false,
+        description: "Unique identifier for the user.",
+        required: true,
+        caseExact: true,
+        mutability: "readOnly",
+        returned: "default",
+        uniqueness: "server",
+      }),
+      V2SchemaAttribute.make({
+        name: "externalId",
+        type: "string",
+        multiValued: false,
+        description: "Unique external identifier for the user.",
+        required: true,
+        caseExact: true,
+        mutability: "readWrite",
+        returned: "default",
+        uniqueness: "server",
+      }),
+      V2SchemaAttribute.make({
+        name: "userName",
+        type: "string",
+        multiValued: false,
+        description: "Unique identifier for the user to use when logging in.",
+        required: true,
+        caseExact: true,
+        mutability: "readWrite",
+        returned: "default",
+        uniqueness: "server",
+      }),
+      V2SchemaAttribute.make({
+        name: "displayName",
+        type: "string",
+        multiValued: false,
+        description: "The name of the user suitable for displaying to end-users.",
+        required: true,
+        caseExact: true,
+        mutability: "readWrite",
+        returned: "default",
+        uniqueness: "none",
+      }),
+      V2SchemaAttribute.make({
+        name: "active",
+        type: "boolean",
+        multiValued: false,
+        description: "A boolean value to indicate whether the user status is active.",
+        required: false,
+        mutability: "readWrite",
+        returned: "default",
+      }),
+      V2SchemaAttribute.make({
+        name: "emails",
+        type: "complex",
+        subAttributes: [
+          V2SchemaAttribute.make({
+            name: "primary",
+            type: "boolean",
+            multiValued: false,
+            description:
+              "A boolean value indicating the 'primary' or preferred attribute value for V2SchemaAttribute attribute, e.g., the preferred mailing address or primary email address. The primary attribute value 'true' MUST appear no more than once.",
+            required: true,
+            mutability: "readWrite",
+            returned: "default",
+          }),
+          V2SchemaAttribute.make({
+            name: "value",
+            type: "string",
+            multiValued: false,
+            description: "The user's email address.",
+            required: true,
+            caseExact: false,
+            mutability: "readWrite",
+            returned: "default",
+            uniqueness: "server",
+          }),
+        ],
+        multiValued: true,
+        description: "Email addresses for the user.",
+        required: true,
+        mutability: "readWrite",
+        returned: "default",
+      }),
+      V2SchemaAttribute.make({
+        name: "roles",
+        type: "complex",
+        subAttributes: [
+          V2SchemaAttribute.make({
+            name: "value",
+            type: "string",
+            multiValued: false,
+            description: "The value of a role.",
+            required: true,
+            caseExact: false,
+            mutability: "readOnly",
+            returned: "default",
+            uniqueness: "none",
+            canonicalValues: UsersContract.Role.literals,
+          }),
+          V2SchemaAttribute.make({
+            name: "display",
+            type: "string",
+            multiValued: false,
+            description: "A human-readable name, primarily used for display purposes.",
+            required: false,
+            caseExact: false,
+            mutability: "readOnly",
+            returned: "default",
+            uniqueness: "none",
+          }),
+          V2SchemaAttribute.make({
+            name: "type",
+            type: "string",
+            multiValued: false,
+            description: "A label indicating the attribute's function.",
+            required: false,
+            caseExact: false,
+            mutability: "readOnly",
+            returned: "default",
+            uniqueness: "none",
+          }),
+          V2SchemaAttribute.make({
+            name: "primary",
+            type: "boolean",
+            multiValued: false,
+            description:
+              "A boolean value indicating the 'primary' or preferred attribute value for this attribute. The primary attribute value 'true' MUST appear no more than once.",
+            required: true,
+            mutability: "readOnly",
+            returned: "default",
+          }),
+        ],
+        multiValued: true,
+        description: "Roles for the user.",
+        required: false,
+        mutability: "readOnly",
+        returned: "default",
+      }),
+    ),
+  );
+
+  export const v2GroupSchemaAttributes = Effect.sync(() =>
+    Array.make(
+      V2SchemaAttribute.make({
+        name: "id",
+        type: "string",
+        multiValued: false,
+        description: "Unique identifier for the group.",
+        required: true,
+        caseExact: true,
+        mutability: "readOnly",
+        returned: "default",
+        uniqueness: "server",
+      }),
+      V2SchemaAttribute.make({
+        name: "externalId",
+        type: "string",
+        multiValued: false,
+        description: "Unique identifier for the group from an external identity provider.",
+        required: true,
+        caseExact: true,
+        mutability: "readWrite",
+        returned: "default",
+        uniqueness: "server",
+      }),
+      V2SchemaAttribute.make({
+        name: "displayName",
+        type: "string",
+        multiValued: false,
+        description: "The name of the group suitable to display to end-users.",
+        required: true,
+        caseExact: true,
+        mutability: "readWrite",
+        returned: "default",
+        uniqueness: "none",
+      }),
+      V2SchemaAttribute.make({
+        name: "members",
+        type: "complex",
+        subAttributes: [
+          V2SchemaAttribute.make({
+            name: "value",
+            type: "string",
+            multiValued: false,
+            description: "Identifier of the member of the group.",
+            required: true,
+            caseExact: false,
+            mutability: "immutable",
+            returned: "default",
+            uniqueness: "none",
+          }),
+          V2SchemaAttribute.make({
+            name: "$ref",
+            type: "reference",
+            referenceTypes: ["User", "Group"],
+            multiValued: false,
+            description: "The URI corresponding to a SCIM resource that is a member of this group.",
+            required: true,
+            caseExact: false,
+            mutability: "immutable",
+            returned: "default",
+            uniqueness: "none",
+          }),
+        ],
+        multiValued: true,
+        description: "A list of members of the group.",
+        required: true,
+        mutability: "readWrite",
+        returned: "default",
+      }),
+    ),
+  );
 
   export const v2UserUri = "urn:ietf:params:scim:schemas:core:2.0:User";
   export const v2GroupUri = "urn:ietf:params:scim:schemas:core:2.0:Group";
@@ -271,7 +309,9 @@ export namespace ScimContract {
   export type V2ResourceUri = typeof V2ResourceUri.Type;
 
   export const v2SchemaUri = "urn:ietf:params:scim:schemas:core:2.0:Schema";
-  export class V2Schema extends Schema.Class<V2Schema>("V2Schema")(
+  export class V2Schema extends Schema.Class<V2Schema, { readonly brand: unique symbol }>(
+    "V2Schema",
+  )(
     {
       _tag: Schema.tagDefaultOmit("ScimV2Schema"),
       schemas: Schema.Tuple([Schema.Literals([v2SchemaUri])]).pipe(
@@ -291,7 +331,10 @@ export namespace ScimContract {
   ) {}
 
   export const v2ResourceTypeUri = "urn:ietf:params:scim:schemas:core:2.0:ResourceType";
-  export class V2ResourceType extends Schema.Class<V2ResourceType>("V2ResourceType")(
+  export class V2ResourceType extends Schema.Class<
+    V2ResourceType,
+    { readonly brand: unique symbol }
+  >("V2ResourceType")(
     {
       _tag: Schema.tagDefaultOmit("ScimV2ResourceType"),
       schemas: Schema.Tuple([Schema.Literal(v2ResourceTypeUri)]).pipe(
@@ -315,7 +358,10 @@ export namespace ScimContract {
     { httpApiStatus: 200 },
   ) {}
 
-  export class CommonAttributes extends Schema.Class<CommonAttributes>("CommonAttributes")({
+  export class CommonAttributes extends Schema.Class<
+    CommonAttributes,
+    { readonly brand: unique symbol }
+  >("CommonAttributes")({
     id: Schema.NonEmptyString,
     externalId: Schema.NonEmptyString.pipe(Schema.optionalKey),
     meta: Schema.Struct({
@@ -330,9 +376,10 @@ export namespace ScimContract {
   export const v2ServiceProviderConfigUri =
     "urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig";
   export const baseV2ServiceProviderConfigOption = Schema.Struct({ supported: Schema.Boolean });
-  export class V2ServiceProviderConfig extends Schema.Class<V2ServiceProviderConfig>(
-    "V2ServiceProviderConfig",
-  )(
+  export class V2ServiceProviderConfig extends Schema.Class<
+    V2ServiceProviderConfig,
+    { readonly brand: unique symbol }
+  >("V2ServiceProviderConfig")(
     {
       _tag: Schema.tagDefaultOmit("ScimV2ServiceProviderConfig"),
       ...CommonAttributes.mapFields(Struct.evolve({ id: (id) => id.pipe(Schema.optionalKey) }))
@@ -407,7 +454,10 @@ export namespace ScimContract {
         Schema.withConstructorDefault(Effect.succeed([v2GroupUri] as const)),
       ),
       displayName: GroupsContract.Name,
-      members: Schema.Struct({ value: EntityId, $ref: Schema.NonEmptyString }).pipe(Schema.Array),
+      members: Schema.Struct({ value: EntityId, $ref: Schema.NonEmptyString }).pipe(
+        Schema.Array,
+        Schema.withDecodingDefaultTypeKey(Effect.sync(Array.empty)),
+      ),
     },
     { httpApiStatus: 200 },
   ) {
@@ -452,15 +502,17 @@ export namespace ScimContract {
                 ),
               );
 
-              return yield* Schema.encodeEffect(GroupsContract.ProvisionalDtos)({
-                group: {
-                  externalId: scimGroup.externalId,
-                  name: scimGroup.displayName,
-                  identityProviderId,
-                  tenantId,
-                },
-                groupMemberships,
-              }).pipe(Effect.mapError(Struct.get("issue")));
+              return yield* Schema.encodeEffect(GroupsContract.ProvisionalDtos)(
+                GroupsContract.ProvisionalDtos.make({
+                  group: {
+                    externalId: scimGroup.externalId,
+                    name: scimGroup.displayName,
+                    identityProviderId,
+                    tenantId,
+                  },
+                  groupMemberships,
+                }),
+              ).pipe(Effect.mapError(Struct.get("issue")));
             }),
           ),
           encode: SchemaGetter.transformEffect(
@@ -480,7 +532,7 @@ export namespace ScimContract {
               return yield* Schema.decodeEffect(this.Provisional)({
                 externalId: group.externalId,
                 displayName: group.name,
-                members,
+                ...(Array.isArrayNonEmpty(members) ? { members } : undefined),
               }).pipe(Effect.mapError(Struct.get("issue")));
             }),
           ),
@@ -492,7 +544,9 @@ export namespace ScimContract {
       return this.Provisional.mapFields(
         Struct.evolve({
           members: (members) =>
-            members.value.mapFields(Struct.evolve({ value: () => BulkId })).pipe(Schema.Array),
+            members.from.schema.value
+              .mapFields(Struct.evolve({ value: () => BulkId }))
+              .pipe(Schema.Array, Schema.withDecodingDefaultTypeKey(Effect.sync(Array.empty))),
         }),
       );
     }
@@ -532,15 +586,17 @@ export namespace ScimContract {
                 ),
               );
 
-              return yield* Schema.encodeEffect(GroupsContract.BulkProvisionalDtos)({
-                group: {
-                  externalId: scimGroup.externalId,
-                  name: scimGroup.displayName,
-                  identityProviderId,
-                  tenantId,
-                },
-                groupMemberships,
-              }).pipe(Effect.mapError(Struct.get("issue")));
+              return yield* Schema.encodeEffect(GroupsContract.BulkProvisionalDtos)(
+                GroupsContract.BulkProvisionalDtos.make({
+                  group: {
+                    externalId: scimGroup.externalId,
+                    name: scimGroup.displayName,
+                    identityProviderId,
+                    tenantId,
+                  },
+                  groupMemberships,
+                }),
+              ).pipe(Effect.mapError(Struct.get("issue")));
             }),
           ),
           encode: SchemaGetter.transformEffect(
@@ -899,17 +955,37 @@ export namespace ScimContract {
 
   export const V2FilterAttributePath = Schema.NonEmptyString;
 
-  export class V2FilterCompareExpression extends Schema.Class<V2FilterCompareExpression>(
-    "V2FilterCompareExpression",
-  )({
+  export const V2FilterCompareExpression = Schema.Struct({
     op: Schema.Literals(["eq", "ne", "co", "sw", "ew", "gt", "lt", "ge", "le"]),
     attrPath: V2FilterAttributePath,
     compValue: Schema.Union([Schema.Boolean, Schema.Null, Schema.Finite, Schema.String]),
-  }) {}
+  });
 
-  export class V2FilterSuffixExpression extends Schema.Class<V2FilterSuffixExpression>(
-    "V2FilterSuffixExpression",
-  )({ op: Schema.Literal("pr"), attrPath: V2FilterAttributePath }) {}
+  export const V2FilterSuffixExpression = Schema.Struct({
+    op: Schema.Literal("pr"),
+    attrPath: V2FilterAttributePath,
+  });
+
+  interface V2FilterAndExpression {
+    op: "and";
+    filters: Array<V2Filter>;
+  }
+
+  interface V2FilterOrExpression {
+    op: "or";
+    filters: Array<V2Filter>;
+  }
+
+  interface V2FilterValuePath {
+    op: "[]";
+    attrPath: typeof V2FilterAttributePath.Type;
+    valFilter: V2Filter;
+  }
+
+  interface V2FilterNotExpression {
+    op: "not";
+    filter: V2Filter;
+  }
 
   export const V2Filter = Schema.Union([
     V2FilterCompareExpression,
@@ -928,35 +1004,44 @@ export namespace ScimContract {
     }),
   );
 
-  export class V2QueryParams extends Schema.Class<V2QueryParams>("V2QueryParams")({
-    filter: V2FilterFromString.pipe(Schema.optionalKey),
-  }) {}
+  export class V2QueryParams extends Schema.Class<V2QueryParams, { readonly brand: unique symbol }>(
+    "V2QueryParams",
+  )({ filter: V2FilterFromString.pipe(Schema.optionalKey) }) {}
 
-  export class V2FilterAndExpression extends Schema.Class<V2FilterAndExpression>(
-    "V2FilterAndExpression",
-  )({ op: Schema.Literal("and"), filters: V2Filter.pipe(Schema.Array, Schema.mutable) }) {}
+  export const V2FilterAndExpression = Schema.Struct({
+    op: Schema.Literal("and"),
+    filters: V2Filter.pipe(Schema.Array, Schema.mutable),
+  });
 
-  export class V2FilterOrExpression extends Schema.Class<V2FilterOrExpression>(
-    "V2FilterOrExpression",
-  )({ op: Schema.Literal("or"), filters: V2Filter.pipe(Schema.Array, Schema.mutable) }) {}
+  export const V2FilterOrExpression = Schema.Struct({
+    op: Schema.Literal("or"),
+    filters: V2Filter.pipe(Schema.Array, Schema.mutable),
+  });
 
-  export class V2FilterValuePath extends Schema.Class<V2FilterValuePath>("FilterValuePath")({
+  export const V2FilterValuePath = Schema.Struct({
     op: Schema.Literal("[]"),
     attrPath: V2FilterAttributePath,
     valFilter: V2Filter,
+  });
+
+  export const V2FilterNotExpression = Schema.Struct({
+    op: Schema.Literal("not"),
+    filter: V2Filter,
+  });
+
+  export class V2PatchRemoveOperation extends Schema.Class<
+    V2PatchRemoveOperation,
+    { readonly brand: unique symbol }
+  >("V2PatchRemoveOperation")({
+    op: Schema.Literal("remove"),
+    path: Schema.NonEmptyString,
+    value: Schema.Any,
   }) {}
 
-  export class V2FilterNotExpression extends Schema.Class<V2FilterNotExpression>(
-    "V2FilterNotExpression",
-  )({ op: Schema.Literal("not"), filter: V2Filter }) {}
-
-  export class V2PatchRemoveOperation extends Schema.Class<V2PatchRemoveOperation>(
-    "V2PatchRemoveOperation",
-  )({ op: Schema.Literal("remove"), path: Schema.NonEmptyString, value: Schema.Any }) {}
-
-  export class V2PatchAddReplaceOperation extends Schema.Class<V2PatchAddReplaceOperation>(
-    "V2PatchAddReplaceOperation",
-  )({
+  export class V2PatchAddReplaceOperation extends Schema.Class<
+    V2PatchAddReplaceOperation,
+    { readonly brand: unique symbol }
+  >("V2PatchAddReplaceOperation")({
     op: Schema.Literals(["add", "replace"]),
     path: Schema.NonEmptyString.pipe(Schema.optional),
     value: Schema.Any.pipe(Schema.optional),
@@ -978,7 +1063,7 @@ export namespace ScimContract {
 
   export const v2ErrorUri = "urn:ietf:params:scim:api:messages:2.0:Error";
   export class V2Error
-    extends Schema.Error<V2Error>("V2Error")({
+    extends Schema.Error<V2Error, { readonly brand: unique symbol }>("V2Error")({
       _tag: Schema.tagDefaultOmit("ScimV2Error"),
       schemas: Schema.Tuple([Schema.Literal(v2ErrorUri)]).pipe(
         Schema.mutable,
@@ -1055,7 +1140,10 @@ export namespace ScimContract {
   )({ status: StatusFromString(500) }, { httpApiStatus: 500 }) {}
 
   export const v2ListResponseUri = "urn:ietf:params:scim:api:messages:2.0:ListResponse";
-  export class V2ListResponse extends Schema.Class<V2ListResponse>("V2ListResponse")(
+  export class V2ListResponse extends Schema.Class<
+    V2ListResponse,
+    { readonly brand: unique symbol }
+  >("V2ListResponse")(
     {
       _tag: Schema.tagDefaultOmit("ScimV2ListResponse"),
       schemas: Schema.Tuple([Schema.Literal(v2ListResponseUri)]).pipe(
@@ -1136,9 +1224,10 @@ export namespace ScimContract {
     }
   }
 
-  export class V2CreateGroupBulkRequestOperation extends Schema.Class<V2CreateGroupBulkRequestOperation>(
-    "V2CreateGroupBulkRequestOperation",
-  )({
+  export class V2CreateGroupBulkRequestOperation extends Schema.Class<
+    V2CreateGroupBulkRequestOperation,
+    { readonly brand: unique symbol }
+  >("V2CreateGroupBulkRequestOperation")({
     _tag: Schema.tagDefaultOmit("ScimV2CreateGroupBulkRequestOperation"),
     method: Schema.Literal("POST").pipe(Schema.withConstructorDefault(Effect.succeed("POST"))),
     path: Schema.Literal("/Groups").pipe(Schema.withConstructorDefault(Effect.succeed("/Groups"))),
@@ -1146,9 +1235,10 @@ export namespace ScimContract {
     data: V2Group.BulkProvisionalToDtos,
   }) {}
 
-  export class V2CreateUserBulkRequestOperation extends Schema.Class<V2CreateUserBulkRequestOperation>(
-    "V2CreateUserBulkRequestOperation",
-  )({
+  export class V2CreateUserBulkRequestOperation extends Schema.Class<
+    V2CreateUserBulkRequestOperation,
+    { readonly brand: unique symbol }
+  >("V2CreateUserBulkRequestOperation")({
     _tag: Schema.tagDefaultOmit("ScimV2CreateUserBulkRequestOperation"),
     method: Schema.Literal("POST").pipe(Schema.withConstructorDefault(Effect.succeed("POST"))),
     path: Schema.Literal("/Users").pipe(Schema.withConstructorDefault(Effect.succeed("/Users"))),
@@ -1163,7 +1253,9 @@ export namespace ScimContract {
   export type V2BulkRequestOperation = typeof V2BulkRequestOperation.Type;
 
   export const v2BulkRequestUri = "urn:ietf:params:scim:api:messages:2.0:BulkRequest";
-  export class V2BulkRequest extends Schema.Class<V2BulkRequest>("V2BulkRequest")({
+  export class V2BulkRequest extends Schema.Class<V2BulkRequest, { readonly brand: unique symbol }>(
+    "V2BulkRequest",
+  )({
     schemas: Schema.Tuple([Schema.Literal(v2BulkRequestUri)]).pipe(
       Schema.withConstructorDefault(Effect.succeed([v2BulkRequestUri])),
     ),
@@ -1174,7 +1266,10 @@ export namespace ScimContract {
     Operations: V2BulkRequestOperation.pipe(Schema.Array),
   }) {}
 
-  export class V2BulkResponseOperation extends Schema.Opaque<V2BulkResponseOperation>()(
+  export class V2BulkResponseOperation extends Schema.Opaque<
+    V2BulkResponseOperation,
+    { readonly brand: unique symbol }
+  >()(
     Schema.Struct({
       location: Schema.NonEmptyString.pipe(Schema.optionalKey),
       method: Schema.Literal("POST").pipe(Schema.withConstructorDefault(Effect.succeed("POST"))),
@@ -1193,7 +1288,10 @@ export namespace ScimContract {
   ) {}
 
   export const v2BulkResponseUri = "urn:ietf:params:scim:api:messages:2.0:BulkResponse";
-  export class V2BulkResponse extends Schema.Class<V2BulkResponse>("V2BulkResponse")({
+  export class V2BulkResponse extends Schema.Class<
+    V2BulkResponse,
+    { readonly brand: unique symbol }
+  >("V2BulkResponse")({
     schemas: Schema.Tuple([Schema.Literal(v2BulkResponseUri)]).pipe(
       Schema.withConstructorDefault(Effect.succeed([v2BulkResponseUri])),
     ),

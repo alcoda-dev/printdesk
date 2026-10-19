@@ -4,13 +4,15 @@ import * as SchemaGetter from "effect/SchemaGetter";
 import { pluck, StringFromUnknown } from "../utils";
 
 export namespace XmlContract {
-  export class BuilderError extends Schema.TaggedError<BuilderError>()("BuilderError", {
-    cause: Schema.Defect(),
-  }) {}
+  export class BuilderError extends Schema.TaggedError<
+    BuilderError,
+    { readonly brand: unique symbol }
+  >()("BuilderError", { cause: Schema.Defect() }) {}
 
-  export class ParserError extends Schema.TaggedError<ParserError>()("ParserError", {
-    cause: Schema.Defect(),
-  }) {}
+  export class ParserError extends Schema.TaggedError<
+    ParserError,
+    { readonly brand: unique symbol }
+  >()("ParserError", { cause: Schema.Defect() }) {}
 }
 
 export namespace XmlRpcContract {
@@ -56,10 +58,10 @@ export namespace XmlRpcContract {
       pluck("methodResponse"),
     );
 
-  export class FaultError extends Schema.TaggedError<FaultError>()("FaultError", {
-    string: Schema.String,
-    code: Schema.Int,
-  }) {}
+  export class FaultError extends Schema.TaggedError<
+    FaultError,
+    { readonly brand: unique symbol }
+  >()("FaultError", { string: Schema.String, code: Schema.Int }) {}
   export const FaultResponse = methodResponse({
     fault: struct(
       member("faultString", Schema.Union([String.fields.value, Value.fields.value])),

@@ -4,14 +4,18 @@ import * as HttpApiGroup from "effect/http-api/HttpApiGroup";
 
 import { AccessControl } from "../access-control";
 import { ActorsContract } from "../actors/contract";
-import { ReplicachePullerContract, ReplicachePusherContract } from "../replicache/contracts";
+import {
+  ReplicacheContract,
+  ReplicachePullerContract,
+  ReplicachePusherContract,
+} from "../replicache/contracts";
 import { AwsCredentialIdentityProviderMiddleware } from "./middleware/aws";
 
 export namespace Replicache {
   export class Group extends HttpApiGroup.make("Replicache")
     .add(
       HttpApiEndpoint.post("pull", "/pull", {
-        headers: ReplicachePullerContract.Headers,
+        headers: ReplicacheContract.Headers,
         payload: ReplicachePullerContract.Payload,
         success: ReplicachePullerContract.Success,
         error: [AccessControl.AccessDeniedError, ActorsContract.ForbiddenActorError],
@@ -19,7 +23,7 @@ export namespace Replicache {
     )
     .add(
       HttpApiEndpoint.post("push", "/push", {
-        headers: ReplicachePusherContract.Headers,
+        headers: ReplicacheContract.Headers,
         payload: ReplicachePusherContract.Payload,
         success: ReplicachePusherContract.Success,
         error: [
