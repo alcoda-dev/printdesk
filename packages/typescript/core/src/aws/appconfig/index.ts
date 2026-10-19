@@ -3,6 +3,11 @@ import {
   CreateHostedConfigurationVersionCommand,
   StartDeploymentCommand,
 } from "@aws-sdk/client-appconfig";
+import {
+  AppConfigDataClient,
+  GetLatestConfigurationCommand,
+  StartConfigurationSessionCommand,
+} from "@aws-sdk/client-appconfigdata";
 import * as Cache from "effect/Cache";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
@@ -15,18 +20,7 @@ import * as Struct from "effect/Struct";
 import { SstResource } from "../../sst/resource";
 import { Constants } from "../../utils/constants";
 import { AwsCredentialIdentity, AwsCredentialIdentityProvider } from "../credential-identity";
-
-export class AppconfigError extends Schema.TaggedError<AppconfigError>()("AppconfigError", {
-  cause: Schema.Defect(),
-}) {}
-
-export class VersionError extends Schema.TaggedError<VersionError>()("VersionError", {
-  cause: Schema.Defect(),
-}) {}
-
-export class DeployError extends Schema.TaggedError<DeployError>()("DeployError", {
-  cause: Schema.Defect(),
-}) {}
+import { catchServiceExceptions } from "../sdk";
 
 export interface VersionArgs<TType extends object, TEncoded, TServices> {
   profileId: string;
@@ -66,7 +60,27 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
                     credentials,
                     region: resource.Aws.pipe(Redacted.value).region,
                   }),
-                catch: (cause) => new AppconfigError({ cause }),
+                catch: catchServiceExceptions(),
+              }),
+              (client) => Effect.sync(() => client.destroy()),
+            ),
+          ),
+        ),
+    });
+
+    const dataClientCache = yield* Cache.make({
+      capacity: Constants.DEFAULT_CACHE_CAPACITY,
+      lookup: (credentials: AwsCredentialIdentity) =>
+        credentials.encode.pipe(
+          Effect.flatMap((credentials) =>
+            Effect.acquireRelease(
+              Effect.try({
+                try: () =>
+                  new AppConfigDataClient({
+                    credentials,
+                    region: resource.Aws.pipe(Redacted.value).region,
+                  }),
+                catch: catchServiceExceptions(),
               }),
               (client) => Effect.sync(() => client.destroy()),
             ),
@@ -80,6 +94,16 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
       ) =>
         AwsCredentialIdentityProvider.provide.pipe(
           Effect.flatMap((credentials) => clientCache.pipe(Cache.get(credentials))),
+          Effect.flatMap(callback),
+        ),
+    );
+
+    const useDataClient = Effect.fn("AppconfigAgent.useDataClient")(
+      <TSuccess, TError, TServices>(
+        callback: (client: AppConfigDataClient) => Effect.Effect<TSuccess, TError, TServices>,
+      ) =>
+        AwsCredentialIdentityProvider.provide.pipe(
+          Effect.flatMap((credentials) => dataClientCache.pipe(Cache.get(credentials))),
           Effect.flatMap(callback),
         ),
     );
@@ -104,14 +128,19 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
               }),
               { abortSignal },
             ),
-          catch: (cause) => new VersionError({ cause }),
+          catch: catchServiceExceptions(
+            "BadRequestException",
+            "ConflictException",
+            "InternalServerException",
+            "PayloadTooLargeException",
+            "ResourceNotFoundException",
+            "ServiceQuotaExceededException",
+            "AppConfigServiceException",
+          ),
         }),
       ).pipe(
         Effect.map(Struct.get("VersionNumber")),
-        Effect.filterOrFail(
-          Predicate.isNotUndefined,
-          () => new VersionError({ cause: new Error("undefined version number") }),
-        ),
+        Effect.filterOrFail(Predicate.isNotUndefined),
       );
     });
 
@@ -129,7 +158,13 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
               }),
               { abortSignal },
             ),
-          catch: (cause) => new DeployError({ cause }),
+          catch: catchServiceExceptions(
+            "BadRequestException",
+            "ConflictException",
+            "InternalServerException",
+            "ResourceNotFoundException",
+            "AppConfigServiceException",
+          ),
         }),
       ),
     );
@@ -147,11 +182,56 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
         ),
     );
 
+    const startSession = Effect.fn("Appconfig.startSession")((profileId: string) =>
+      useDataClient((client) =>
+        Effect.tryPromise({
+          try: (abortSignal) =>
+            client.send(
+              new StartConfigurationSessionCommand({
+                ApplicationIdentifier: application.id,
+                EnvironmentIdentifier: environment.id,
+                ConfigurationProfileIdentifier: profileId,
+              }),
+              { abortSignal },
+            ),
+          catch: catchServiceExceptions(
+            "BadRequestException",
+            "InternalServerException",
+            "ResourceNotFoundException",
+            "ThrottlingException",
+            "AppConfigDataServiceException",
+          ),
+        }),
+      ),
+    );
+
+    const getLatest = Effect.fn("Appconfig.getLatest")((token: Redacted.Redacted) =>
+      useDataClient((client) =>
+        Effect.tryPromise({
+          try: (abortSignal) =>
+            client.send(
+              new GetLatestConfigurationCommand({ ConfigurationToken: token.pipe(Redacted.value) }),
+              { abortSignal },
+            ),
+          catch: catchServiceExceptions(
+            "BadRequestException",
+            "InternalServerException",
+            "ResourceNotFoundException",
+            "ThrottlingException",
+            "AppConfigDataServiceException",
+          ),
+        }),
+      ),
+    );
+
     return {
       useClient,
+      useDataClient,
       version,
       deploy,
       publish,
+      startSession,
+      getLatest,
     } as const;
   }),
 }) {

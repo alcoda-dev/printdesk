@@ -384,6 +384,9 @@ importers:
       '@aws-sdk/client-appconfig':
         specifier: ^3.1150.0
         version: 3.1152.0
+      '@aws-sdk/client-appconfigdata':
+        specifier: ^3.1150.0
+        version: 3.1152.0
       '@aws-sdk/credential-providers':
         specifier: ^3.1150.0
         version: 3.1152.0
@@ -441,6 +444,9 @@ importers:
       '@smithy/signature-v4':
         specifier: ^5.7.4
         version: 5.7.4
+      '@smithy/smithy-client':
+        specifier: ^4.15.2
+        version: 4.15.2
       aws-cron-parser:
         specifier: ^1.1.12
         version: 1.1.12
@@ -1022,6 +1028,10 @@ packages:
 
   '@aws-sdk/client-appconfig@3.1152.0':
     resolution: {integrity: sha512-Y96NrfDpRFhYNOUEWa/VRE+lf2HjgJVscDoRiTcx9skQx0E/jb0B9DCQI/lK3yYh6OLf9aa2LjYnJb3urG4Idw==}
+    engines: {node: '>=20.0.0'}
+
+  '@aws-sdk/client-appconfigdata@3.1152.0':
+    resolution: {integrity: sha512-rmHvyqj31eYtzWW0DYNPC8QCAm41FaYVea0yWAeofCZ6dMunP6d3NkqJmNjE4BZGO6dhMxQ2/UNuPDmVumEmAA==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/client-dynamodb@3.1152.0':
@@ -5591,6 +5601,17 @@ snapshots:
       tslib: 2.8.1
 
   '@aws-sdk/client-appconfig@3.1152.0':
+    dependencies:
+      '@aws-sdk/core': 3.978.3
+      '@aws-sdk/credential-provider-node': 3.972.86
+      '@aws-sdk/types': 3.974.6
+      '@smithy/core': 3.36.0
+      '@smithy/fetch-http-handler': 5.8.0
+      '@smithy/node-http-handler': 4.12.1
+      '@smithy/types': 4.19.0
+      tslib: 2.8.1
+
+  '@aws-sdk/client-appconfigdata@3.1152.0':
     dependencies:
       '@aws-sdk/core': 3.978.3
       '@aws-sdk/credential-provider-node': 3.972.86
