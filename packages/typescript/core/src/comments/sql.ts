@@ -6,7 +6,7 @@ import { activeOrdersView } from "../orders/sql";
 import { activeSharedAccountManagerAccessView } from "../shared-accounts/sql";
 import { Tables } from "../tables";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const comments = new Tables.Sync(
   "comments",
@@ -26,7 +26,7 @@ export const activeCommentsView = snakeCase
   .view(`active_${comments.name}`)
   .as((qb) => qb.select().from(commentsTable).where(isNull(commentsTable.deletedAt)));
 export type ActiveCommentsView = typeof activeCommentsView;
-export type ActiveComment = InferSelectViewModel<ActiveCommentsView>;
+export type ActiveComment = InferViewSelectModel<ActiveCommentsView>;
 
 export const activeCustomerOrderCommentsView = snakeCase
   .view(`active_customer_order_${comments.name}`)
@@ -46,7 +46,7 @@ export const activeCustomerOrderCommentsView = snakeCase
       ),
   );
 export type ActiveCustomerOrderCommentsView = typeof activeCustomerOrderCommentsView;
-export type ActiveCustomerOrderComment = InferSelectViewModel<ActiveCustomerOrderCommentsView>;
+export type ActiveCustomerOrderComment = InferViewSelectModel<ActiveCustomerOrderCommentsView>;
 
 export const activeManagerAuthorizedSharedAccountOrderCommentsView = snakeCase
   .view(`active_manager_authorized_shared_account_order_${comments.name}`)
@@ -78,4 +78,4 @@ export const activeManagerAuthorizedSharedAccountOrderCommentsView = snakeCase
 export type ActiveManagerAuthorizedSharedAccountOrderCommentsView =
   typeof activeManagerAuthorizedSharedAccountOrderCommentsView;
 export type ActiveManagerAuthorizedSharedAccountOrderComment =
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountOrderCommentsView>;
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountOrderCommentsView>;

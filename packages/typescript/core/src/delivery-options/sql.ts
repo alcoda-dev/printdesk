@@ -5,7 +5,7 @@ import { Columns } from "../columns";
 import { activePublishedRoomsView } from "../rooms/sql";
 import { Tables } from "../tables";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const deliveryOptions = new Tables.Sync("delivery_options", {
   name: Columns.varchar().notNull(),
@@ -22,7 +22,7 @@ export const activeDeliveryOptionsView = snakeCase
   .view(`active_${deliveryOptions.name}`)
   .as((qb) => qb.select().from(deliveryOptionsTable).where(isNull(deliveryOptionsTable.deletedAt)));
 export type ActiveDeliveryOptionsView = typeof activeDeliveryOptionsView;
-export type ActiveDeliveryOption = InferSelectViewModel<ActiveDeliveryOptionsView>;
+export type ActiveDeliveryOption = InferViewSelectModel<ActiveDeliveryOptionsView>;
 
 export const activePublishedRoomDeliveryOptionsView = snakeCase
   .view(`active_published_room_${deliveryOptions.name}`)
@@ -40,4 +40,4 @@ export const activePublishedRoomDeliveryOptionsView = snakeCase
   );
 export type ActivePublishedRoomDeliveryOptionsView = typeof activePublishedRoomDeliveryOptionsView;
 export type ActivePublishedRoomDeliveryOption =
-  InferSelectViewModel<ActivePublishedRoomDeliveryOptionsView>;
+  InferViewSelectModel<ActivePublishedRoomDeliveryOptionsView>;

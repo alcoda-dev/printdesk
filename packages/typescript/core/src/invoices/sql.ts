@@ -8,7 +8,7 @@ import { activeSharedAccountManagerAccessView } from "../shared-accounts/sql";
 import { Tables } from "../tables";
 import { InvoicesContract } from "./contract";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const invoices = new Tables.Sync(
   "invoices",
@@ -41,7 +41,7 @@ export const activeInvoicesView = snakeCase
   .view(`active_${invoices.name}`)
   .as((qb) => qb.select().from(invoicesTable).where(isNull(invoicesTable.deletedAt)));
 export type ActiveInvoicesView = typeof activeInvoicesView;
-export type ActiveInvoice = InferSelectViewModel<ActiveInvoicesView>;
+export type ActiveInvoice = InferViewSelectModel<ActiveInvoicesView>;
 
 export const activeCustomerOrderInvoicesView = snakeCase
   .view(`active_customer_order_${invoices.name}`)
@@ -61,7 +61,7 @@ export const activeCustomerOrderInvoicesView = snakeCase
       ),
   );
 export type ActiveCustomerOrderInvoicesView = typeof activeCustomerOrderInvoicesView;
-export type ActiveCustomerOrderInvoice = InferSelectViewModel<ActiveCustomerOrderInvoicesView>;
+export type ActiveCustomerOrderInvoice = InferViewSelectModel<ActiveCustomerOrderInvoicesView>;
 
 export const activeManagerAuthorizedSharedAccountOrderInvoicesView = snakeCase
   .view(`active_manager_authorized_shared_account_order_${invoices.name}`)
@@ -93,4 +93,4 @@ export const activeManagerAuthorizedSharedAccountOrderInvoicesView = snakeCase
 export type ActiveManagerAuthorizedSharedAccountOrderInvoicesView =
   typeof activeManagerAuthorizedSharedAccountOrderInvoicesView;
 export type ActiveManagerAuthorizedSharedAccountOrderInvoice =
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountOrderInvoicesView>;
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountOrderInvoicesView>;

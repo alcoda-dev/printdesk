@@ -46,8 +46,8 @@ catalog:
   "@types/react-dom": ^19.3.0
   "@vitejs/plugin-react": ^6.1.2
   aws4fetch: ^1.0.20
-  drizzle-kit: 1.0.0-rc.5-ab785fc
-  drizzle-orm: 1.0.0-rc.5-ab785fc
+  drizzle-kit: 1.0.0-rc.5
+  drizzle-orm: 1.0.0-rc.5
   effect: ^4.0.5
   hono: ^4.13.13
   jose: ^6.2.12
@@ -64,11 +64,8 @@ catalog:
   wrangler: ^4.149.0
 
 minimumReleaseAgeExclude:
-  - "@effect/tsgo-darwin-arm64@0.53.1"
-  - "@effect/tsgo-darwin-x64@0.53.1"
-  - "@effect/tsgo-linux-x64@0.53.1"
-  - "@effect/tsgo-win32-arm64@0.53.1"
-  - "@effect/tsgo-win32-x64@0.53.1"
+  - drizzle-kit@1.0.0-rc.5
+  - drizzle-orm@1.0.0-rc.5
 
 overrides:
   "@microsoft/kiota-abstractions": 1.0.0-preview.108
@@ -80,6 +77,3 @@ overrides:
   "@microsoft/kiota-serialization-multipart": 1.0.0-preview.108
   "@microsoft/kiota-serialization-text": 1.0.0-preview.108
   "@microsoft/msgraph-sdk": 1.0.0-preview.90
-
-patchedDependencies:
-  drizzle-orm@1.0.0-rc.5-ab785fc: patches/drizzle-orm@1.0.0-rc.5-ab785fc.patch

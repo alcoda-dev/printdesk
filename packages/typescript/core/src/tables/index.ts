@@ -23,6 +23,7 @@ export namespace Tables {
       schema: undefined;
       columns: PgBuildColumns<TName, TColumns>;
       dialect: "pg";
+      isAlias: false;
     }>;
 
     public constructor(
@@ -59,6 +60,7 @@ export namespace Tables {
       schema: undefined;
       columns: PgBuildColumns<TName, Columns.Sync & TColumns>;
       dialect: "pg";
+      isAlias: false;
     }>;
 
     public constructor(
@@ -121,6 +123,7 @@ export namespace Tables {
       schema: undefined;
       columns: PgBuildColumns<TName, Columns.NonSync & TColumns>;
       dialect: "pg";
+      isAlias: false;
     }>;
 
     public constructor(

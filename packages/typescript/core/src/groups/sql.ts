@@ -5,7 +5,7 @@ import { Columns } from "../columns";
 import { Tables } from "../tables";
 import { GroupsContract } from "./contracts";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const groupMemberships = new Tables.Sync(
   "group_memberships",
@@ -28,7 +28,7 @@ export const activeGroupMembershipsView = snakeCase
     qb.select().from(groupMembershipsTable).where(isNull(groupMembershipsTable.deletedAt)),
   );
 export type ActiveGroupMembershipsView = typeof activeGroupMembershipsView;
-export type ActiveGroupMembership = InferSelectViewModel<ActiveGroupMembershipsView>;
+export type ActiveGroupMembership = InferViewSelectModel<ActiveGroupMembershipsView>;
 
 export const groups = new Tables.Sync(
   "groups",
@@ -50,7 +50,7 @@ export const activeGroupsView = snakeCase
   .view(`active_${groups.name}`)
   .as((qb) => qb.select().from(groupsTable).where(isNull(groupsTable.deletedAt)));
 export type ActiveGroupsView = typeof activeGroupsView;
-export type ActiveGroup = InferSelectViewModel<ActiveGroupsView>;
+export type ActiveGroup = InferViewSelectModel<ActiveGroupsView>;
 
 export const activeMembershipGroupsView = snakeCase
   .view(`active_membership_${groups.name}`)
@@ -70,4 +70,4 @@ export const activeMembershipGroupsView = snakeCase
       ),
   );
 export type ActiveMembershipGroupsView = typeof activeMembershipGroupsView;
-export type ActiveMembershipGroup = InferSelectViewModel<ActiveMembershipGroupsView>;
+export type ActiveMembershipGroup = InferViewSelectModel<ActiveMembershipGroupsView>;

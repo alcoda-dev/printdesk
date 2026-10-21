@@ -6,7 +6,7 @@ import * as Struct from "effect/Struct";
 import { ColumnsContract } from "../columns/contract";
 import { EntityId, generateEntityId, TenantId, Version } from "../utils";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 import type { PgTable, PgView } from "drizzle-orm/pg-core";
 import type { Permissions } from "../permissions";
 
@@ -120,7 +120,7 @@ export namespace TablesContract {
       TFields extends Schema.Struct.Fields,
       const TDtoOmitKey extends keyof TFields = DefaultDtoOmitKey,
     >(
-      fields: Schema.Schema.Type<Schema.Struct<TFields>> extends InferSelectViewModel<TView>
+      fields: Schema.Schema.Type<Schema.Struct<TFields>> extends InferViewSelectModel<TView>
         ? TFields
         : never,
       dtoOmitKeys: ReadonlyArray<TDtoOmitKey> = defaultDtoOmitKeys as any,
@@ -150,7 +150,7 @@ export namespace TablesContract {
     >(
       membersFields: Schema.Schema.Type<
         Schema.Union<{ [TKey in keyof TMembersFields]: Schema.Struct<TMembersFields[TKey]> }>
-      > extends InferSelectViewModel<TView>
+      > extends InferViewSelectModel<TView>
         ? TMembersFields
         : never,
       dtoOmitKeys: ReadonlyArray<TDtoOmitKey> = defaultDtoOmitKeys as any,
@@ -195,7 +195,7 @@ export namespace TablesContract {
       const TDtoOmitKey extends keyof TFields = DefaultDtoOmitKey,
     >(
       name: TName,
-      fields: Schema.Schema.Type<Schema.Struct<TFields>> extends InferSelectViewModel<TView>
+      fields: Schema.Schema.Type<Schema.Struct<TFields>> extends InferViewSelectModel<TView>
         ? TFields
         : never,
       dtoOmitKeys: ReadonlyArray<TDtoOmitKey> = defaultDtoOmitKeys as any,
@@ -227,7 +227,7 @@ export namespace TablesContract {
       name: TName,
       membersFields: Schema.Schema.Type<
         Schema.Union<{ [TKey in keyof TMembersFields]: Schema.Struct<TMembersFields[TKey]> }>
-      > extends InferSelectViewModel<TView>
+      > extends InferViewSelectModel<TView>
         ? TMembersFields
         : never,
       dtoOmitKeys: ReadonlyArray<TDtoOmitKey> = defaultDtoOmitKeys as any,

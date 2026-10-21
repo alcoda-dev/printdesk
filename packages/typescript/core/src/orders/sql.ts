@@ -6,7 +6,7 @@ import { activeSharedAccountManagerAccessView } from "../shared-accounts/sql";
 import { Tables } from "../tables";
 import { OrderObjectMetadataContract, OrdersContract } from "./contracts";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 import type { EntityId } from "../utils";
 
 type OrderRow<TRow> = Omit<
@@ -95,7 +95,7 @@ export const activeOrdersView = snakeCase
   .view(`active_${orders.name}`)
   .as((qb) => qb.select().from(orders.table).where(isNull(orders.table.deletedAt)));
 export type ActiveOrdersView = typeof activeOrdersView;
-export type ActiveOrder = OrderRow<InferSelectViewModel<ActiveOrdersView>>;
+export type ActiveOrder = OrderRow<InferViewSelectModel<ActiveOrdersView>>;
 export type ActiveCustomerOrdersView = ActiveOrdersView;
 export type ActiveCustomerOrder = ActiveOrder;
 export const activeManagerAuthorizedSharedAccountOrdersView = snakeCase
@@ -122,7 +122,7 @@ export const activeManagerAuthorizedSharedAccountOrdersView = snakeCase
 export type ActiveManagerAuthorizedSharedAccountOrdersView =
   typeof activeManagerAuthorizedSharedAccountOrdersView;
 export type ActiveManagerAuthorizedSharedAccountOrder = OrderRow<
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountOrdersView>
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountOrdersView>
 >;
 
 export const orderObjectMetadata = new Tables.Sync(
@@ -145,7 +145,7 @@ export const activeOrderObjectMetadataView = snakeCase
     qb.select().from(orderObjectMetadata.table).where(isNull(orderObjectMetadata.table.deletedAt)),
   );
 export type ActiveOrderObjectMetadataView = typeof activeOrderObjectMetadataView;
-export type ActiveOrderObjectMetadata = InferSelectViewModel<ActiveOrderObjectMetadataView>;
+export type ActiveOrderObjectMetadata = InferViewSelectModel<ActiveOrderObjectMetadataView>;
 export const activeCustomerOrderObjectMetadataView = snakeCase
   .view(`active_customer_${orderObjectMetadata.name}`)
   .as((qb) =>
@@ -165,7 +165,7 @@ export const activeCustomerOrderObjectMetadataView = snakeCase
   );
 export type ActiveCustomerOrderObjectMetadataView = typeof activeCustomerOrderObjectMetadataView;
 export type ActiveCustomerOrderObjectMetadata =
-  InferSelectViewModel<ActiveCustomerOrderObjectMetadataView>;
+  InferViewSelectModel<ActiveCustomerOrderObjectMetadataView>;
 export const activeManagerAuthorizedSharedAccountOrderObjectMetadataView = snakeCase
   .view(`active_manager_authorized_shared_account_${orderObjectMetadata.name}`)
   .as((qb) =>
@@ -196,4 +196,4 @@ export const activeManagerAuthorizedSharedAccountOrderObjectMetadataView = snake
 export type ActiveManagerAuthorizedSharedAccountOrderObjectMetadataView =
   typeof activeManagerAuthorizedSharedAccountOrderObjectMetadataView;
 export type ActiveManagerAuthorizedSharedAccountOrderObjectMetadata =
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountOrderObjectMetadataView>;
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountOrderObjectMetadataView>;

@@ -19,7 +19,7 @@ import { Tables } from "../tables";
 import { Constants } from "../utils/constants";
 import { WorkflowStatusesContract } from "./contracts";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 import type { EntityId } from "../utils";
 
 export const roomWorkflows = new Tables.Sync(
@@ -35,7 +35,7 @@ export const activeRoomWorkflowsView = snakeCase
   .view(`active_${roomWorkflows.name}`)
   .as((qb) => qb.select().from(roomWorkflowsTable).where(isNull(roomWorkflowsTable.deletedAt)));
 export type ActiveRoomWorkflowsView = typeof activeRoomWorkflowsView;
-export type ActiveRoomWorkflow = InferSelectViewModel<ActiveRoomWorkflowsView>;
+export type ActiveRoomWorkflow = InferViewSelectModel<ActiveRoomWorkflowsView>;
 
 export const activePublishedRoomRoomWorkflowsView = snakeCase
   .view(`active_published_room_${roomWorkflows.name}`)
@@ -53,7 +53,7 @@ export const activePublishedRoomRoomWorkflowsView = snakeCase
   );
 export type ActivePublishedRoomRoomWorkflowsView = typeof activePublishedRoomRoomWorkflowsView;
 export type ActivePublishedRoomRoomWorkflow =
-  InferSelectViewModel<ActivePublishedRoomRoomWorkflowsView>;
+  InferViewSelectModel<ActivePublishedRoomRoomWorkflowsView>;
 
 export const sharedAccountWorkflows = new Tables.Sync(
   "shared_account_workflows",
@@ -73,7 +73,7 @@ export const activeSharedAccountWorkflowsView = snakeCase
       .where(isNull(sharedAccountWorkflowsTable.deletedAt)),
   );
 export type ActiveSharedAccountWorkflowsView = typeof activeSharedAccountWorkflowsView;
-export type ActiveSharedAccountWorkflow = InferSelectViewModel<ActiveSharedAccountWorkflowsView>;
+export type ActiveSharedAccountWorkflow = InferViewSelectModel<ActiveSharedAccountWorkflowsView>;
 
 export const activeCustomerAuthorizedSharedAccountWorkflowsView = snakeCase
   .view(`active_customer_authorized_${sharedAccountWorkflows.name}`)
@@ -101,7 +101,7 @@ export const activeCustomerAuthorizedSharedAccountWorkflowsView = snakeCase
 export type ActiveCustomerAuthorizedSharedAccountWorkflowsView =
   typeof activeCustomerAuthorizedSharedAccountWorkflowsView;
 export type ActiveCustomerAuthorizedSharedAccountWorkflow =
-  InferSelectViewModel<ActiveCustomerAuthorizedSharedAccountWorkflowsView>;
+  InferViewSelectModel<ActiveCustomerAuthorizedSharedAccountWorkflowsView>;
 
 export const activeManagerAuthorizedSharedAccountWorkflowsView = snakeCase
   .view(`active_manager_authorized_${sharedAccountWorkflows.name}`)
@@ -129,7 +129,7 @@ export const activeManagerAuthorizedSharedAccountWorkflowsView = snakeCase
 export type ActiveManagerAuthorizedSharedAccountWorkflowsView =
   typeof activeManagerAuthorizedSharedAccountWorkflowsView;
 export type ActiveManagerAuthorizedSharedAccountWorkflow =
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountWorkflowsView>;
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountWorkflowsView>;
 
 export const workflowStatuses = new Tables.Sync(
   "workflow_statuses",
@@ -166,7 +166,7 @@ export const activeWorkflowStatusesView = snakeCase
   );
 export type ActiveWorkflowStatusesView = typeof activeWorkflowStatusesView;
 export type ActiveWorkflowStatus = WorkflowStatusRow<
-  InferSelectViewModel<ActiveWorkflowStatusesView>
+  InferViewSelectModel<ActiveWorkflowStatusesView>
 >;
 
 export const activeCustomerAuthorizedSharedAccountWorkflowStatusesView = snakeCase
@@ -195,7 +195,7 @@ export const activeCustomerAuthorizedSharedAccountWorkflowStatusesView = snakeCa
 export type ActiveCustomerAuthorizedSharedAccountWorkflowStatusesView =
   typeof activeCustomerAuthorizedSharedAccountWorkflowStatusesView;
 export type ActiveCustomerAuthorizedSharedAccountWorkflowStatus = SharedAccountWorkflowStatusRow<
-  InferSelectViewModel<ActiveCustomerAuthorizedSharedAccountWorkflowStatusesView>
+  InferViewSelectModel<ActiveCustomerAuthorizedSharedAccountWorkflowStatusesView>
 >;
 
 export const activeManagerAuthorizedSharedAccountWorkflowStatusesView = snakeCase
@@ -224,7 +224,7 @@ export const activeManagerAuthorizedSharedAccountWorkflowStatusesView = snakeCas
 export type ActiveManagerAuthorizedSharedAccountWorkflowStatusesView =
   typeof activeManagerAuthorizedSharedAccountWorkflowStatusesView;
 export type ActiveManagerAuthorizedSharedAccountWorkflowStatus = SharedAccountWorkflowStatusRow<
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountWorkflowStatusesView>
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountWorkflowStatusesView>
 >;
 
 export const activePublishedRoomWorkflowStatusesView = snakeCase
@@ -244,7 +244,7 @@ export const activePublishedRoomWorkflowStatusesView = snakeCase
 export type ActivePublishedRoomWorkflowStatusesView =
   typeof activePublishedRoomWorkflowStatusesView;
 export type ActivePublishedRoomWorkflowStatus = RoomWorkflowStatusRow<
-  InferSelectViewModel<ActivePublishedRoomWorkflowStatusesView>
+  InferViewSelectModel<ActivePublishedRoomWorkflowStatusesView>
 >;
 
 type WorkflowStatusRow<TRow> = Omit<TRow, "roomWorkflowId" | "sharedAccountWorkflowId"> &

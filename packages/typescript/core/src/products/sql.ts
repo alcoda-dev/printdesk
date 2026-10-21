@@ -6,7 +6,7 @@ import { activePublishedRoomsView } from "../rooms/sql";
 import { Tables } from "../tables";
 import { ProductsContract } from "./contract";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const products = new Tables.Sync(
   "products",
@@ -26,7 +26,7 @@ export const activeProductsView = snakeCase
   .view(`active_${products.name}`)
   .as((qb) => qb.select().from(productsTable).where(isNull(productsTable.deletedAt)));
 export type ActiveProductsView = typeof activeProductsView;
-export type ActiveProduct = InferSelectViewModel<ActiveProductsView>;
+export type ActiveProduct = InferViewSelectModel<ActiveProductsView>;
 
 export const activePublishedProductsView = snakeCase
   .view(`active_published_${products.name}`)
@@ -44,4 +44,4 @@ export const activePublishedProductsView = snakeCase
       .where(eq(activeProductsView.status, "published")),
   );
 export type ActivePublishedProductsView = typeof activePublishedProductsView;
-export type ActivePublishedProduct = InferSelectViewModel<ActivePublishedProductsView>;
+export type ActivePublishedProduct = InferViewSelectModel<ActivePublishedProductsView>;

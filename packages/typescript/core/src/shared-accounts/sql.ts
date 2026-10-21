@@ -15,7 +15,7 @@ import { activeGroupMembershipsView } from "../groups/sql";
 import { Tables } from "../tables";
 import { SharedAccountsContract } from "./contracts";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 import type { Discriminate, Prettify } from "../utils";
 
 export const sharedAccountCustomerAccess = new Tables.Sync(
@@ -43,7 +43,7 @@ export const activeSharedAccountCustomerAccessView = snakeCase
   );
 export type ActiveSharedAccountCustomerAccessView = typeof activeSharedAccountCustomerAccessView;
 export type ActiveSharedAccountCustomerAccess =
-  InferSelectViewModel<ActiveSharedAccountCustomerAccessView>;
+  InferViewSelectModel<ActiveSharedAccountCustomerAccessView>;
 
 export type ActiveAuthorizedSharedAccountCustomerAccessView = ActiveSharedAccountCustomerAccessView;
 export type ActiveAuthorizedSharedAccountCustomerAccess = ActiveSharedAccountCustomerAccess;
@@ -73,7 +73,7 @@ export const activeSharedAccountManagerAccessView = snakeCase
   );
 export type ActiveSharedAccountManagerAccessView = typeof activeSharedAccountManagerAccessView;
 export type ActiveSharedAccountManagerAccess =
-  InferSelectViewModel<ActiveSharedAccountManagerAccessView>;
+  InferViewSelectModel<ActiveSharedAccountManagerAccessView>;
 
 export type ActiveAuthorizedSharedAccountManagerAccessView = ActiveSharedAccountManagerAccessView;
 export type ActiveAuthorizedSharedAccountManagerAccess = ActiveSharedAccountManagerAccess;
@@ -104,7 +104,7 @@ export const activeCustomerAuthorizedSharedAccountManagerAccessView = snakeCase
 export type ActiveCustomerAuthorizedSharedAccountManagerAccessView =
   typeof activeCustomerAuthorizedSharedAccountManagerAccessView;
 export type ActiveCustomerAuthorizedSharedAccountManagerAccess =
-  InferSelectViewModel<ActiveCustomerAuthorizedSharedAccountManagerAccessView>;
+  InferViewSelectModel<ActiveCustomerAuthorizedSharedAccountManagerAccessView>;
 
 export const sharedAccounts = new Tables.Sync(
   "shared_accounts",
@@ -147,7 +147,7 @@ export const activeSharedAccountsView = snakeCase
   .view(`active_${sharedAccounts.name}`)
   .as((qb) => qb.select().from(sharedAccountsTable).where(isNull(sharedAccountsTable.deletedAt)));
 export type ActiveSharedAccountsView = typeof activeSharedAccountsView;
-export type ActiveSharedAccount = InferSelectViewModel<ActiveSharedAccountsView>;
+export type ActiveSharedAccount = InferViewSelectModel<ActiveSharedAccountsView>;
 
 export const activeCustomerAuthorizedSharedAccountsView = snakeCase
   .view(`active_customer_authorized_${sharedAccounts.name}`)
@@ -169,7 +169,7 @@ export const activeCustomerAuthorizedSharedAccountsView = snakeCase
 export type ActiveCustomerAuthorizedSharedAccountsView =
   typeof activeCustomerAuthorizedSharedAccountsView;
 export type ActiveCustomerAuthorizedSharedAccount =
-  InferSelectViewModel<ActiveCustomerAuthorizedSharedAccountsView>;
+  InferViewSelectModel<ActiveCustomerAuthorizedSharedAccountsView>;
 
 export const activeManagerAuthorizedSharedAccountsView = snakeCase
   .view(`active_manager_authorized_${sharedAccounts.name}`)
@@ -191,7 +191,7 @@ export const activeManagerAuthorizedSharedAccountsView = snakeCase
 export type ActiveManagerAuthorizedSharedAccountsView =
   typeof activeManagerAuthorizedSharedAccountsView;
 export type ActiveManagerAuthorizedSharedAccount =
-  InferSelectViewModel<ActiveManagerAuthorizedSharedAccountsView>;
+  InferViewSelectModel<ActiveManagerAuthorizedSharedAccountsView>;
 
 export const sharedAccountGroupCustomerAccess = new Tables.Sync(
   `shared_account_group_customer_access`,
@@ -220,7 +220,7 @@ export const activeSharedAccountGroupCustomerAccessView = snakeCase
 export type ActiveSharedAccountGroupCustomerAccessView =
   typeof activeSharedAccountGroupCustomerAccessView;
 export type ActiveSharedAccountGroupCustomerAccess =
-  InferSelectViewModel<ActiveSharedAccountGroupCustomerAccessView>;
+  InferViewSelectModel<ActiveSharedAccountGroupCustomerAccessView>;
 
 export const activeAuthorizedSharedAccountGroupCustomerAccessView = snakeCase
   .view(`active_authorized_${sharedAccountGroupCustomerAccess.name}`)
@@ -248,4 +248,4 @@ export const activeAuthorizedSharedAccountGroupCustomerAccessView = snakeCase
 export type ActiveAuthorizedSharedAccountGroupCustomerAccessView =
   typeof activeAuthorizedSharedAccountGroupCustomerAccessView;
 export type ActiveAuthorizedSharedAccountGroupCustomerAccess =
-  InferSelectViewModel<ActiveAuthorizedSharedAccountGroupCustomerAccessView>;
+  InferViewSelectModel<ActiveAuthorizedSharedAccountGroupCustomerAccessView>;

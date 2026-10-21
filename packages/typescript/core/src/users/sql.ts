@@ -5,7 +5,7 @@ import { Columns } from "../columns";
 import { Tables } from "../tables";
 import { UsersContract } from "./contract";
 
-import type { InferSelectModel, InferSelectViewModel } from "drizzle-orm";
+import type { InferSelectModel, InferViewSelectModel } from "drizzle-orm";
 
 export const users = new Tables.Sync(
   "users",
@@ -34,4 +34,4 @@ export const activeUsersView = snakeCase
   .view(`active_${users.name}`)
   .as((qb) => qb.select().from(usersTable).where(isNull(usersTable.deletedAt)));
 export type ActiveUsersView = typeof activeUsersView;
-export type ActiveUser = InferSelectViewModel<ActiveUsersView>;
+export type ActiveUser = InferViewSelectModel<ActiveUsersView>;
