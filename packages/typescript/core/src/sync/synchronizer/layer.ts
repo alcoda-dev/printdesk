@@ -124,8 +124,8 @@ export const makeService = Effect.gen(function* () {
         Effect.all(
           {
             clientViewEntries: stream.pipe(
-              Stream.map((diff) =>
-                Match.valueTags(diff, {
+              Stream.map(
+                Match.valueTags({
                   update: ({ entity, data }) =>
                     ReplicacheClientViewEntriesModel.Table.Model.make({
                       clientGroupId: clientView.clientGroupId,
@@ -149,8 +149,8 @@ export const makeService = Effect.gen(function* () {
               Effect.map(Chunk.fromIterable),
             ),
             patch: stream.pipe(
-              Stream.map((diff) =>
-                Match.valueTags(diff, {
+              Stream.map(
+                Match.valueTags({
                   update: ({ entity, data }) =>
                     ReplicachePullerContract.makePutTableOperation(entity, data),
                   delete: ({ entity, id }) =>
@@ -167,8 +167,8 @@ export const makeService = Effect.gen(function* () {
               ),
             ),
             excludes: stream.pipe(
-              Stream.map((diff) =>
-                Match.valueTags(diff, {
+              Stream.map(
+                Match.valueTags({
                   update: ({ entity, data }) => ({ entity, id: data.id }),
                   delete: ({ entity, id }) => ({ entity, id }),
                 }),

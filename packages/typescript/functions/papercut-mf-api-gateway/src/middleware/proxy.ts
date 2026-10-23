@@ -38,11 +38,10 @@ export const proxy = createMiddleware((c) =>
           throw cause.pipe(
             Cause.findError,
             Result.match({
-              onSuccess: (error) =>
-                Match.valueTags(error, {
-                  TimeoutError: (error) => new HTTPException(504, { cause: error.cause }),
-                  UnknownError: (error) => new HTTPException(500, { cause: error.cause }),
-                }),
+              onSuccess: Match.valueTags({
+                TimeoutError: (error) => new HTTPException(504, { cause: error.cause }),
+                UnknownError: (error) => new HTTPException(500, { cause: error.cause }),
+              }),
               onFailure: (cause) => new HTTPException(500, { cause }),
             }),
           );
