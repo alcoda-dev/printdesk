@@ -20,10 +20,7 @@ import { OrderObjectMetadataSync } from "../../orders/objects/sync";
 import { OrdersSync } from "../../orders/sync";
 import { ProductsSync } from "../../products/sync";
 import { ReplicachePullerContract } from "../../replicache/contracts";
-import {
-  ReplicacheClientViewEntriesModel,
-  type ReplicacheClientViewsModel,
-} from "../../replicache/models";
+import { ReplicacheClientViewEntriesModel } from "../../replicache/models";
 import { RoomsSync } from "../../rooms/sync";
 import { SharedAccountCustomerAccessSync } from "../../shared-accounts/customer-access/sync";
 import { SharedAccountGroupCustomerAccessSync } from "../../shared-accounts/group-customer-access/sync";
@@ -37,6 +34,7 @@ import { SharedAccountWorkflowsSync } from "../../workflows/shared-account/sync"
 import { WorkflowStatusesSync } from "../../workflows/status/sync";
 
 import type { ActorsContract } from "../../actors/contract";
+import type { ReplicacheClientViewsModel } from "../../replicache/models";
 import type { Version } from "../../utils";
 
 export type ServiceShape = Effect.Success<typeof makeService>;
