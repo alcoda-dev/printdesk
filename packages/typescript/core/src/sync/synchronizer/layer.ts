@@ -94,29 +94,14 @@ export const makeService = Effect.gen(function* () {
     limitOffset: number,
     clientViewVersion: { next: Version; max: Version },
   ) {
-    const stream: Stream.Stream<
-      | Struct.Assign<Stream.Success<ReturnType<typeof streamer.streamUpdates>>, { _tag: "update" }>
-      | Struct.Assign<
-          Stream.Success<ReturnType<typeof streamer.streamDeletes>>,
-          { _tag: "delete" }
-        >,
-      Stream.Error<ReturnType<typeof streamer.streamUpdates | typeof streamer.streamDeletes>>,
-      Stream.Services<ReturnType<typeof streamer.streamUpdates | typeof streamer.streamDeletes>>
-    > = Stream.mergeAll(
-      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-      [
-        streamer
-          .streamUpdates(clientView, userId)
-          .pipe(Stream.map((update) => Object.assign(update, { _tag: "update" }))),
-        streamer
-          .streamDeletes(clientView, userId)
-          .pipe(Stream.map((delete_) => Object.assign(delete_, { _tag: "delete" }))),
-        // oxlint-disable-next-line typescript/no-explicit-any
-      ] as any,
-      { concurrency: "unbounded" },
-    );
-
-    const { clientViewEntries, patch, limit, excludes } = yield* stream.pipe(
+    const { clientViewEntries, patch, limit, excludes } = yield* Stream.merge(
+      streamer
+        .streamUpdates(clientView, userId)
+        .pipe(Stream.map(Struct.assign({ _tag: "update" as const }))),
+      streamer
+        .streamDeletes(clientView, userId)
+        .pipe(Stream.map(Struct.assign({ _tag: "delete" as const }))),
+    ).pipe(
       Stream.share({ capacity: 128, strategy: "suspend" }),
       Effect.flatMap((stream) =>
         Effect.all(
