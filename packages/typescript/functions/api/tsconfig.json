@@ -33,6 +33,8 @@
       "@printdesk/core/*": ["../../core/src/*"]
     },
 
+    "types": ["node"],
+
     "plugins": [
       {
         "name": "@effect/language-service",

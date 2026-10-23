@@ -6,6 +6,7 @@ import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Layer from "effect/Layer";
 
 export const configLayer = Config.layer.pipe(
-  Layer.provide([Appconfig.layer, AppconfigAgent.layer]),
-  Layer.provide([FetchHttpClient.layer, SstResource.layer]),
+  Layer.provide(AppconfigAgent.layer),
+  Layer.provide([Appconfig.layer, FetchHttpClient.layer]),
+  Layer.provide(SstResource.layer),
 );

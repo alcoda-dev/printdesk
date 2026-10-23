@@ -21,8 +21,9 @@ import { databaseLayer } from "./database";
 
 export const papercutMfApiLayer = PapercutMfApi.layer.pipe(
   Layer.provide([Config.layer, XmlRpc.XmlRpc.layer]),
-  Layer.provide([Appconfig.layer, AppconfigAgent.layer, Xml.Builder.layer, Xml.Parser.layer]),
-  Layer.provide([FetchHttpClient.layer, SstResource.layer]),
+  Layer.provide([AppconfigAgent.layer, Xml.Builder.layer, Xml.Parser.layer]),
+  Layer.provide([Appconfig.layer, FetchHttpClient.layer]),
+  Layer.provide(SstResource.layer),
 );
 
 export const papercutMfSynchronizerLayer = PapercutMfSynchronizer.layer.pipe(
