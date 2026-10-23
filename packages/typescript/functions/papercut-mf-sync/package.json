@@ -8,6 +8,7 @@
     "effect": "catalog:"
   },
   "devDependencies": {
-    "@effect/tsgo": "catalog:"
+    "@effect/tsgo": "catalog:",
+    "@types/node": "catalog:"
   }
 }

@@ -1,12 +1,14 @@
 import { ActorLayerMap } from "@printdesk/core/actors";
 import { Appconfig } from "@printdesk/core/aws/appconfig";
 import { AppconfigAgent } from "@printdesk/core/aws/appconfig/agent";
+import { AppconfigCredentialIdentityProviderLayerMap } from "@printdesk/core/aws/credential-identity/appconfig";
 import { AppsyncPublisherCredentialIdentityProviderLayerMap } from "@printdesk/core/aws/credential-identity/appsync";
 import { nodeCredentialIdentityProviderLayer } from "@printdesk/core/aws/credential-identity/node";
 import * as DsqlSigner from "@printdesk/core/aws/dsql-signer/layer";
 import { AppsyncSigner } from "@printdesk/core/aws/sigv4-signers/appsync";
 import * as ClientsRepository from "@printdesk/core/clients/repository/layer";
 import * as Config from "@printdesk/core/config/layer";
+import { appconfigRoleLayer } from "@printdesk/core/config/role";
 import { Database } from "@printdesk/core/database";
 import { Drizzle } from "@printdesk/core/database/drizzle";
 import * as PgClient from "@printdesk/core/database/pg-client";
@@ -36,8 +38,9 @@ import { openauthLayer } from "../lib/auth";
 
 export const layer = Layer.mergeAll(
   Oauth.AccessTokenLayerMap.layer,
-  AppsyncPublisherCredentialIdentityProviderLayerMap.layer,
   ActorLayerMap.layer,
+  AppconfigCredentialIdentityProviderLayerMap.layer,
+  AppsyncPublisherCredentialIdentityProviderLayerMap.layer,
   ClientsRepository.layer,
   openauthLayer,
   PapercutMfSynchronizer.layer,
@@ -45,6 +48,7 @@ export const layer = Layer.mergeAll(
   TenantsRepositories.repositoryLayer,
 ).pipe(
   Layer.provide([
+    appconfigRoleLayer,
     appsyncPublisherRoleLayer,
     GroupMembershipsRepositories.repositoryLayer,
     GroupsRepositories.repositoryLayer,
@@ -57,8 +61,8 @@ export const layer = Layer.mergeAll(
     UsersRepositories.repositoryLayer,
   ]),
   Layer.provideMerge(Config.layer),
-  Layer.provide([Appconfig.layer, AppconfigAgent.layer, AppsyncSigner.layer, XmlRpc.XmlRpc.layer]),
-  Layer.provide([Database.layer, Xml.layer]),
+  Layer.provide([AppconfigAgent.layer, AppsyncSigner.layer, XmlRpc.XmlRpc.layer]),
+  Layer.provide([Appconfig.layer, Database.layer, Xml.layer]),
   Layer.provide([Drizzle.layerWithDrizzleServices, FetchHttpClient.layer]),
   Layer.provide(PgClient.layer),
   Layer.provide(DsqlSigner.layer({ expiresIn: Duration.minutes(15) })),
