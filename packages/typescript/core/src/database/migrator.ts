@@ -69,7 +69,7 @@ export class Migrator extends Context.Service<Migrator>()("@printdesk/core/datab
     const config = yield* MigratorConfig;
     const crypto = yield* Crypto.Crypto;
 
-    const textEncoder = new TextEncoder();
+    const textEncoder = new globalThis.TextEncoder();
 
     const schema = snakeCase.schema(config.migrationsSchema ?? defaultSchema);
     const schemaDdl = sql`CREATE SCHEMA IF NOT EXISTS ${schema};`;

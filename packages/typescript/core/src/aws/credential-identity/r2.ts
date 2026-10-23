@@ -20,7 +20,7 @@ export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
   const s3Bucket = yield* S3Bucket;
   const r2S3Credentials = yield* S3Credentials;
 
-  const textEncoder = new TextEncoder();
+  const textEncoder = new globalThis.TextEncoder();
 
   const claims: Record<string, unknown> = {
     actions: ["PutObject", "GetObject"],
