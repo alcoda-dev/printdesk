@@ -24,10 +24,10 @@ import { makeAssetsS3Bucket } from "./lib/assets";
 import { makeR2S3Credentials } from "./lib/cloudflare";
 import { runtime } from "./runtime";
 
-export class CacheInvalidationError extends Schema.TaggedError<CacheInvalidationError>()(
-  "CacheInvalidationError",
-  { cause: Schema.Defect() },
-) {}
+export class CacheInvalidationError extends Schema.TaggedError<
+  CacheInvalidationError,
+  { readonly brand: unique symbol }
+>()("CacheInvalidationError", { cause: Schema.Defect() }) {}
 
 export const queue = ((batch, _env, ctx) =>
   Effect.forEach(
@@ -52,6 +52,8 @@ export const queue = ((batch, _env, ctx) =>
               const httpClient = yield* HttpClient.HttpClient.pipe(
                 Effect.map(HttpClient.filterStatusOk),
               );
+
+              // yield* Effect.logInfo({ user, tenantId, identityProvider });
 
               const { contentType, data } = yield* Match.value(identityProvider).pipe(
                 Match.when({ kind: Match.is(Constants.ENTRA_ID) }, (entraId) =>
@@ -97,10 +99,9 @@ export const queue = ((batch, _env, ctx) =>
           }),
         ),
         Effect.andThen(Effect.sync(() => message.ack())),
-        Effect.catchTags({
-          NoSuchElementError: () => Effect.sync(() => message.ack()),
-          IdentityProviderNotImplementedError: () => Effect.sync(() => message.ack()),
-        }),
+        Effect.catchTag(["NoSuchElementError", "IdentityProviderNotImplementedError"], () =>
+          Effect.sync(() => message.ack()),
+        ),
         Effect.catchCause(
           Effect.fn((cause) =>
             Effect.logError(

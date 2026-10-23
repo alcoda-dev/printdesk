@@ -25,10 +25,9 @@ export const baseReplicacheGroupLayer = HttpApiBuilder.group(
         "pull",
         Effect.fn("Api.Replicache.pull")(({ payload }) =>
           puller.pull(payload).pipe(
-            Effect.catchTags({
-              ClientStateNotFoundError: (e) => Effect.succeed(e.response),
-              VersionNotSupportedError: (e) => Effect.succeed(e.response),
-            }),
+            Effect.catchTag(["ClientStateNotFoundError", "VersionNotSupportedError"], (e) =>
+              Effect.succeed(e.response),
+            ),
             Effect.flatMap(Schema.encodeEffect(ReplicachePullerContract.Response)),
             orDieWhenUnrespondable,
           ),
@@ -38,10 +37,9 @@ export const baseReplicacheGroupLayer = HttpApiBuilder.group(
         "push",
         Effect.fn("Api.Replicache.push")(({ payload }) =>
           pusher.push(payload).pipe(
-            Effect.catchTags({
-              ClientStateNotFoundError: (e) => Effect.succeed(e.response),
-              VersionNotSupportedError: (e) => Effect.succeed(e.response),
-            }),
+            Effect.catchTag(["ClientStateNotFoundError", "VersionNotSupportedError"], (e) =>
+              Effect.succeed(e.response),
+            ),
             orDieWhenUnrespondable,
           ),
         ),

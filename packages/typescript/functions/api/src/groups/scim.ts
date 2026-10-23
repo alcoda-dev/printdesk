@@ -117,11 +117,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("group_memberships:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -136,11 +135,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("group_memberships:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -156,11 +154,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("group_memberships:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
             orDieWhenUnrespondable,
           ),
         ),
@@ -186,11 +183,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("group_memberships:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
             orDieWhenUnrespondable,
           ),
         ),
@@ -207,11 +203,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("group_memberships:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
             orDieWhenUnrespondable,
           ),
         ),
@@ -222,11 +217,10 @@ export const baseScimV2GroupsGroupLayer = HttpApiBuilder.group(
           scim.deleteGroup(params.id).pipe(
             orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("groups:delete")),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       );
@@ -261,11 +255,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
           scim.queryUsers(query.filter).pipe(
             orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("users:read")),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -275,11 +268,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
           scim.retrieveUser(params.id).pipe(
             orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("users:read")),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -294,11 +286,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("users:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -322,11 +313,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("users:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -341,11 +331,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
                 AccessControl.permissionPolicy("users:read"),
               ),
             ),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       )
@@ -355,11 +344,10 @@ export const baseScimV2UsersGroupLayer = HttpApiBuilder.group(
           scim.deleteUser(params.id).pipe(
             orDieWhenUnrespondable,
             AccessControl.enforce(AccessControl.permissionPolicy("users:delete")),
-            Effect.catchTags({
-              ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-              AccessDeniedError: (error) =>
-                new ScimContract.V2ForbiddenError({ detail: error.message }),
-            }),
+            Effect.catchTag(
+              ["ForbiddenActorError", "AccessDeniedError"],
+              (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+            ),
           ),
         ),
       );
@@ -415,11 +403,10 @@ export const baseScimV2BulkGroupLayer = HttpApiBuilder.group(
               AccessControl.permissionPolicy("users:create"),
             ),
           ),
-          Effect.catchTags({
-            ForbiddenActorError: () => new ScimContract.V2ForbiddenError(),
-            AccessDeniedError: (error) =>
-              new ScimContract.V2ForbiddenError({ detail: error.message }),
-          }),
+          Effect.catchTag(
+            ["ForbiddenActorError", "AccessDeniedError"],
+            (e) => new ScimContract.V2ForbiddenError({ detail: e.message }),
+          ),
         );
       }),
     );
