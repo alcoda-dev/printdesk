@@ -11,20 +11,20 @@ allowBuilds:
 catalog:
   "@aws-crypto/sha256-js": ^5.2.0
   "@aws-sdk/client-dynamodb": ^3.1146.0
-  "@aws-sdk/types": ^3.974.6
-  "@cloudflare/vite-plugin": ^1.63.1
-  "@cloudflare/workers-types": ^5.20261012.1
+  "@aws-sdk/types": ^3.975.0
+  "@cloudflare/vite-plugin": ^1.64.0
+  "@cloudflare/workers-types": ^5.20261022.1
   "@effect-aws/client-lambda": ^2.0.0
   "@effect-aws/client-s3": ^2.0.0
   "@effect-aws/dynamodb": ^2.0.0
   "@effect-aws/dsql": ^1.0.0
   "@effect-aws/lambda": ^2.0.0
-  "@effect/atom-react": ^4.0.5
-  "@effect/platform-browser": ^4.0.5
-  "@effect/platform-node": ^4.0.5
+  "@effect/atom-react": ^4.0.6
+  "@effect/platform-browser": ^4.0.6
+  "@effect/platform-node": ^4.0.6
   "@effect/platform-node-shared": ^4.0.5
-  "@effect/sql-pg": ^4.0.5
-  "@effect/tsgo": ^0.53.0
+  "@effect/sql-pg": ^4.0.6
+  "@effect/tsgo": ^0.53.5
   "@hono/aws-lambda": ^1.0.1
   "@hono/cloudflare-workers": ^1.0.1
   "@hono/node-server": ^2.1.5
@@ -36,9 +36,9 @@ catalog:
   "@tailwindcss/vite": ^4.3.3
   "@tanstack/devtools-vite": ^0.8.5
   "@tanstack/react-devtools": ^0.10.13
-  "@tanstack/react-router": ^1.170.42
+  "@tanstack/react-router": ^1.170.45
   "@tanstack/react-router-devtools": ^1.167.2
-  "@tanstack/react-start": ^1.168.61
+  "@tanstack/react-start": ^1.169.3
   "@typeonce/effect-machine": ^0.40.0
   "@types/aws-lambda": ^8.10.164
   "@types/node": ^24.19.2
@@ -48,24 +48,20 @@ catalog:
   aws4fetch: ^1.0.20
   drizzle-kit: 1.0.0-rc.5
   drizzle-orm: 1.0.0-rc.5
-  effect: ^4.0.5
+  effect: ^4.0.6
   hono: ^4.13.13
-  jose: ^6.2.12
-  lucide-react: ^1.55.0
+  jose: ^6.2.13
+  lucide-react: ^1.61.0
   oxc-transform-react: ^0.153.0
-  react: ^19.3.0
+  react: ^19.3.1
   react-aria-components: ^1.22.1
-  react-dom: ^19.3.0
+  react-dom: ^19.3.1
   replicache: ^15.3.0
   sst: ^4.17.2
   tailwindcss: ^4.3.3
   typescript: ^7.0.2
-  vite: ^8.3.4
-  wrangler: ^4.149.0
-
-minimumReleaseAgeExclude:
-  - drizzle-kit@1.0.0-rc.5
-  - drizzle-orm@1.0.0-rc.5
+  vite: ^8.3.5
+  wrangler: ^4.152.0
 
 overrides:
   "@microsoft/kiota-abstractions": 1.0.0-preview.108

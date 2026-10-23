@@ -134,6 +134,23 @@ class Config:
                                             ],
                                         ],
                                     ),
+                                    aws.iam.GetPolicyDocumentStatementArgs(
+                                        actions=[
+                                            "appconfig:StartConfigurationSession",
+                                            "appconfig:GetLatestConfiguration",
+                                        ],
+                                        resources=[
+                                            arns[
+                                                "invoices_processor_client_credentials_configuration_profile"
+                                            ],
+                                            arns[
+                                                "papercut_mf_api_auth_token_configuration_profile"
+                                            ],
+                                            arns[
+                                                "papercut_mf_sync_client_credentials_configuration_profile"
+                                            ],
+                                        ],
+                                    ),
                                 ]
                             )
                         ).json
