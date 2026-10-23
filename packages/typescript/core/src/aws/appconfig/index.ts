@@ -8,8 +8,10 @@ import {
   GetLatestConfigurationCommand,
   StartConfigurationSessionCommand,
 } from "@aws-sdk/client-appconfigdata";
+import * as Array from "effect/Array";
 import * as Cache from "effect/Cache";
 import * as Context from "effect/Context";
+import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Predicate from "effect/Predicate";
@@ -191,6 +193,9 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
                 ApplicationIdentifier: application.id,
                 EnvironmentIdentifier: environment.id,
                 ConfigurationProfileIdentifier: profileId,
+                RequiredMinimumPollIntervalInSeconds: Duration.fromInputUnsafe(
+                  Constants.APPCONFIG_MINIMUM_POLL_INTERVAL_DURATION,
+                ).pipe(Duration.toSeconds),
               }),
               { abortSignal },
             ),
@@ -202,6 +207,10 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
             "AppConfigDataServiceException",
           ),
         }),
+      ).pipe(
+        Effect.filterOrFail((output): output is Required<typeof output> =>
+          Array.every(globalThis.Object.values(output), Predicate.isNotUndefined),
+        ),
       ),
     );
 
@@ -221,6 +230,10 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
             "AppConfigDataServiceException",
           ),
         }),
+      ).pipe(
+        Effect.filterOrFail((output): output is Required<typeof output> =>
+          Array.every(globalThis.Object.values(output), Predicate.isNotUndefined),
+        ),
       ),
     );
 
