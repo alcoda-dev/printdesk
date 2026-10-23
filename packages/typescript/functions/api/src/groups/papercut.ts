@@ -15,7 +15,10 @@ import { databaseLayer } from "../lib/database";
 import { papercutMfApiLayer, papercutMfSynchronizerLayer } from "../lib/papercut";
 import { realtimeLayer } from "../lib/realtime";
 import { authMiddlewareLayer } from "../middleware/auth";
-import { appsyncPublisherCredentialIdentityProviderMiddlewareLayer } from "../middleware/aws";
+import {
+  appconfigCredentialIdentityProviderMiddlewareLayer,
+  appsyncPublisherCredentialIdentityProviderMiddlewareLayer,
+} from "../middleware/aws";
 import { errorMiddlewareLayer } from "../middleware/error";
 
 export const basePapercutMfGroupLayer = HttpApiBuilder.group(
@@ -57,7 +60,12 @@ export const basePapercutMfGroupLayer = HttpApiBuilder.group(
 );
 
 export const papercutMfGroupLayer = basePapercutMfGroupLayer.pipe(
-  Layer.provide([authMiddlewareLayer, errorMiddlewareLayer, papercutMfApiLayer]),
+  Layer.provide([
+    appconfigCredentialIdentityProviderMiddlewareLayer,
+    authMiddlewareLayer,
+    errorMiddlewareLayer,
+    papercutMfApiLayer,
+  ]),
 );
 
 export const basePapercutMfSyncGroupLayer = HttpApiBuilder.group(

@@ -13,7 +13,7 @@ export namespace Papercut {
       HttpApiEndpoint.get("health", "/health", {
         success: PapercutMfContract.HealthSuccess,
         error: [ActorsContract.ForbiddenActorError, AccessControl.AccessDeniedError],
-      }),
+      }).middleware(AwsCredentialIdentityProviderMiddleware),
     )
     .add(
       HttpApiEndpoint.get("taskStatus", "/task-status", {
