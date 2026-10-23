@@ -265,10 +265,12 @@ export async function handler(
         Effect.filterOrElse(Array.isArrayEmpty, () => ReplicacheNotifier.use(Struct.get("poke"))),
         Effect.asVoid,
         Effect.provide(
-          Layer.mergeAll(
-            AppsyncPublisherCredentialIdentityProviderLayerMap.get(actor),
-            papercutSyncClientAccessTokenLayer,
-          ).pipe(Layer.provideMerge(ActorLayerMap.get(actor))),
+          Layer.mergeAll(papercutSyncClientAccessTokenLayer).pipe(
+            Layer.provideMerge([
+              ActorLayerMap.get(actor),
+              AppsyncPublisherCredentialIdentityProviderLayerMap.get(actor),
+            ]),
+          ),
         ),
         runtime.runPromise,
       ),
