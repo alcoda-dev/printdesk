@@ -28,7 +28,6 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "@effect-aws/lambda": ["../../vendor/@effect-aws/lambda/src"],
       "@printdesk/core/*": ["../../core/src/*"]
     },
 

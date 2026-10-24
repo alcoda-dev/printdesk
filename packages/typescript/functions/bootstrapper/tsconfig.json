@@ -30,7 +30,6 @@
     "types": ["node"],
 
     "paths": {
-      "@effect-aws/dynamodb": ["../../vendor/@effect-aws/dynamodb/src"],
       "@printdesk/core/*": ["../../core/src/*"]
     },
 

@@ -29,7 +29,6 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "@effect-aws/lambda": ["../../vendor/@effect-aws/lambda/src"],
       "@openauthjs/openauth": ["../../vendor/openauth/src"],
       "@openauthjs/openauth/*": ["../../vendor/openauth/src/*"],
       "@printdesk/core/*": ["../../core/src/*"]

@@ -28,9 +28,6 @@
     "noPropertyAccessFromIndexSignature": false,
 
     "paths": {
-      "@effect-aws/cloudfront": ["../vendor/@effect-aws/cloudfront/src"],
-      "@effect-aws/dsql": ["../vendor/@effect-aws/dsql/src"],
-      "@effect-aws/dynamodb": ["../vendor/@effect-aws/dynamodb/src"],
       "@openauthjs/openauth/*": ["../vendor/openauth/src/*"]
     },
 
