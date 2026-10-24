@@ -20,7 +20,7 @@
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/aws-lambda": "^8.10.164",
     "eslint-plugin-drizzle": "^0.2.3",
-    "remeda": "^2.53.0",
+    "remeda": "2.52.0",
     "sst": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "^1.3.0"

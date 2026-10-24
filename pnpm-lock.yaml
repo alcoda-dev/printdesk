@@ -216,8 +216,8 @@ catalogs:
       specifier: ^2.1.5
       version: 2.1.5
     '@lucas-barake/effect-form-react':
-      specifier: 0.26.0-beta.5
-      version: 0.26.0-beta.5
+      specifier: ^1.1.0
+      version: 1.1.0
     '@stylexjs/atoms':
       specifier: ^0.19.1
       version: 0.19.1
@@ -300,8 +300,8 @@ catalogs:
       specifier: ^15.3.0
       version: 15.3.0
     sst:
-      specifier: ^4.17.2
-      version: 4.17.2
+      specifier: npm:@sst-community/sst@^4.22.0
+      version: 4.22.0
     tailwindcss:
       specifier: ^4.3.3
       version: 4.3.3
@@ -361,11 +361,11 @@ importers:
         specifier: ^0.2.3
         version: 0.2.3(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))
       remeda:
-        specifier: ^2.53.0
-        version: 2.53.0
+        specifier: 2.52.0
+        version: 2.52.0
       sst:
         specifier: 'catalog:'
-        version: 4.17.2
+        version: '@sst-community/sst@4.22.0'
       typescript:
         specifier: 'catalog:'
         version: 7.0.2
@@ -482,7 +482,7 @@ importers:
         version: 0.3.0
       sst:
         specifier: 'catalog:'
-        version: 4.17.2
+        version: '@sst-community/sst@4.22.0'
     devDependencies:
       '@aws-sdk/types':
         specifier: 'catalog:'
@@ -552,9 +552,12 @@ importers:
       '@effect/tsgo':
         specifier: 'catalog:'
         version: 0.53.5
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.19.2
       wrangler:
         specifier: 'catalog:'
-        version: 4.152.0(@cloudflare/workers-types@5.20261022.1)(@types/node@26.6.5)
+        version: 4.152.0(@cloudflare/workers-types@5.20261022.1)(@types/node@24.19.2)
 
   packages/typescript/functions/assets:
     dependencies:
@@ -750,7 +753,7 @@ importers:
         version: 4.13.13
       sst:
         specifier: 'catalog:'
-        version: 4.17.2
+        version: '@sst-community/sst@4.22.0'
     devDependencies:
       '@cloudflare/workers-types':
         specifier: 'catalog:'
@@ -932,7 +935,7 @@ importers:
         version: 4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0)
       '@lucas-barake/effect-form-react':
         specifier: 'catalog:'
-        version: 0.26.0-beta.5(@effect-atom/atom@0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6))(@effect/atom-react@4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0))(effect@4.0.6)(react@19.3.1)
+        version: 1.1.0(@effect/atom-react@4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0))(effect@4.0.6)(react@19.3.1)
       '@printdesk/core':
         specifier: workspace:*
         version: link:../core
@@ -1149,8 +1152,8 @@ packages:
     resolution: {integrity: sha512-ctjVSyCMegrWfXlx6VqzSBFI6UqmQ5ZlnfMhdLIiWmhoH8UAQxSCP5N3OpG7X3k4LnS7ou74C4mt20+bfTW2aQ==}
     engines: {node: '>=20.0.0'}
 
-  '@aws/durable-execution-sdk-js@1.0.2':
-    resolution: {integrity: sha512-KIYBVqV9gArkWdPEDYOjJqLlO+NecmCXOXadNBlOspJTmqztwuiyb6aZc468bYWSGuL4Me/gyTIK97ubkwFNCw==}
+  '@aws/durable-execution-sdk-js@2.6.0':
+    resolution: {integrity: sha512-3UlQEVC4NCwr8npJIkndQZ9SjpTF45SMT7Y/vJSvb8g4XmJirK9H3IoIlTLAZ01JMeOw3FEvzGSAKXgzX+jLpA==}
     engines: {node: '>=22'}
 
   '@aws/durable-execution-sdk-js@2.7.1':
@@ -1413,14 +1416,6 @@ packages:
   '@dual-bundle/import-meta-resolve@4.2.1':
     resolution: {integrity: sha512-id+7YRUgoUX6CgV0DtuhirQWodeeA7Lf4i2x71JS/vtA5pRb/hIGWlw+G6MeXvsM+MXrz0VAydTGElX1rAfgPg==}
 
-  '@effect-atom/atom@0.5.3':
-    resolution: {integrity: sha512-TRZv/i+YT3TtnN0oFORJqXdxSs1fc7lrJlH+1xZvDFyjC9hgoVnrcKbeZsDFmr6r0wYRqVo7U3IftxiQNjpNZA==}
-    peerDependencies:
-      '@effect/experimental': ^0.58.0
-      '@effect/platform': ^0.94.2
-      '@effect/rpc': ^0.73.0
-      effect: ^3.19.15
-
   '@effect-aws/client-dynamodb@2.0.0':
     resolution: {integrity: sha512-qnwooFL6GIMlc0YUjoZQ1C/RrzhBMWv5vVf7BqcF+QlijcoGfbz8blZQxHncokX0S2nV25//OhORvcg/OrN2rw==}
     peerDependencies:
@@ -1465,19 +1460,6 @@ packages:
       react: '>=19.0.0 <20.0.0'
       scheduler: '>=0.25.0 <0.29.0'
 
-  '@effect/experimental@0.58.0':
-    resolution: {integrity: sha512-IEP9sapjF6rFy5TkoqDPc86st/fnqUfjT7Xa3pWJrFGr1hzaMXHo+mWsYOZS9LAOVKnpHuVziDK97EP5qsCHVA==}
-    peerDependencies:
-      '@effect/platform': ^0.94.0
-      effect: ^3.19.13
-      ioredis: ^5
-      lmdb: ^3
-    peerDependenciesMeta:
-      ioredis:
-        optional: true
-      lmdb:
-        optional: true
-
   '@effect/platform-browser@4.0.6':
     resolution: {integrity: sha512-i4bf1+FlUnZypqK0pQ5cq46KhroTgqFGktFn2WorwIk+yc+RuZO6qsF+Sk6lY5uHwdHTOLGMlnlXSJ8u1UG42g==}
     peerDependencies:
@@ -1495,17 +1477,6 @@ packages:
     peerDependencies:
       effect: ^4.0.6
       redis: '>=5.0.0 <7.0.0'
-
-  '@effect/platform@0.94.5':
-    resolution: {integrity: sha512-z05APUiDDPbodhTkH/RJqOLoCU11bU2IZLfcwLFrld03+ob1VeqRnELQlmueLIYm6NZifHAtjl32V+GRt34y4A==}
-    peerDependencies:
-      effect: ^3.19.17
-
-  '@effect/rpc@0.73.2':
-    resolution: {integrity: sha512-td7LHDgBOYKg+VgGWEelD8rSAmvjXz7am17vfxZROX5qIYuvH7drL/z4p5xQFadhHZ7DYdlFpqdO9ggc77OCIw==}
-    peerDependencies:
-      '@effect/platform': ^0.94.5
-      effect: ^3.19.18
 
   '@effect/sql-pg@4.0.6':
     resolution: {integrity: sha512-mh2Z+Hi1/AWtkoGuzub2PPCHN7ZsMAbY8dlv/YbdJ6PoXVdrVAGsr+FeeoeD6f0rdnln4DQm7PvFjv1htAjY9w==}
@@ -1983,18 +1954,17 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@lucas-barake/effect-form-react@0.26.0-beta.5':
-    resolution: {integrity: sha512-Zj9V1/d5lNFLQPpoooUP3aX23+dxApzMcHnryEmbaRiTr0HwTr7GrgvZY1C6jNPL5+ZapUSAxiZzPvuD+f55uw==}
+  '@lucas-barake/effect-form-react@1.1.0':
+    resolution: {integrity: sha512-883pL16lF1POoukIS2Et06DWXF6WyuweVyj1tiNR71nkhOOWicSqqP4LF0cro9exBotdTMZwKC1EQm8eHOcxlg==}
     peerDependencies:
-      '@effect/atom-react': '>=4.0.0-beta.52 <4.0.1'
-      effect: '>=4.0.0-beta.52 <4.0.1'
+      '@effect/atom-react': ^4.0.0
+      effect: ^4.0.0
       react: ^19.0.0
 
-  '@lucas-barake/effect-form@0.25.0':
-    resolution: {integrity: sha512-yj9zk2QB4oad8PqcJh3pYvwJYPwilFDNmZn5L+1oXXRGhng4QddzYxmhlJuw7Hqm7KMrBYIxlIOU6axsOucQSw==}
+  '@lucas-barake/effect-form@1.1.1':
+    resolution: {integrity: sha512-ulNzHlEnCkpktvBG7kOgJD85pmnNXylnFxPbz9fffnev9viX50uPj9DbmkCuMZmutDsPtNplYqoyK55MGuZb1A==}
     peerDependencies:
-      '@effect-atom/atom': ^0.5.0
-      effect: ^3.19.15
+      effect: ^4.0.0
 
   '@microsoft/kiota-abstractions@1.0.0-preview.108':
     resolution: {integrity: sha512-BMcVp6tUDnt2RXlYb5zU+8VdDNqlpcYzuumJZkgSoJauYyVeEaigtdx5bPL+cYLlom/S23LVONs5Ci06Orn8Fg==}
@@ -2037,36 +2007,6 @@ packages:
 
   '@microsoft/msgraph-sdk@1.0.0-preview.90':
     resolution: {integrity: sha512-IZOF9kxqRjSbEsj/cdrQRbclmKR3ewxPLMkKITIrJXLsu3E3lmWn2U/vsgG4dOGOSY8kMokqZHG30ffLHLH30w==}
-
-  '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4':
-    resolution: {integrity: sha512-LCkGo6JDfaBhgST7UpPWgNgLINpcpabaHfyz5OBx75nUYxBsaEPxjnyNjWpeb/xBup/682QnBfRBy2/LvPutZQ==}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.4':
-    resolution: {integrity: sha512-zExlW9zUJKZH/tOtVMttwjKa4Xm/3KcNjnE3dPN92uCktwavMxpgCA3MoJK/DOnTWsQgo224OaST27/mPNAf+w==}
-    cpu: [x64]
-    os: [darwin]
-
-  '@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.4':
-    resolution: {integrity: sha512-dgX0P/9wGPJeHFBG+ZmhgE6bmtMt7NP5CRBGyyktpopdk/mW4POnrpQsSLtKI1dwpc+pPLuXHDh6vvskyQE/sw==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@msgpackr-extract/msgpackr-extract-linux-arm@3.0.4':
-    resolution: {integrity: sha512-Tg3yX65f5GbtXLkrYEHE5oibZG9epyYWas7FogTTEJeDEF9JlXJzKgXaNhT3UXlTOeA+AfZpYZYZ0uPj7Cfquw==}
-    cpu: [arm]
-    os: [linux]
-
-  '@msgpackr-extract/msgpackr-extract-linux-x64@3.0.4':
-    resolution: {integrity: sha512-8TNXMEjJc3QEy7R/x1INhgiU+XakDAFUzBhaz7+Rbrs8NH5UQeHQxxmzsSBJGyV6I1jW79undiQm8tOI+D+8FQ==}
-    cpu: [x64]
-    os: [linux]
-
-  '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.4':
-    resolution: {integrity: sha512-CmCXPQrkbwExx3j946/PtHWHbYJiCRBRDl4BlkRQcJB/YOwQxJRTpoo7aTsortjgoJ1x7opzTSxn7C+ASSLVjQ==}
-    cpu: [x64]
-    os: [win32]
 
   '@napi-rs/wasm-runtime@1.2.5':
     resolution: {integrity: sha512-HshSvXzmBxNzqejd3k/KemgQ3hdREUYFRRrgxOZ+gPljDIsO2SDZrVZMd4Z/HsxudQbE62OVyVFE8z9BCurfjA==}
@@ -2891,6 +2831,51 @@ packages:
 
   '@speed-highlight/core@1.2.24':
     resolution: {integrity: sha512-qeW2e1l78afw8VhRPfPQ1Gjj+KU5XFQ/OFV5ti6eTa9bruO7mJyZtA4vw0ofqmA3tKCkROE9xLk3VZoeRc98nw==}
+
+  '@sst-community/sst-darwin-arm64@4.22.0':
+    resolution: {integrity: sha512-l5fuAyedBoZcQJhWuH3zbV3pJaanuYic7YbDcZF6THB2on9YXeI/NxmB8QXxuI42PfEMymZWnTXr5Xc9Ws2q0A==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@sst-community/sst-darwin-x64@4.22.0':
+    resolution: {integrity: sha512-JokZCY559O1H2iOFxrjEkggqIclAaZu9t5L6BBS9NJ1P0btLsCgkhPHWB/QVZp8gtVlZghKHXQ1In6S9T4qiGw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@sst-community/sst-linux-arm64@4.22.0':
+    resolution: {integrity: sha512-dd6UqP7RYbIBZeKMOGjLmvY2u8UKdAjhOgN4c8Oidg7HQzbJ2PvDUdu3F+Adc5U0w+jTGhncHoIPirkBO+fCxA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@sst-community/sst-linux-x64@4.22.0':
+    resolution: {integrity: sha512-LpTaBaEAMleHa+K3RtsOyB61iLQcmH0ZjdKzwju9RSxnWmHIRAhpKhnWAxj1Bj8qzQpsXVkSLuaMqNJGh24n0Q==}
+    cpu: [x64]
+    os: [linux]
+
+  '@sst-community/sst-linux-x86@4.22.0':
+    resolution: {integrity: sha512-duB+l0Ne6smgqFqeTTaUsx8sKv0H4l0A2bO/Xbq4J0iPdySTSq7/cp76BPxFJI5CiPbwXsVPjSXN9uc5rbFEpA==}
+    cpu: [x86]
+    os: [linux]
+
+  '@sst-community/sst-win32-arm64@4.22.0':
+    resolution: {integrity: sha512-Bd+305tWtUIrbR8s0DqR85djnvbaDFuGMNXLox0NV/M6QTEtfUipstN0ZTnAdd7NJV6dr7YXAl9EtuVk+Z68nA==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@sst-community/sst-win32-x64@4.22.0':
+    resolution: {integrity: sha512-vCtUeMFKWwYdICLjaSaDz0McvQizxQAMnZVlopuG10uTP9wACWh+/is3riozMpnAxKT0rXISyd6c8GjNmd+pDQ==}
+    cpu: [x64]
+    os: [win32]
+
+  '@sst-community/sst-win32-x86@4.22.0':
+    resolution: {integrity: sha512-oPy/o+0Ey79XV+3CHVhxAJ7pKEZU4RWI3/7OG8eAhb4i7K/c7n7TTIyoxsSap0dc2HU9EhoU8dRvZ/74o3ALyg==}
+    cpu: [x86]
+    os: [win32]
+
+  '@sst-community/sst@4.22.0':
+    resolution: {integrity: sha512-6KfHlyA+NuOsYwgsKmW6OmhotLjvPLev46yy4op+MHmjk74YBk/bCh7hEx9d2BzcyGkOXq58BNTMkdsbfif28Q==}
+    engines: {node: '>=22'}
+    hasBin: true
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -4215,9 +4200,6 @@ packages:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
 
-  find-my-way-ts@0.1.6:
-    resolution: {integrity: sha512-a85L9ZoXtNAey3Y6Z+eBWW658kO/MwR7zIafkIUPUMf3isZG0NCs2pjW2wtjxAKuJPxMAsHUIP4ZPGv0o5gyTA==}
-
   find-up@5.0.0:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
@@ -4664,16 +4646,6 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  msgpackr-extract@3.0.4:
-    resolution: {integrity: sha512-4kmO/MdyUIkLIvTPr8VHLil4AtoKIoniWPIEk5+CDy0xnWC84azhSFmuJ7PxZdsYtiP5kEeQsORAVIeMgxT+Hw==}
-    hasBin: true
-
-  msgpackr@1.12.1:
-    resolution: {integrity: sha512-4EUH9tQHnMmEgzW/MdAP0KIfa1T9AF+htl0ffe2n5vb2EKn9y2co8ccpgWko6S52Jy1PQZKwRnx5/KkYjtd9MQ==}
-
-  multipasta@0.2.9:
-    resolution: {integrity: sha512-kAovZHgxryqb0xTFz7OTCPxbas8UBTTwCDhfrlaNecp1/z6xcMfp5PVhDxsW7jONHyDF10/ccp30MxA2+66GJw==}
-
   nanoid@3.3.20:
     resolution: {integrity: sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -4700,10 +4672,6 @@ packages:
     peerDependenciesMeta:
       encoding:
         optional: true
-
-  node-gyp-build-optional-packages@5.2.2:
-    resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
-    hasBin: true
 
   node-releases@2.0.60:
     resolution: {integrity: sha512-OmO8+GM1JUZqXET720VrJCwkjUCXmCMQm0Z3UDDRbfNLHS4NEAvY60j5jiFv0tkKw2PNNlqOLhahVmwJIOLDIQ==}
@@ -4939,8 +4907,8 @@ packages:
     resolution: {integrity: sha512-XFQbPie1lGpKeUZ8ySYY43yLnQy/iIQtHNvIr/1XdaABpb96rUSdm3Mfl+98FEVbv9ZJIzINMno5s0Nh8E5LEw==}
     engines: {node: '>= 20.0.0'}
 
-  remeda@2.53.0:
-    resolution: {integrity: sha512-1jeHr8AUMB3r089AOmaiHBPAcGTep27JCbMt8MeXXXquDkO3h2N4CtuK++4Oas8mulCUiOUDeZqN+ssrcatKlw==}
+  remeda@2.52.0:
+    resolution: {integrity: sha512-PReYy2iQJbKq7t/4grlsew2rUKRgZYMRQOVjlxsl9+j8yQWfEdyuzJFPSF4kDmO11KoHSanilyHnG4xSBA21nQ==}
     engines: {node: '>=18.0.0'}
 
   replicache@15.3.0:
@@ -5035,50 +5003,6 @@ packages:
   srvx@1.0.6:
     resolution: {integrity: sha512-QeTKgAhk8OSsfeq60bl3wuVs9PmBftzmk7owBInA/F1YQne+TRw0UcPymNpURldAmx8hfmM2PNNGH/zgo3GpLA==}
     engines: {node: '>=20.16.0'}
-    hasBin: true
-
-  sst-darwin-arm64@4.17.2:
-    resolution: {integrity: sha512-b0VnDsLEu0IfliBC4o5psGayj8H3Xy2Gy+3CrPsxRRdZCVq8rwEMJurMK2iinq80u6iEsISyJgbg7/PPgk4WMQ==}
-    cpu: [arm64]
-    os: [darwin]
-
-  sst-darwin-x64@4.17.2:
-    resolution: {integrity: sha512-Zywxje6eng7H187O6x48cViT2VBhZLLctXURxnA1UqbNnUVZ29UWRzyarWx3FLTBbS4wjTophTBOrfBNwHYzGw==}
-    cpu: [x64]
-    os: [darwin]
-
-  sst-linux-arm64@4.17.2:
-    resolution: {integrity: sha512-KIZi+br/j51Y5mvJp0eOajuh8uB1XYbZbqlK6P4DjDcDOgBf0QBTE1nyaHtQGnIpHzzq2Uxy9n5yV5SVqQGYzA==}
-    cpu: [arm64]
-    os: [linux]
-
-  sst-linux-x64@4.17.2:
-    resolution: {integrity: sha512-4SlWmfMJLaD1j8jlDPxYpoRiopTJyY57wdNAurVa3afhl1hKYeKukH440HvNxv7JgF6m698QQ0T+4t89KD7osQ==}
-    cpu: [x64]
-    os: [linux]
-
-  sst-linux-x86@4.17.2:
-    resolution: {integrity: sha512-NvEiRaoy6+fuGSSDfC2Uh6HNdR42x9DPtcXckc0UUwcGKK2GjfnjsH471UuW3Z4wleU1Kmr9Scrr2BZRyPZZ3Q==}
-    cpu: [x86]
-    os: [linux]
-
-  sst-win32-arm64@4.17.2:
-    resolution: {integrity: sha512-/2R0BMREFEYO/oWzrY09akdHcvnT2PNQqFAbhKHwLjcv1NacDrB7Tv8fm2PkqaOot8ndlX5jQnB15fpIVVX6+w==}
-    cpu: [arm64]
-    os: [win32]
-
-  sst-win32-x64@4.17.2:
-    resolution: {integrity: sha512-uGFNzNX4pnR9qyg8pjTKfyOQGKqDOk6qxGUfdWvQDzjB5H61YZcxphFfun25M4EhXgC1gJYvMdTm59FktSVMVQ==}
-    cpu: [x64]
-    os: [win32]
-
-  sst-win32-x86@4.17.2:
-    resolution: {integrity: sha512-lPjQUe9VmtIv1TETHaOIB2YhDx9DBIkNZMO/KeSJmHcDU5ytwv8nzyQBws5kNu8OSjIpCPEbLrPil7uO2y9iXA==}
-    cpu: [x86]
-    os: [win32]
-
-  sst@4.17.2:
-    resolution: {integrity: sha512-r62HyE6KMpmeIXx1pDPehE9pZMLWKL79WLa9+qWgljPkzqX6+Kayiro9JlrIqlJ8eBUzgil09qmx7ZZw90e5gA==}
     hasBin: true
 
   std-env@4.3.0:
@@ -5234,10 +5158,6 @@ packages:
     resolution: {integrity: sha512-6L+EeigHMQhdaIPNIFUKwfWJSwWFQ8gJbJ2DLOs5sDIegTwR9fRxvnM3uciHKjIZhFz+KAv2emhWMRvDmMcY8A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
-  uuid@11.1.1:
-    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
-    hasBin: true
 
   vite-plus@1.3.0:
     resolution: {integrity: sha512-wZGsDeYfPcrCegqgY68pJJHGTpEZdsZvIMH2/mWXkGkBD72UY3M7z24Sv3ZeOL/FrqbbtyqBOfkKO6BvoQ8wMw==}
@@ -5763,7 +5683,7 @@ snapshots:
       '@smithy/types': 4.19.0
       tslib: 2.8.1
 
-  '@aws/durable-execution-sdk-js@1.0.2':
+  '@aws/durable-execution-sdk-js@2.6.0':
     dependencies:
       '@aws-sdk/client-lambda': 3.1156.0
 
@@ -6063,13 +5983,6 @@ snapshots:
 
   '@dual-bundle/import-meta-resolve@4.2.1': {}
 
-  '@effect-atom/atom@0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6)':
-    dependencies:
-      '@effect/experimental': 0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6)
-      '@effect/platform': 0.94.5(effect@4.0.6)
-      '@effect/rpc': 0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6)
-      effect: 4.0.6
-
   '@effect-aws/client-dynamodb@2.0.0(effect@4.0.6)':
     dependencies:
       '@aws-sdk/client-dynamodb': 3.1156.0
@@ -6121,12 +6034,6 @@ snapshots:
       react: 19.3.1
       scheduler: 0.28.0
 
-  '@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6)':
-    dependencies:
-      '@effect/platform': 0.94.5(effect@4.0.6)
-      effect: 4.0.6
-      uuid: 11.1.1
-
   '@effect/platform-browser@4.0.6(effect@4.0.6)':
     dependencies:
       effect: 4.0.6
@@ -6149,19 +6056,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-
-  '@effect/platform@0.94.5(effect@4.0.6)':
-    dependencies:
-      effect: 4.0.6
-      find-my-way-ts: 0.1.6
-      msgpackr: 1.12.1
-      multipasta: 0.2.9
-
-  '@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6)':
-    dependencies:
-      '@effect/platform': 0.94.5(effect@4.0.6)
-      effect: 4.0.6
-      msgpackr: 1.12.1
 
   '@effect/sql-pg@4.0.6(effect@4.0.6)':
     dependencies:
@@ -6500,18 +6394,15 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@lucas-barake/effect-form-react@0.26.0-beta.5(@effect-atom/atom@0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6))(@effect/atom-react@4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0))(effect@4.0.6)(react@19.3.1)':
+  '@lucas-barake/effect-form-react@1.1.0(@effect/atom-react@4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0))(effect@4.0.6)(react@19.3.1)':
     dependencies:
       '@effect/atom-react': 4.0.6(effect@4.0.6)(react@19.3.1)(scheduler@0.28.0)
-      '@lucas-barake/effect-form': 0.25.0(@effect-atom/atom@0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6))(effect@4.0.6)
+      '@lucas-barake/effect-form': 1.1.1(effect@4.0.6)
       effect: 4.0.6
       react: 19.3.1
-    transitivePeerDependencies:
-      - '@effect-atom/atom'
 
-  '@lucas-barake/effect-form@0.25.0(@effect-atom/atom@0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6))(effect@4.0.6)':
+  '@lucas-barake/effect-form@1.1.1(effect@4.0.6)':
     dependencies:
-      '@effect-atom/atom': 0.5.3(@effect/experimental@0.58.0(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(@effect/platform@0.94.5(effect@4.0.6))(@effect/rpc@0.73.2(@effect/platform@0.94.5(effect@4.0.6))(effect@4.0.6))(effect@4.0.6)
       effect: 4.0.6
 
   '@microsoft/kiota-abstractions@1.0.0-preview.108':
@@ -6608,24 +6499,6 @@ snapshots:
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
-
-  '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.4':
-    optional: true
-
-  '@msgpackr-extract/msgpackr-extract-darwin-x64@3.0.4':
-    optional: true
-
-  '@msgpackr-extract/msgpackr-extract-linux-arm64@3.0.4':
-    optional: true
-
-  '@msgpackr-extract/msgpackr-extract-linux-arm@3.0.4':
-    optional: true
-
-  '@msgpackr-extract/msgpackr-extract-linux-x64@3.0.4':
-    optional: true
-
-  '@msgpackr-extract/msgpackr-extract-win32-x64@3.0.4':
-    optional: true
 
   '@napi-rs/wasm-runtime@1.2.5(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)':
     dependencies:
@@ -7114,6 +6987,46 @@ snapshots:
       solid-js: 1.9.17
 
   '@speed-highlight/core@1.2.24': {}
+
+  '@sst-community/sst-darwin-arm64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-darwin-x64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-linux-arm64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-linux-x64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-linux-x86@4.22.0':
+    optional: true
+
+  '@sst-community/sst-win32-arm64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-win32-x64@4.22.0':
+    optional: true
+
+  '@sst-community/sst-win32-x86@4.22.0':
+    optional: true
+
+  '@sst-community/sst@4.22.0':
+    dependencies:
+      '@aws/durable-execution-sdk-js': 2.6.0
+      aws4fetch: 1.0.18
+      jose: 5.2.3
+      openid-client: 5.6.4
+    optionalDependencies:
+      '@sst-community/sst-darwin-arm64': 4.22.0
+      '@sst-community/sst-darwin-x64': 4.22.0
+      '@sst-community/sst-linux-arm64': 4.22.0
+      '@sst-community/sst-linux-x64': 4.22.0
+      '@sst-community/sst-linux-x86': 4.22.0
+      '@sst-community/sst-win32-arm64': 4.22.0
+      '@sst-community/sst-win32-x64': 4.22.0
+      '@sst-community/sst-win32-x86': 4.22.0
 
   '@standard-schema/spec@1.1.0': {}
 
@@ -8284,8 +8197,6 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  find-my-way-ts@0.1.6: {}
-
   find-up@5.0.0:
     dependencies:
       locate-path: 6.0.0
@@ -8693,24 +8604,6 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msgpackr-extract@3.0.4:
-    dependencies:
-      node-gyp-build-optional-packages: 5.2.2
-    optionalDependencies:
-      '@msgpackr-extract/msgpackr-extract-darwin-arm64': 3.0.4
-      '@msgpackr-extract/msgpackr-extract-darwin-x64': 3.0.4
-      '@msgpackr-extract/msgpackr-extract-linux-arm': 3.0.4
-      '@msgpackr-extract/msgpackr-extract-linux-arm64': 3.0.4
-      '@msgpackr-extract/msgpackr-extract-linux-x64': 3.0.4
-      '@msgpackr-extract/msgpackr-extract-win32-x64': 3.0.4
-    optional: true
-
-  msgpackr@1.12.1:
-    optionalDependencies:
-      msgpackr-extract: 3.0.4
-
-  multipasta@0.2.9: {}
-
   nanoid@3.3.20: {}
 
   nanoid@5.1.16: {}
@@ -8722,11 +8615,6 @@ snapshots:
   node-fetch@2.7.0:
     dependencies:
       whatwg-url: 5.0.0
-
-  node-gyp-build-optional-packages@5.2.2:
-    dependencies:
-      detect-libc: 2.1.2
-    optional: true
 
   node-releases@2.0.60: {}
 
@@ -9029,7 +8917,7 @@ snapshots:
       - '@node-rs/xxhash'
       - '@opentelemetry/api'
 
-  remeda@2.53.0: {}
+  remeda@2.52.0: {}
 
   replicache@15.3.0:
     dependencies:
@@ -9183,46 +9071,6 @@ snapshots:
 
   srvx@1.0.6: {}
 
-  sst-darwin-arm64@4.17.2:
-    optional: true
-
-  sst-darwin-x64@4.17.2:
-    optional: true
-
-  sst-linux-arm64@4.17.2:
-    optional: true
-
-  sst-linux-x64@4.17.2:
-    optional: true
-
-  sst-linux-x86@4.17.2:
-    optional: true
-
-  sst-win32-arm64@4.17.2:
-    optional: true
-
-  sst-win32-x64@4.17.2:
-    optional: true
-
-  sst-win32-x86@4.17.2:
-    optional: true
-
-  sst@4.17.2:
-    dependencies:
-      '@aws/durable-execution-sdk-js': 1.0.2
-      aws4fetch: 1.0.18
-      jose: 5.2.3
-      openid-client: 5.6.4
-    optionalDependencies:
-      sst-darwin-arm64: 4.17.2
-      sst-darwin-x64: 4.17.2
-      sst-linux-arm64: 4.17.2
-      sst-linux-x64: 4.17.2
-      sst-linux-x86: 4.17.2
-      sst-win32-arm64: 4.17.2
-      sst-win32-x64: 4.17.2
-      sst-win32-x86: 4.17.2
-
   std-env@4.3.0: {}
 
   strnum@2.5.1:
@@ -9345,8 +9193,6 @@ snapshots:
   use-sync-external-store@1.7.0(react@19.3.1):
     dependencies:
       react: 19.3.1
-
-  uuid@11.1.1: {}
 
   vite-plus@1.3.0(@opentelemetry/api@1.10.0)(@types/node@26.6.5)(@vitest/ui@5.0.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(typescript@7.0.2):
     dependencies:

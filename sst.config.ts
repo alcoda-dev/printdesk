@@ -25,16 +25,16 @@ export default $config({
         aws: {
           profile: input?.stage === "prod" ? "prod" : "dev",
           region: awsRegion,
-          version: "7.28.0",
+          version: "7.48.0",
         },
-        azuread: { version: "6.9.0" },
+        azuread: { version: "6.11.1" },
         cloudflare: {
           apiToken: cloudflareApiToken,
           version: "6.21.0",
         },
         command: { version: "1.2.1" },
         docker: { version: "4.11.2" },
-        random: { version: "4.19.2" },
+        random: { version: "4.21.2" },
         "@pulumiverse/time": { version: "0.1.1" },
       },
     };
