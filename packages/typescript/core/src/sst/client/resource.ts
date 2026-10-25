@@ -1,6 +1,7 @@
 import * as Array from "effect/Array";
 import * as Record from "effect/Record";
 import * as Redacted from "effect/Redacted";
+import * as String from "effect/String";
 
 import { Constants } from "../../utils/constants";
 
@@ -55,8 +56,8 @@ export function makeResource<
     // oxlint-disable-next-line typescript/no-explicit-any
     Record.empty<string, any>(),
     function (target, [key, value]) {
-      if (key.startsWith(prefix))
-        target[key.slice(prefix.length)] = Redacted.make(JSON.parse(value));
+      if (String.startsWith(prefix)(key))
+        target[String.slice(prefix.length)(key)] = Redacted.make(JSON.parse(value));
       else if (!prefixedOnly) target[key] = Redacted.make(value);
       return target;
     },

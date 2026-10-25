@@ -1,4 +1,5 @@
 import * as Redacted from "effect/Redacted";
+import * as String from "effect/String";
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
@@ -8,7 +9,7 @@ import { proxy } from "./middleware/proxy";
 
 const hostnames = resource.Hostnames.pipe(Redacted.value);
 
-export default new Hono({ getPath: (req) => req.url.replace(/^https?:\/([^?]+).*$/, "$1") })
+export default new Hono({ getPath: (req) => String.replace(/^https?:\/([^?]+).*$/, "$1")(req.url) })
   .use(logger())
   .use(actor)
   .all(`/${hostnames.api}/:path{.+}`, proxy("api"))

@@ -148,7 +148,7 @@ export const tenantTemplate = Function.dual<
   (template: string) => (tenantId: TenantId) => string,
   (tenantId: TenantId, template: string) => string
 >(2, (tenantId, template) =>
-  template.replace(new RegExp(Constants.TENANT_ID_PLACEHOLDER, "g"), tenantId),
+  String.replace(new RegExp(Constants.TENANT_ID_PLACEHOLDER, "g"), tenantId)(template),
 );
 
 export const TenantIdFromTemplate = Schema.TemplateLiteralParser([
@@ -165,7 +165,7 @@ export const TenantIdFromTemplate = Schema.TemplateLiteralParser([
 export const getUserInitials = Effect.fn(function* (name: string) {
   if (!name) return "";
 
-  const splitName = name.split(" ");
+  const splitName = String.split(name, " ");
 
   const firstInitial = yield* Array.head(splitName).pipe(
     Option.flatMap((firstName) => String.charAt(firstName, 0)),

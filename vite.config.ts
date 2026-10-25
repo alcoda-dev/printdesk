@@ -89,6 +89,7 @@ export default defineConfig({
           "effecttsgo/node-builtin-import": "off",
           "effecttsgo/prefer-effect-array": "off",
           "effecttsgo/prefer-effect-record": "off",
+          "effecttsgo/prefer-effect-string": "off",
         },
       },
     ],

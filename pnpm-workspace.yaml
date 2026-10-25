@@ -12,8 +12,8 @@ catalog:
   "@aws-crypto/sha256-js": ^5.2.0
   "@aws-sdk/client-dynamodb": ^3.1146.0
   "@aws-sdk/types": ^3.975.0
-  "@cloudflare/vite-plugin": ^1.64.0
-  "@cloudflare/workers-types": ^5.20261022.1
+  "@cloudflare/vite-plugin": ^1.65.0
+  "@cloudflare/workers-types": ^5.20261024.1
   "@effect-aws/client-lambda": ^2.0.0
   "@effect-aws/client-s3": ^2.0.0
   "@effect-aws/dynamodb": ^2.0.0
@@ -24,7 +24,7 @@ catalog:
   "@effect/platform-node": ^4.0.6
   "@effect/platform-node-shared": ^4.0.5
   "@effect/sql-pg": ^4.0.6
-  "@effect/tsgo": ^0.53.5
+  "@effect/tsgo": ^0.57.0
   "@hono/aws-lambda": ^1.0.1
   "@hono/cloudflare-workers": ^1.0.1
   "@hono/node-server": ^2.1.5
@@ -36,9 +36,9 @@ catalog:
   "@tailwindcss/vite": ^4.3.3
   "@tanstack/devtools-vite": ^0.8.5
   "@tanstack/react-devtools": ^0.10.13
-  "@tanstack/react-router": ^1.170.45
+  "@tanstack/react-router": ^1.170.46
   "@tanstack/react-router-devtools": ^1.167.2
-  "@tanstack/react-start": ^1.169.3
+  "@tanstack/react-start": ^1.169.4
   "@typeonce/effect-machine": ^0.40.0
   "@types/aws-lambda": ^8.10.164
   "@types/node": ^24.19.2
@@ -59,9 +59,21 @@ catalog:
   replicache: ^15.3.0
   sst: npm:@sst-community/sst@^4.22.0
   tailwindcss: ^4.3.3
+  tsrs: ^0.18.0-ts7.1.0-dev.20260929
   typescript: ^7.0.2
-  vite: ^8.3.5
   wrangler: ^4.152.0
+  vite-plus: ^1.4.0
+  vite: npm:@voidzero-dev/vite-plus-core@^1.4.0
+
+minimumReleaseAgeExclude:
+  - "@effect/tsgo-darwin-arm64@0.57.0"
+  - "@effect/tsgo-darwin-x64@0.57.0"
+  - "@effect/tsgo-linux-arm64@0.57.0"
+  - "@effect/tsgo-linux-arm@0.57.0"
+  - "@effect/tsgo-linux-x64@0.57.0"
+  - "@effect/tsgo-win32-arm64@0.57.0"
+  - "@effect/tsgo-win32-x64@0.57.0"
+  - "@effect/tsgo@0.57.0"
 
 overrides:
   "@microsoft/kiota-abstractions": 1.0.0-preview.108
@@ -73,3 +85,10 @@ overrides:
   "@microsoft/kiota-serialization-multipart": 1.0.0-preview.108
   "@microsoft/kiota-serialization-text": 1.0.0-preview.108
   "@microsoft/msgraph-sdk": 1.0.0-preview.90
+  vite@*: "catalog:"
+
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"

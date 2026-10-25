@@ -3,6 +3,7 @@ import * as Boolean from "effect/Boolean";
 import * as HashSet from "effect/HashSet";
 import * as Record from "effect/Record";
 import * as Redacted from "effect/Redacted";
+import * as String from "effect/String";
 import { every } from "hono/combine";
 import { createMiddleware } from "hono/factory";
 import { proxy as honoProxy } from "hono/proxy";
@@ -29,7 +30,7 @@ const services = {
   },
 } satisfies Record<string, { baseUrl: URL; customFetch: (req: Request) => Promise<Response> }>;
 
-const headerRemovalFilterSet = HashSet.make(
+const headerRemovalFilterSet = HashSet.make<ReadonlyArray<Lowercase<string>>>(
   Constants.FORWARDED_AUTHORIZATION_HEADER_NAME,
   "cf-connecting-ip",
   "cf-ipcountry",
@@ -49,7 +50,7 @@ export const proxy = (service: keyof typeof services) =>
 
       const headers = new Headers(
         Record.filter(c.req.header(), (_, name) =>
-          headerRemovalFilterSet.pipe(HashSet.has(name.toLowerCase()), Boolean.not),
+          headerRemovalFilterSet.pipe(HashSet.has(String.toLowerCase(name)), Boolean.not),
         ),
       );
       const authorization = c.req.header("Authorization");

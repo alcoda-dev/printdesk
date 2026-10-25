@@ -9,6 +9,7 @@ import * as PlatformError from "effect/PlatformError";
 import * as Predicate from "effect/Predicate";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
+import * as String from "effect/String";
 import { SignJWT } from "jose";
 
 import { Crypto } from ".";
@@ -51,7 +52,7 @@ export const makeService = Effect.gen(function* () {
           // oxlint-disable-next-line effecttsgo/new-promise
           new Promise<CryptoContract.Secret>((resolve, reject) =>
             scrypt(
-              secret.pipe(Redacted.value).normalize(),
+              secret.pipe(Redacted.value, String.normalize()),
               salt.pipe(Redacted.value),
               64,
               (error, derivedKey) =>

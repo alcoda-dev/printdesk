@@ -53,6 +53,7 @@ export const DsqlStatement = Schema.Trim.pipe(
       const createIndexRegex = /^CREATE\s+(UNIQUE\s+)?INDEX\s+(?!ASYNC\s+)/i;
 
       if (createIndexRegex.test(statement))
+        // oxlint-disable-next-line effecttsgo/prefer-effect-string
         return statement.replace(createIndexRegex, (_, unique?: string) =>
           unique ? "CREATE UNIQUE INDEX ASYNC " : "CREATE INDEX ASYNC",
         );

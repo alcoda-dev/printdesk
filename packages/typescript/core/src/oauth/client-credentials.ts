@@ -36,6 +36,7 @@ export const ClientCredentialsProvider = (
         id,
         secret: CryptoContract.Secret.make(Redacted.make(input.clientSecret)),
       }),
+      // oxlint-disable-next-line effecttsgo/prefer-effect-string
       input.params.scope?.split(" ").filter(Boolean),
     );
 
