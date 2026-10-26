@@ -7,7 +7,7 @@
     "sso": "aws sso login --profile dev",
     "sso:prod": "aws sso login --profile prod",
     "sst": "sst",
-    "prepare": "effect-tsgo patch --typescript --oxlint --tsrs"
+    "prepare": "effect-tsgo patch --typescript --oxlint"
   },
   "devDependencies": {
     "@aws-crypto/sha256-js": "catalog:",
@@ -22,7 +22,6 @@
     "eslint-plugin-drizzle": "1.0.0-rc.5",
     "remeda": "2.52.0",
     "sst": "catalog:",
-    "tsrs": "catalog:",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
