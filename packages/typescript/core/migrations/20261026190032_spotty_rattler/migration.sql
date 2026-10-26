@@ -22,7 +22,7 @@ CREATE TABLE "clients" (
 	"secret_hash" varchar(113) NOT NULL,
 	"status" varchar(50) DEFAULT 'active' NOT NULL,
 	"role" varchar(50) NOT NULL,
-	"scopes" text NOT NULL,
+	"scopes" jsonb NOT NULL,
 	"callback_id" text,
 	"identity_provider_id" char(11),
 	CONSTRAINT "clients_pkey" PRIMARY KEY("id", "tenant_id")
@@ -107,7 +107,7 @@ CREATE TABLE "invoices" (
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
 	"version" integer DEFAULT 1 NOT NULL,
-	"line_items" bytea NOT NULL,
+	"line_items" jsonb NOT NULL,
 	"status" varchar(50) DEFAULT 'processing' NOT NULL,
 	"charged_at" timestamp,
 	"order_id" char(11) NOT NULL,
@@ -175,7 +175,7 @@ CREATE TABLE "orders" (
 	"room_workflow_status_id" char(11),
 	"shared_account_workflow_status_id" char(11),
 	"delivery_option_id" char(11),
-	"attributes" bytea,
+	"attributes" jsonb,
 	"approved_at" timestamp,
 	CONSTRAINT "orders_pkey" PRIMARY KEY("id", "tenant_id"),
 	CONSTRAINT "status_validity" CHECK (
@@ -206,7 +206,7 @@ CREATE TABLE "products" (
 	"name" varchar(50) NOT NULL,
 	"status" varchar(50) DEFAULT 'draft' NOT NULL,
 	"room_id" char(11) NOT NULL,
-	"config" bytea NOT NULL,
+	"config" jsonb NOT NULL,
 	CONSTRAINT "products_pkey" PRIMARY KEY("id", "tenant_id")
 );
 
@@ -264,7 +264,7 @@ CREATE TABLE "replicache_clients" (
 --> statement-breakpoint
 CREATE TABLE "replicache_meta" (
 	"key" text PRIMARY KEY,
-	"value" bytea NOT NULL
+	"value" jsonb NOT NULL
 );
 
 --> statement-breakpoint
@@ -550,9 +550,6 @@ CREATE UNIQUE INDEX "shared_account_workflows_shared_account_id_tenant_id_index"
 
 --> statement-breakpoint
 CREATE INDEX "workflow_statuses_room_workflow_id_index" ON "workflow_statuses" ("room_workflow_id");
-
---> statement-breakpoint
-CREATE INDEX "workflow_statuses_shared_account_workflow_id_index" ON "workflow_statuses" ("shared_account_workflow_id");
 
 --> statement-breakpoint
 CREATE VIEW "active_rooms" AS (
