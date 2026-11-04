@@ -11,7 +11,7 @@ export const clients = new Tables.NonSync(
   "clients",
   {
     name: Columns.varchar().notNull(),
-    secretHash: Columns.hash().notNull(),
+    secretHash: Columns.base64Secret().notNull(),
     status: Columns.union(ClientsContract.Status.literals).notNull().default("active"),
     role: Columns.union(ClientsContract.Role.literals).notNull(),
     scopes: Columns.jsonb(ClientsContract.Scopes).notNull(),

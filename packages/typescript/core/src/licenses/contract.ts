@@ -13,7 +13,7 @@ import { EntityId, Separator } from "../utils";
 import type { LicensesTable } from "./sql";
 
 export namespace LicensesContract {
-  export const Key = CryptoContract.Secret;
+  export const Key = CryptoContract.Base64Secret;
   export type Key = typeof Key.Type;
 
   export class KeyPair extends Schema.Class<KeyPair, { readonly brand: unique symbol }>("KeyPair")({
@@ -42,7 +42,7 @@ export namespace LicensesContract {
   export class Table extends TablesContract.Table<LicensesTable>("licenses")(
     {
       id: EntityId,
-      keyHash: CryptoContract.HashFromString,
+      keyHash: CryptoContract.Base64Secret,
       expiresAt: ColumnsContract.NullableTimestamp,
       ...ColumnsContract.Timestamps.fields,
     },

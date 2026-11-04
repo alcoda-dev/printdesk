@@ -7,7 +7,7 @@ import * as Struct from "effect/Struct";
 import { Oauth } from ".";
 import { ClientsContract } from "../clients/contract";
 import { ClientsRepository } from "../clients/repository";
-import { Crypto } from "../crypto";
+import { Hmac } from "../crypto/hmac";
 import { IdentityProvidersContract } from "../identity/contract";
 import { IdentityProvidersRepository } from "../identity/repository";
 import { TenantsContract } from "../tenants/contract";
@@ -23,7 +23,7 @@ export type ServiceShape = Effect.Success<typeof makeService>;
 
 export const makeService = Effect.gen(function* () {
   const clientsRepository = yield* ClientsRepository;
-  const crypto = yield* Crypto;
+  const hmac = yield* Hmac;
   const identityProvidersRepository = yield* IdentityProvidersRepository;
 
   const verifyClient = Effect.fn("Oauth.verifyClient")(function* (
@@ -65,8 +65,8 @@ export const makeService = Effect.gen(function* () {
       ),
     );
 
-    yield* crypto
-      .verifySecret(credentials.secret, client.secretHash)
+    yield* hmac
+      .verify(credentials.secret, client.secretHash)
       .pipe(
         Effect.catchTag(
           "InvalidSecretError",

@@ -20,7 +20,7 @@ export const scimAuthMiddlewareLayer = ScimAuthMiddleware.layer.pipe(
 export const scimBulkIdMapMiddlewareLayer = ScimBulkIdMapMiddleware.layer;
 
 export const scimErrorMiddlewareLayer = ScimErrorMiddleware.layer.pipe(
-  Layer.provide(NodeCrypto.layer),
+  Layer.provide(NodeCrypto.layerSecureRandom),
 );
 
 export const scimHttpApiSchemaErrorHandlerMiddlewareLayer =

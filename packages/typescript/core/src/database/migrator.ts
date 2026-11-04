@@ -7,7 +7,7 @@ import { sql } from "drizzle-orm/sql";
 import * as Array from "effect/Array";
 import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
-import * as Crypto from "effect/Crypto";
+import * as Digest from "effect/crypto/Digest";
 import * as Data from "effect/Data";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -68,7 +68,7 @@ export class Migrator extends Context.Service<Migrator>()("@printdesk/core/datab
   make: Effect.gen(function* () {
     const db = yield* Drizzle;
     const config = yield* MigratorConfig;
-    const crypto = yield* Crypto.Crypto;
+    const digest = yield* Digest.Digest;
 
     const textEncoder = new globalThis.TextEncoder();
 
@@ -133,8 +133,8 @@ export class Migrator extends Context.Service<Migrator>()("@printdesk/core/datab
           Effect.forEach(
             migration.sql,
             Effect.fn(function* (statement, index) {
-              const hash = yield* crypto
-                .digest("SHA-256", textEncoder.encode(statement.trim()))
+              const hash = yield* digest
+                .digest(Digest.sha256, textEncoder.encode(statement.trim()))
                 .pipe(Effect.flatMap(Schema.encodeEffect(Schema.Uint8ArrayFromHex)));
 
               const storedHash = statements.pipe(

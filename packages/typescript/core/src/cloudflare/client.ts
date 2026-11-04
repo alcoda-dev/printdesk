@@ -1,14 +1,15 @@
 import _CloudflareClient from "cloudflare";
 import * as Array from "effect/Array";
 import * as Context from "effect/Context";
+import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
+import * as Base64 from "effect/encoding/Base64";
 import * as Layer from "effect/Layer";
 import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 
 import { Cloudflare } from ".";
-import { Crypto } from "../crypto";
 import { CloudflareContract } from "./contract";
 
 import type { MessagePushParams } from "cloudflare/resources/queues";
@@ -36,7 +37,7 @@ export class CloudflareClient extends Context.Service<CloudflareClient>()(
   {
     make: Effect.gen(function* () {
       const { account, apiToken } = yield* Cloudflare;
-      const crypto = yield* Crypto;
+      const random = yield* SecureRandom.SecureRandom;
 
       const client = yield* Effect.try({
         try: () => new _CloudflareClient({ apiToken: apiToken.pipe(Redacted.value) }),
@@ -58,8 +59,8 @@ export class CloudflareClient extends Context.Service<CloudflareClient>()(
 
       const refreshTunnelToken = Effect.fn("CloudflareClient.refreshTunnelToken")(
         (tunnelId: CloudflareContract.TunnelId) =>
-          crypto.generateToken().pipe(
-            Effect.map(Redacted.value),
+          random.randomBytes(32).pipe(
+            Effect.map(Base64.encode),
             Effect.flatMap((tunnel_secret) =>
               Effect.tryPromise({
                 try: (signal) =>

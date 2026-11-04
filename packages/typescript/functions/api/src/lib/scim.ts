@@ -19,7 +19,7 @@ export const scimLocatorLayer = ScimLocator.layer.pipe(
 export const scimLayer = Scim.layer.pipe(
   Layer.provide([
     cloudflareClientLayer,
-    NodeCrypto.layer,
+    NodeCrypto.layerSecureRandom,
     scimLocatorLayer,
     GroupMembershipsRepositories.repositoryLayer,
     GroupsRepositories.repositoryLayer,

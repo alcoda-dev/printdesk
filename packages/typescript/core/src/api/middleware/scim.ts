@@ -1,6 +1,6 @@
 // oxlint-disable effecttsgo/strict-effect-provide
 import * as Cause from "effect/Cause";
-import * as Crypto from "effect/Crypto";
+import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as HttpApiMiddleware from "effect/http-api/HttpApiMiddleware";
 import * as HttpApiSchema from "effect/http-api/HttpApiSchema";
@@ -92,13 +92,13 @@ export class ScimErrorMiddleware extends HttpApiMiddleware.Service<ScimErrorMidd
   "@printdesk/core/api/ScimErrorMiddleware",
   { error: ScimContract.V2InternalServerError },
 ) {
-  public static readonly make = Crypto.Crypto.pipe(
-    Effect.map((crypto) =>
+  public static readonly make = SecureRandom.SecureRandom.pipe(
+    Effect.map((random) =>
       this.of((httpEffect) =>
         httpEffect.pipe(
           Effect.tapCauseIf(Cause.hasFails, Effect.logError),
           Effect.catchDefect((defect) =>
-            crypto.randomUUIDv4().pipe(
+            random.uuidV4().pipe(
               Effect.orDie,
               Effect.map(String.slice(0, 8)),
               Effect.map((id) => `err_${id}` as const),

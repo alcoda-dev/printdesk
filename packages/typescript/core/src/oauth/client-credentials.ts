@@ -1,4 +1,4 @@
-import * as Redacted from "effect/Redacted";
+import * as Schema from "effect/Schema";
 
 import { CryptoContract } from "../crypto/contract";
 import { EntityId } from "../utils";
@@ -34,7 +34,8 @@ export const ClientCredentialsProvider = (
     const result = await config.verify(
       new OauthContract.ClientCredentials({
         id,
-        secret: CryptoContract.Secret.make(Redacted.make(input.clientSecret)),
+        // oxlint-disable-next-line effecttsgo/schema-sync
+        secret: Schema.decodeSync(CryptoContract.Base64Secret)(input.clientSecret),
       }),
       // oxlint-disable-next-line effecttsgo/prefer-effect-string
       input.params.scope?.split(" ").filter(Boolean),

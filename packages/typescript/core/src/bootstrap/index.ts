@@ -7,7 +7,7 @@ import * as Redacted from "effect/Redacted";
 import * as Schema from "effect/Schema";
 
 import { ClientsRepository } from "../clients/repository";
-import { Crypto } from "../crypto";
+import { Hmac } from "../crypto/hmac";
 import { LicensesContract } from "../licenses/contract";
 import { LicensesManager } from "../licenses/manager";
 import { OauthContract } from "../oauth/contract";
@@ -21,7 +21,7 @@ export class Bootstrap extends Context.Service<Bootstrap>()("@printdesk/core/boo
     const lambda = yield* Lambda;
     const licensesManager = yield* LicensesManager;
     const clientsRepository = yield* ClientsRepository;
-    const crypto = yield* Crypto;
+    const hmac = yield* Hmac;
     const workflow = yield* SstResource.useSync((resource) =>
       resource.Bootstrapper.pipe(Redacted.value),
     );
@@ -44,18 +44,14 @@ export class Bootstrap extends Context.Service<Bootstrap>()("@printdesk/core/boo
         ),
       );
 
-      const bootstrapClientSecret = yield* crypto.generateToken();
-      const { id: bootstrapClientId } = yield* crypto.hashSecret(bootstrapClientSecret).pipe(
-        Effect.flatMap((secretHash) =>
-          clientsRepository.create({
-            name: "Bootstrap Client",
-            role: "bootstrap",
-            secretHash,
-            scopes: ["bootstrap"],
-            tenantId,
-          }),
-        ),
-      );
+      const { key: bootstrapClientSecret, hash: bootstrapClientSecretHash } = yield* hmac.issue();
+      const { id: bootstrapClientId } = yield* clientsRepository.create({
+        name: "Bootstrap Client",
+        role: "bootstrap",
+        secretHash: bootstrapClientSecretHash,
+        scopes: ["bootstrap"],
+        tenantId,
+      });
 
       return new OauthContract.ClientCredentials({
         id: bootstrapClientId,

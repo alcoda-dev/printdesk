@@ -28,7 +28,7 @@ export namespace ClientsContract {
     {
       ...TablesContract.BaseModel.fields,
       name: Schema.NonEmptyString,
-      secretHash: CryptoContract.HashFromString,
+      secretHash: CryptoContract.Base64Secret,
       status: Status.pipe(Schema.withDecodingDefaultType(Effect.succeed("active"))),
       role: Role,
       scopes: Scopes,

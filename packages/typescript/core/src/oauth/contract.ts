@@ -284,7 +284,7 @@ export namespace OauthContract {
   export class ClientCredentials extends Schema.Class<
     ClientCredentials,
     { readonly brand: unique symbol }
-  >("ClientCredentials")({ id: EntityId, secret: CryptoContract.Secret }) {}
+  >("ClientCredentials")({ id: EntityId, secret: CryptoContract.Base64Secret }) {}
 
   export class ClientCredentialsError extends Schema.TaggedError<
     ClientCredentialsError,

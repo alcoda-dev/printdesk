@@ -1,6 +1,6 @@
 import * as Array from "effect/Array";
 import * as Cause from "effect/Cause";
-import * as Crypto from "effect/Crypto";
+import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Equal from "effect/Equal";
@@ -58,7 +58,7 @@ interface GroupMembershipRelation {
 }
 
 export const makeService = Effect.gen(function* () {
-  const crypto = yield* Crypto.Crypto;
+  const random = yield* SecureRandom.SecureRandom;
   const locator = yield* ScimLocator;
 
   const db = yield* Database;
@@ -705,7 +705,7 @@ export const makeService = Effect.gen(function* () {
                     }),
                   ),
                 onFailure: (cause) =>
-                  crypto.randomUUIDv4().pipe(
+                  random.uuidV4().pipe(
                     Effect.orDie,
                     Effect.map(String.slice(0, 8)),
                     Effect.map((id) => `err_${id}` as const),

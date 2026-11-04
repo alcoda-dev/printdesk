@@ -1,7 +1,7 @@
 import { UnexpectedServerError } from "@printdesk/core/api/middleware/error";
 import { orDieWhenUnrespondable } from "@printdesk/core/utils";
 import * as Cause from "effect/Cause";
-import * as Crypto from "effect/Crypto";
+import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Effect from "effect/Effect";
 import * as HttpServerRespondable from "effect/http/HttpServerRespondable";
 import * as HttpServerResponse from "effect/http/HttpServerResponse";
@@ -18,7 +18,7 @@ export const orErrorResponse = <TError, TServices>(
     orDieWhenUnrespondable,
     Effect.tapCauseIf(Cause.hasFails, Effect.logError),
     Effect.catchDefect((defect) =>
-      Crypto.Crypto.use((crypto) => crypto.randomUUIDv4()).pipe(
+      SecureRandom.SecureRandom.use((random) => random.uuidV4()).pipe(
         Effect.orDie,
         Effect.map(String.slice(0, 8)),
         Effect.map((id) => `err_${id}` as const),

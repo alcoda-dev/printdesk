@@ -13,7 +13,7 @@ export const licenses = new Tables.Table(
     id: Columns.entityId()
       .primaryKey()
       .$defaultFn(() => generateEntityId.pipe(Effect.runSync)),
-    keyHash: Columns.hash().notNull(),
+    keyHash: Columns.base64Secret().notNull(),
     expiresAt: Columns.dateTime(),
     ...Columns.timestamps,
   },

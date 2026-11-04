@@ -1,3 +1,4 @@
+import * as Digest from "effect/crypto/Digest";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -9,14 +10,16 @@ import * as String from "effect/String";
 import { AwsCredentialIdentityProvider, AwsCredentialIdentityProviderError } from ".";
 import { Actor, ActorLayerMap } from "../../actors";
 import { Cloudflare } from "../../cloudflare";
-import { Crypto } from "../../crypto";
+import { Jose } from "../../crypto/jose";
 import { Constants } from "../../utils/constants";
 import { S3Bucket } from "../s3/bucket";
 import { S3Credentials } from "../s3/credentials";
 
 export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
   const { account } = yield* Cloudflare;
-  const crypto = yield* Crypto;
+  const jose = yield* Jose;
+  const digest = yield* Digest.Digest;
+
   const s3Bucket = yield* S3Bucket;
   const r2S3Credentials = yield* S3Credentials;
 
@@ -28,7 +31,7 @@ export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
     scope: "object-read-write",
   };
 
-  const jwt = yield* crypto.signJwt({
+  const jwt = yield* jose.signJwt({
     claims,
     subject: account.id,
     issuer: r2S3Credentials.accessKeyId.pipe(Redacted.value),
@@ -37,9 +40,7 @@ export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
     key: textEncoder.encode(r2S3Credentials.secretAccessKey.pipe(Redacted.value)),
   });
 
-  const secretAccessKey = yield* crypto
-    .digest("SHA-256", textEncoder.encode(jwt))
-    .pipe(Effect.flatMap(Schema.encodeEffect(Schema.Uint8ArrayFromHex)));
+  const secretAccessKey = yield* digest.digestHex(Digest.sha256, textEncoder.encode(jwt));
 
   const sessionToken = yield* Effect.succeed("jwt/").pipe(
     Effect.map(String.concat(jwt)),

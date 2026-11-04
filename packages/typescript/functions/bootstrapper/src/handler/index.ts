@@ -8,7 +8,6 @@ import { AppsyncPublisherCredentialIdentityProviderLayerMap } from "@printdesk/c
 import { BootstrapContract } from "@printdesk/core/bootstrap/contract";
 import { ClientsRepository } from "@printdesk/core/clients/repository";
 import { Config } from "@printdesk/core/config";
-import { Crypto } from "@printdesk/core/crypto";
 import { RealtimeEventHandlers } from "@printdesk/core/handlers/realtime-events";
 import { IdentityProvidersRepository } from "@printdesk/core/identity/repository";
 import { InfraContract } from "@printdesk/core/infra/contract";
@@ -18,6 +17,7 @@ import { PapercutMfContract } from "@printdesk/core/papercut-mf/contract";
 import { PapercutMfSynchronizer } from "@printdesk/core/papercut-mf/synchronizer";
 import { Realtime } from "@printdesk/core/realtime";
 import { ReplicacheNotifier } from "@printdesk/core/replicache/notifier";
+import { Hmac } from "@printdesk/core/src/crypto/hmac/index";
 import { SstResource } from "@printdesk/core/sst/resource";
 import { TenantsContract } from "@printdesk/core/tenants/contract";
 import { TenantsRepository } from "@printdesk/core/tenants/repositories";
@@ -140,12 +140,10 @@ export async function handler(
       function* () {
         const clientsRepository = yield* ClientsRepository;
         const config = yield* Config;
-        const crypto = yield* Crypto;
+        const hmac = yield* Hmac;
 
-        const invoicesProcessorClientSecret = yield* crypto.generateToken();
-        const invoicesProcessorClientSecretHash = yield* invoicesProcessorClientSecret.pipe(
-          crypto.hashSecret,
-        );
+        const { key: invoicesProcessorClientSecret, hash: invoicesProcessorClientSecretHash } =
+          yield* hmac.issue();
         yield* clientsRepository
           .create({
             name: "Invoices Processor Client",
@@ -163,21 +161,23 @@ export async function handler(
             ),
           );
 
-        const scimClientSecret = yield* crypto.generateToken();
-        const scimClientSecretHash = yield* scimClientSecret.pipe(crypto.hashSecret);
-        yield* clientsRepository.create({
-          name: "SCIM Client",
-          secretHash: scimClientSecretHash,
-          role: "scim",
-          scopes: ["scim"],
-          tenantId,
-        });
+        yield* hmac.issue().pipe(
+          Effect.map(Struct.get("hash")),
+          Effect.flatMap((secretHash) =>
+            clientsRepository.create({
+              name: "SCIM Client",
+              secretHash,
+              role: "scim",
+              scopes: ["scim"],
+              tenantId,
+            }),
+          ),
+        );
 
         if (Option.isSome(payload.papercutMf)) {
-          const papercutMfSyncClientSecret = yield* crypto.generateToken();
-          const papercutMfSyncClientSecretHash = yield* papercutMfSyncClientSecret.pipe(
-            crypto.hashSecret,
-          );
+          const { key: papercutMfSyncClientSecret, hash: papercutMfSyncClientSecretHash } =
+            yield* hmac.issue();
+
           yield* clientsRepository
             .create({
               name: "Papercut MF Sync Client",

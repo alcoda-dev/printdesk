@@ -37,14 +37,13 @@ export namespace Columns {
     toDriver: Schema.DateTimeUtcFromDate.pipe(Schema.encodeSync),
   });
 
-  export const hash = customType<{
-    driverData: typeof CryptoContract.HashFromString.Encoded;
-    data: typeof CryptoContract.HashFromString.Type;
+  export const base64Secret = customType<{
+    driverData: typeof CryptoContract.Base64Secret.Encoded;
+    data: CryptoContract.Base64Secret;
   }>({
-    // 24 (salt, 16B) + 1 (separator) + 88 (derived key, 32B) = 113 characters. Base64 encoded.
-    dataType: () => "varchar(113)",
-    fromDriver: CryptoContract.HashFromString.pipe(Schema.decodeSync),
-    toDriver: CryptoContract.HashFromString.pipe(Schema.encodeSync),
+    dataType: () => "varchar(44)",
+    fromDriver: CryptoContract.Base64Secret.pipe(Schema.decodeSync),
+    toDriver: CryptoContract.Base64Secret.pipe(Schema.encodeSync),
   });
 
   export const jsonb = <TType, TEncoded extends object>(schema: Schema.Codec<TType, TEncoded>) =>

@@ -2,7 +2,7 @@ import * as Array from "effect/Array";
 import * as Cause from "effect/Cause";
 import * as Channel from "effect/Channel";
 import * as Context from "effect/Context";
-import * as Crypto from "effect/Crypto";
+import * as SecureRandom from "effect/crypto/SecureRandom";
 import * as Deferred from "effect/Deferred";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -146,7 +146,7 @@ export namespace Realtime {
       | RealtimeEventHandlers.Record[TName]["Input"]["DecodingServices"]
       | RealtimeEventHandlers.Record[TName]["Output"]["DecodingServices"]
       | THandlerServices
-      | Crypto.Crypto,
+      | SecureRandom.SecureRandom,
       TRuntimeError
     >;
     readonly atoms: {
@@ -190,14 +190,14 @@ export namespace Realtime {
   ) =>
     Atom.readable((get) => {
       const streamEffect = Effect.gen(function* () {
-        const crypto = yield* Crypto.Crypto;
+        const random = yield* SecureRandom.SecureRandom;
         const realtime = yield* get.resultOnce(opts.atoms.realtime);
         const { write } = yield* realtime.socket.writer;
 
         yield* realtime.connection.pipe(Deferred.await);
 
-        const id = yield* crypto
-          .randomUUIDv4()
+        const id = yield* random
+          .uuidV4()
           .pipe(Effect.flatMap((id) => RealtimeContract.SubscriptionId.makeEffect(id)));
 
         const handler = yield* RealtimeEventHandlers.registry.resolve(name);

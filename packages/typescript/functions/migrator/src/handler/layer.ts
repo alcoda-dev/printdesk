@@ -14,6 +14,6 @@ export const layer = Migrator.layer.pipe(
   Layer.provide(PgClient.layer),
   Layer.provide(DsqlSigner.layer({ expiresIn: Duration.minutes(15) })),
   Layer.provide(nodeCredentialIdentityProviderLayer),
-  Layer.provide([NodeCrypto.layer, SstResource.layer]),
+  Layer.provide([NodeCrypto.layerDigest, SstResource.layer]),
   Layer.tapCause(Effect.logError),
 );

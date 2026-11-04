@@ -11,7 +11,6 @@ import { AppsyncSigner } from "@printdesk/core/aws/sigv4-signers/appsync";
 import * as ClientsRepository from "@printdesk/core/clients/repository/layer";
 import * as Config from "@printdesk/core/config/layer";
 import { appconfigRoleLayer } from "@printdesk/core/config/role";
-import * as Crypto from "@printdesk/core/crypto/layer";
 import { Database } from "@printdesk/core/database";
 import { Drizzle } from "@printdesk/core/database/drizzle";
 import * as PgClient from "@printdesk/core/database/pg-client";
@@ -29,6 +28,8 @@ import * as ReplicacheNotifier from "@printdesk/core/replicache/notifier/layer";
 import * as SharedAccountCustomerAccessRepositories from "@printdesk/core/shared-accounts/customer-access/repositories/layers";
 import * as SharedAccountGroupCustomerAccessRepositories from "@printdesk/core/shared-accounts/group-customer-access/repositories/layers";
 import * as SharedAccountsRepositories from "@printdesk/core/shared-accounts/repositories/layers";
+import { Hmac } from "@printdesk/core/src/crypto/hmac/index";
+import { hmacSigningSecretLayer } from "@printdesk/core/src/crypto/hmac/layer";
 import { SstResource } from "@printdesk/core/sst/resource";
 import * as TenantsRepositories from "@printdesk/core/tenants/repositories/layers";
 import * as UsersRepositories from "@printdesk/core/users/repositories/layers";
@@ -57,7 +58,7 @@ export const layer = Layer.mergeAll(
 ).pipe(
   Layer.provide([appconfigRoleLayer, appsyncPublisherRoleLayer]),
   Layer.provideMerge([
-    Crypto.layer,
+    Hmac.layer,
     IdentityRepository.providersRepositoryLayer,
     Realtime.layer,
     TenantsRepositories.repositoryLayer,
@@ -65,13 +66,15 @@ export const layer = Layer.mergeAll(
   Layer.provide([
     GroupMembershipsRepositories.repositoryLayer,
     GroupsRepositories.repositoryLayer,
+    hmacSigningSecretLayer,
     LicensesRepository.layer,
     PapercutMfApi.layer,
     SharedAccountCustomerAccessRepositories.repositoryLayer,
     SharedAccountGroupCustomerAccessRepositories.repositoryLayer,
     SharedAccountsRepositories.repositoryLayer,
     UsersRepositories.repositoryLayer,
-    NodeCrypto.layer,
+    NodeCrypto.layerMac,
+    NodeCrypto.layerSecureRandom,
   ]),
   Layer.provide([AppsyncSigner.layer, XmlRpc.XmlRpc.layer]),
   Layer.provideMerge([Config.layer, Database.layer]),

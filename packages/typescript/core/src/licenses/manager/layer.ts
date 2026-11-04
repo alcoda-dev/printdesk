@@ -6,7 +6,7 @@ import * as Predicate from "effect/Predicate";
 import * as Struct from "effect/Struct";
 
 import { LicensesManager } from ".";
-import { Crypto } from "../../crypto";
+import { Hmac } from "../../crypto/hmac";
 import { TenantsRepository } from "../../tenants/repositories";
 import { LicensesContract } from "../contract";
 import { LicensesRepository } from "../repository";
@@ -18,30 +18,28 @@ export type ServiceShape = Effect.Success<typeof makeService>;
 export const makeService = Effect.gen(function* () {
   const repository = yield* LicensesRepository;
   const tenantsRepository = yield* TenantsRepository;
-  const crypto = yield* Crypto;
+  const hmac = yield* Hmac;
 
   const issue = Effect.gen(function* () {
-    const key = yield* crypto.generateToken();
+    const { key, hash } = yield* hmac.issue();
 
-    const { id } = yield* crypto
-      .hashSecret(key)
-      .pipe(Effect.flatMap((keyHash) => repository.create({ keyHash })));
-
-    return new LicensesContract.KeyPair({ id, key });
+    return yield* repository
+      .create({ keyHash: hash })
+      .pipe(Effect.map(({ id }) => new LicensesContract.KeyPair({ id, key })));
   }).pipe(Effect.withSpan("Licenses.Manager.issue"));
 
   const verifyKeyPair = Effect.fn("Licenses.Manager.verifyKeyPair")(
     (keyPair: LicensesContract.KeyPair) =>
       repository
         .findById(keyPair.id)
-        .pipe(Effect.tap((license) => crypto.verifySecret(keyPair.key, license.keyHash))),
+        .pipe(Effect.tap((license) => hmac.verify(keyPair.key, license.keyHash))),
   );
 
   const verifyKeyPairForUpdate = Effect.fn("Licenses.Manager.verifyKeyPairForUpdate")(
     (keyPair: LicensesContract.KeyPair) =>
       repository
         .findByIdForUpdate(keyPair.id)
-        .pipe(Effect.tap((license) => crypto.verifySecret(keyPair.key, license.keyHash))),
+        .pipe(Effect.tap((license) => hmac.verify(keyPair.key, license.keyHash))),
   );
 
   const isAvailable = Effect.fn("Licenses.Manager.isAvailable")((id: License["id"]) =>
