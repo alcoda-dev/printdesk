@@ -3,10 +3,10 @@ name = "infra-manager"
 version = "0.0.0"
 requires-python = "==3.14.*"
 dependencies = [
-  "aws-lambda-powertools>=3.38.0",
-  "boto3>=1.43.123",
-  "pulumi>=3.273.0",
-  "pulumi-aws>=7.52.1",
+  "aws-lambda-powertools>=3.39.0",
+  "boto3>=1.43.124",
+  "pulumi>=3.274.0",
+  "pulumi-aws>=7.53.0",
   "pulumi-cloudflare>=6.23.2",
   "pulumiverse-time>=0.1.1",
   "pyawscron>=1.0.7",
