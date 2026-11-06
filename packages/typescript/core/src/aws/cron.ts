@@ -1,4 +1,4 @@
-import { parse } from "aws-cron-parser";
+import awsCronParser from "aws-cron-parser";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";
 
@@ -12,7 +12,7 @@ export namespace AwsCron {
 
   export const parseExpression = (expression: string) =>
     Result.try({
-      try: () => parse(expression),
+      try: () => awsCronParser.parse(expression),
       catch: (error) => new ParseExpressionError({ cause: error }),
     });
 
