@@ -13,7 +13,7 @@ catalog:
   "@aws-sdk/client-dynamodb": ^3.1146.0
   "@aws-sdk/types": ^3.975.0
   "@cloudflare/vite-plugin": ^1.67.0
-  "@cloudflare/workers-types": ^5.20261103.1
+  "@cloudflare/workers-types": ^5.20261104.1
   "@effect-aws/client-lambda": ^2.0.0
   "@effect-aws/client-s3": ^2.0.0
   "@effect-aws/dynamodb": ^2.0.0
@@ -24,7 +24,7 @@ catalog:
   "@effect/platform-node": ^4.1.2
   "@effect/platform-node-shared": ^4.0.5
   "@effect/sql-pg": ^4.1.2
-  "@effect/tsgo": ^0.57.0
+  "@effect/tsgo": ^0.67.3
   "@hono/aws-lambda": ^1.0.1
   "@hono/cloudflare-workers": ^1.0.1
   "@hono/node-server": ^2.1.6
@@ -39,7 +39,7 @@ catalog:
   "@tanstack/react-router": ^1.170.46
   "@tanstack/react-router-devtools": ^1.167.2
   "@tanstack/react-start": ^1.169.4
-  "@typeonce/effect-machine": ^0.40.0
+  "@typeonce/effect-machine": ^0.46.0
   "@types/aws-lambda": ^8.10.164
   "@types/node": ^24.19.2
   "@types/react": ^19.3.0
@@ -51,28 +51,18 @@ catalog:
   effect: ^4.1.2
   hono: ^4.13.16
   jose: ^6.2.15
-  lucide-react: ^1.67.0
-  oxc-transform-react: ^0.153.0
+  lucide-react: ^1.69.0
+  oxc-transform-react: ^0.157.0
   react: ^19.3.1
   react-aria-components: ^1.22.1
   react-dom: ^19.3.1
   replicache: ^15.3.0
-  sst: npm:@sst-community/sst@^4.23.1
+  sst: npm:@sst-community/sst@^4.23.2
   tailwindcss: ^4.3.4
   typescript: ^7.0.2
-  wrangler: ^4.157.0
-  vite-plus: ^1.4.0
-  vite: npm:@voidzero-dev/vite-plus-core@^1.4.0
-
-minimumReleaseAgeExclude:
-  - "@effect/tsgo-darwin-arm64@0.57.0"
-  - "@effect/tsgo-darwin-x64@0.57.0"
-  - "@effect/tsgo-linux-arm64@0.57.0"
-  - "@effect/tsgo-linux-arm@0.57.0"
-  - "@effect/tsgo-linux-x64@0.57.0"
-  - "@effect/tsgo-win32-arm64@0.57.0"
-  - "@effect/tsgo-win32-x64@0.57.0"
-  - "@effect/tsgo@0.57.0"
+  wrangler: ^4.158.0
+  vite-plus: ^1.5.0
+  vite: npm:@voidzero-dev/vite-plus-core@^1.5.0
 
 overrides:
   "@microsoft/kiota-abstractions": 1.0.0-preview.108

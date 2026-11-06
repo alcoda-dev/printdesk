@@ -2,6 +2,9 @@
   "name": "@printdesk/api",
   "private": true,
   "type": "module",
+  "scripts": {
+    "dev": "vpx --watch ./src/index.ts"
+  },
   "dependencies": {
     "@effect-aws/client-lambda": "catalog:",
     "@effect-aws/dynamodb": "catalog:",

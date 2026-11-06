@@ -2,11 +2,13 @@
   "name": "@printdesk/issuer",
   "private": true,
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "vpx --watch ./src/index.ts"
+  },
   "dependencies": {
     "@effect-aws/lambda": "catalog:",
     "@effect/platform-node": "catalog:",
-    "@hono/aws-lambda": "catalog:",
+    "@hono/node-server": "catalog:",
     "@openauthjs/openauth": "workspace:@printdesk/openauth@*",
     "@printdesk/core": "workspace:^",
     "effect": "catalog:",
