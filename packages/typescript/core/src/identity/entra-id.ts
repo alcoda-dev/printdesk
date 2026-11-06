@@ -38,6 +38,7 @@ export namespace EntraId {
         catch: (cause) => new AuthProviderError({ cause }),
       }),
     );
+
     public static readonly fromClientCredentials = Effect.fn(function* (
       tenantId: IdentityProvidersContract.ExternalId,
     ) {
