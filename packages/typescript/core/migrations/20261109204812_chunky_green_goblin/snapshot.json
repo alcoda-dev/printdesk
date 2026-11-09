@@ -2,7 +2,7 @@
   "type": "base",
   "version": "9",
   "dialect": "postgres",
-  "id": "b536863b-7696-4724-9189-e81feb0ea7f6",
+  "id": "fc53cb47-05d4-4e1d-97f7-ce3d9eb92757",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -2332,7 +2332,7 @@
       "schema": "public",
       "table": "clients",
       "name": "secret_hash",
-      "type": "varchar(113)",
+      "type": "varchar(44)",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -3138,7 +3138,7 @@
       "schema": "public",
       "table": "licenses",
       "name": "key_hash",
-      "type": "varchar(113)",
+      "type": "varchar(44)",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,

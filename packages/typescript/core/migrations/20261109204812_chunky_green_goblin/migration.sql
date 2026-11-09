@@ -19,7 +19,7 @@ CREATE TABLE "clients" (
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
 	"name" varchar(50) NOT NULL,
-	"secret_hash" varchar(113) NOT NULL,
+	"secret_hash" varchar(44) NOT NULL,
 	"status" varchar(50) DEFAULT 'active' NOT NULL,
 	"role" varchar(50) NOT NULL,
 	"scopes" jsonb NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE "invoices" (
 --> statement-breakpoint
 CREATE TABLE "licenses" (
 	"id" char(11) PRIMARY KEY,
-	"key_hash" varchar(113) NOT NULL,
+	"key_hash" varchar(44) NOT NULL,
 	"expires_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -550,6 +550,9 @@ CREATE UNIQUE INDEX "shared_account_workflows_shared_account_id_tenant_id_index"
 
 --> statement-breakpoint
 CREATE INDEX "workflow_statuses_room_workflow_id_index" ON "workflow_statuses" ("room_workflow_id");
+
+--> statement-breakpoint
+CREATE INDEX "workflow_statuses_shared_account_workflow_id_index" ON "workflow_statuses" ("shared_account_workflow_id");
 
 --> statement-breakpoint
 CREATE VIEW "active_rooms" AS (
