@@ -13,7 +13,7 @@ catalog:
   "@aws-sdk/client-dynamodb": ^3.1146.0
   "@aws-sdk/types": ^3.975.0
   "@cloudflare/vite-plugin": ^1.67.0
-  "@cloudflare/workers-types": ^5.20261104.1
+  "@cloudflare/workers-types": ^5.20261108.1
   "@effect-aws/client-lambda": ^2.0.0
   "@effect-aws/client-s3": ^2.0.0
   "@effect-aws/dynamodb": ^2.0.0
@@ -24,7 +24,7 @@ catalog:
   "@effect/platform-node": ^4.1.2
   "@effect/platform-node-shared": ^4.0.5
   "@effect/sql-pg": ^4.1.2
-  "@effect/tsgo": ^0.67.3
+  "@effect/tsgo": ^0.67.5
   "@hono/aws-lambda": ^1.0.1
   "@hono/cloudflare-workers": ^1.0.1
   "@hono/node-server": ^2.1.6
@@ -33,12 +33,12 @@ catalog:
   "@stylexjs/atoms": ^0.19.1
   "@stylexjs/stylex": ^0.19.1
   "@stylexjs/unplugin": ^0.19.1
-  "@tailwindcss/vite": ^4.3.4
+  "@tailwindcss/vite": ^4.3.5
   "@tanstack/devtools-vite": ^0.8.6
   "@tanstack/react-devtools": ^0.10.14
   "@tanstack/react-router": ^1.170.46
-  "@tanstack/react-router-devtools": ^1.167.2
-  "@tanstack/react-start": ^1.169.4
+  "@tanstack/react-router-devtools": ^1.167.3
+  "@tanstack/react-start": ^1.169.5
   "@typeonce/effect-machine": ^0.46.0
   "@types/aws-lambda": ^8.10.164
   "@types/node": ^24.19.2
@@ -49,16 +49,16 @@ catalog:
   drizzle-kit: 1.0.0-rc.5
   drizzle-orm: 1.0.0-rc.5
   effect: ^4.1.2
-  hono: ^4.13.16
+  hono: ^4.13.17
   jose: ^6.2.15
-  lucide-react: ^1.69.0
+  lucide-react: ^1.70.0
   oxc-transform-react: ^0.157.0
   react: ^19.3.1
   react-aria-components: ^1.22.1
   react-dom: ^19.3.1
   replicache: ^15.3.0
-  sst: npm:@sst-community/sst@^4.23.2
-  tailwindcss: ^4.3.4
+  sst: npm:@sst-community/sst@^4.24.0
+  tailwindcss: ^4.3.5
   typescript: ^7.0.2
   wrangler: ^4.158.0
   vite-plus: ^1.5.0
