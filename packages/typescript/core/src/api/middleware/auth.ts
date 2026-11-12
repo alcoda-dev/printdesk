@@ -34,7 +34,7 @@ export class AuthMiddleware extends HttpApiMiddleware.Service<
 }) {
   public static get Headers() {
     return OauthContract.AuthHeaders.to.pipe(
-      Schema.encodeKeys({ accessToken: Constants.FORWARDED_AUTHORIZATION_HEADER_NAME }),
+      Schema.encodeKeys({ accessToken: Constants.FORWARDED_HEADERS.AUTHORIZATION }),
     );
   }
 

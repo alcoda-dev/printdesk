@@ -40,7 +40,7 @@ export const fetch = Effect.fn(
     );
     const forwarded = new Request(url, request);
     if (parsed._tag === "AuthHeaders")
-      forwarded.headers.delete(Constants.FORWARDED_AUTHORIZATION_HEADER_NAME);
+      forwarded.headers.delete(Constants.FORWARDED_HEADERS.AUTHORIZATION);
 
     const response = yield* Effect.promise((signal) =>
       ctx.exports

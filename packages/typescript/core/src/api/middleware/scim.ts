@@ -29,7 +29,7 @@ export class ScimAuthMiddleware extends HttpApiMiddleware.Service<
   security: {
     bearer: HttpApiSecurity.apiKey({
       in: "header",
-      key: Constants.FORWARDED_AUTHORIZATION_HEADER_NAME,
+      key: Constants.FORWARDED_HEADERS.AUTHORIZATION,
     }),
   },
   error: ScimContract.V2UnauthorizedError.pipe(

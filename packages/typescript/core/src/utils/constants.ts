@@ -158,7 +158,9 @@ export namespace Constants {
 
   export const DEFAULT_CACHE_CAPACITY = 10;
 
-  export const FORWARDED_AUTHORIZATION_HEADER_NAME = "x-forwarded-authorization";
+  export const FORWARDED_HEADERS = {
+    AUTHORIZATION: "x-forwarded-authorization",
+  } as const;
 
   export const APPCONFIG_MINIMUM_POLL_INTERVAL_DURATION = "2 minutes" satisfies Duration.Input;
 }

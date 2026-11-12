@@ -31,7 +31,7 @@ const services = {
 } satisfies Record<string, { baseUrl: URL; customFetch: (req: Request) => Promise<Response> }>;
 
 const headerRemovalFilterSet = HashSet.make<ReadonlyArray<Lowercase<string>>>(
-  Constants.FORWARDED_AUTHORIZATION_HEADER_NAME,
+  Constants.FORWARDED_HEADERS.AUTHORIZATION,
   "cf-connecting-ip",
   "cf-ipcountry",
   "cf-ray",
@@ -54,7 +54,7 @@ export const proxy = (service: keyof typeof services) =>
         ),
       );
       const authorization = c.req.header("Authorization");
-      if (authorization) headers.set(Constants.FORWARDED_AUTHORIZATION_HEADER_NAME, authorization);
+      if (authorization) headers.set(Constants.FORWARDED_HEADERS.AUTHORIZATION, authorization);
 
       return honoProxy(url, {
         customFetch,
