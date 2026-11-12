@@ -176,7 +176,7 @@ interface ImportMeta {
         outputs: {
           title: devArgs.title,
           environment,
-          command: $output(devArgs.command ?? "vp run dev"),
+          command: $output(devArgs.command ?? "vpr dev"),
           autostart: $output(devArgs.autostart ?? true),
           directory: $output(devArgs.directory ?? path),
         },
