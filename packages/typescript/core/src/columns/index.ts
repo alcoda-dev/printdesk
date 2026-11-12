@@ -49,6 +49,7 @@ export namespace Columns {
   export const jsonb = <TType, TEncoded extends object>(schema: Schema.Codec<TType, TEncoded>) =>
     customType<{ driverData: TEncoded; data: TType }>({
       dataType: () => "jsonb",
+      codec: "jsonb",
       fromDriver: schema.pipe(Schema.decodeSync),
       toDriver: schema.pipe(Schema.encodeSync),
     })();
