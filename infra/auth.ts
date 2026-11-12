@@ -3,9 +3,11 @@ import { Constants } from "@printdesk/core/utils/constants";
 import { dsql, dynamo } from "./db";
 import { hostnames } from "./dns";
 import * as lib from "./lib";
-import { aws_ } from "./utils";
+import { aws_, environment } from "./utils";
 
 import type { DynamoStorageOptions } from "@openauthjs/openauth/storage/dynamo";
+
+export const hmacSigningSecret = new random.RandomBytes("HmacSigningSecret", { length: 32 });
 
 const oauthAppName =
   {
@@ -78,19 +80,20 @@ export const identityProviders = new sst.Linkable("IdentityProviders", {
   properties: {
     [Constants.ENTRA_ID]: {
       clientId: entraIdApplication.clientId,
-      clientSecret: entraIdClientSecret.value,
+      clientSecret: $util.secret(entraIdClientSecret.value),
     },
     [Constants.GOOGLE]: {
       clientId: "TODO",
-      clientSecret: "TODO",
+      clientSecret: $util.secret("TODO"),
     },
   },
 });
 
-export const issuer = new lib.aws.lambda.Function("Issuer", {
-  handler: "packages/typescript/functions/issuer/src/index.default",
+export const issuer = new lib.aws.lambda.WebFunction("Issuer", {
+  entrypoint: "packages/typescript/functions/issuer/src/index.ts",
+  dev: { port: 3000 },
   url: { authorization: "iam" },
-  link: [aws_, dsql, dynamo, identityProviders],
+  link: [aws_, dsql, dynamo, environment, hmacSigningSecret, identityProviders],
   environment: {
     OPENAUTH_STORAGE: $jsonStringify({
       type: "dynamo",
@@ -99,14 +102,7 @@ export const issuer = new lib.aws.lambda.Function("Issuer", {
         pk: dynamo.nodes.table.hashKey,
         sk: dynamo.nodes.table.rangeKey,
         ttl: dynamo.nodes.table.ttl.attributeName,
-      } satisfies {
-        [TKey in keyof DynamoStorageOptions]: $util.Input<DynamoStorageOptions[TKey]>;
-      },
+      } satisfies { [TKey in keyof DynamoStorageOptions]: $util.Input<DynamoStorageOptions[TKey]> },
     }),
   },
-});
-
-export const invokeIssuerFunctionUrl = sst.aws.permission({
-  actions: ["lambda:InvokeFunctionUrl"],
-  resources: [issuer.arn],
 });

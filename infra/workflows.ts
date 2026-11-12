@@ -1,4 +1,4 @@
-import { issuer } from "./auth";
+import { hmacSigningSecret, issuer } from "./auth";
 import {
   appconfigAgent,
   appconfigAgentDevContainer,
@@ -14,7 +14,7 @@ import {
 import { dsql, dynamo } from "./db";
 import { hostnames } from "./dns";
 import { appsyncApi, appsyncChannelNamespacePublisherRoleTemplate } from "./realtime";
-import { aws_, isProdStage } from "./utils";
+import { aws_ } from "./utils";
 
 export const bootstrapper = new sst.aws.Workflow(
   "Bootstrapper",
@@ -32,6 +32,7 @@ export const bootstrapper = new sst.aws.Workflow(
       aws_,
       dsql,
       dynamo,
+      hmacSigningSecret,
       hostnames,
       papercutMfSyncClientCredentialsConfigurationProfileTemplate,
       invoicesProcessorClientCredentialsConfigurationProfileTemplate,

@@ -12,15 +12,12 @@ declare module "sst" {
     }
     "Api": {
       "arn": string
-      "name": string
+      "endpointArn": string
       "roleArn": string
-      "type": "sst.aws.Function"
+      "type": "pd.awscf.LambdaWebFunction"
       "url": string
     }
     "ApiGateway": import("@cloudflare/workers-types").Service
-    "ApiGatewayAwsPermissions": {
-      "type": "sst.sst.Linkable"
-    }
     "ApiGatewayProperties": {
       "type": "sst.sst.Linkable"
       "urls": {
@@ -177,6 +174,10 @@ declare module "sst" {
       "isProdStage": boolean
       "type": "sst.sst.Linkable"
     }
+    "HmacSigningSecret": {
+      "base64": string
+      "type": "random.index/randomBytes.RandomBytes"
+    }
     "Hostnames": {
       "api": string
       "assets": string
@@ -218,10 +219,14 @@ declare module "sst" {
     }
     "Issuer": {
       "arn": string
-      "name": string
+      "endpointArn": string
       "roleArn": string
-      "type": "sst.aws.Function"
+      "type": "pd.awscf.LambdaWebFunction"
       "url": string
+    }
+    "LambdaEncryptionKey": {
+      "base64": string
+      "type": "random.index/randomBytes.RandomBytes"
     }
     "Migrator": {
       "name": string
@@ -294,6 +299,7 @@ declare module "sst" {
       "type": "pd.cloudflare.StaticSite"
       "url": string
     }
+    "WebFunctionDevBridgeWorker": import("@cloudflare/workers-types").Service
     "Www": {
       "type": "sst.cloudflare.TanStackStart"
       "url": string

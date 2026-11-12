@@ -1,12 +1,9 @@
 import { assetsBucketTemplate, r2S3Credentials, userAvatarsQueueProperties } from "./assets";
-import { identityProviders, invokeIssuerFunctionUrl, issuer } from "./auth";
+import { hmacSigningSecret, identityProviders, issuer } from "./auth";
 import {
-  appconfigAgent,
-  appconfigAgentDevContainer,
   appconfigAllAtOnceDeploymentStrategy,
   appconfigApplication,
   appconfigEnvironment,
-  appconfigAgentExtensionTransform,
   appconfigLinear20PercentEvery6MinutesDeploymentStrategy,
   appconfigRoleTemplate,
   papercutMfApiAuthTokenConfigurationProfileTemplate,
@@ -20,49 +17,36 @@ import {
   appsyncChannelNamespacePublisherRoleTemplate,
   appsyncChannelNamespaceSubscriberRoleTemplate,
 } from "./realtime";
-import { aws_, cloudflare_, isProdStage } from "./utils";
+import { aws_, cloudflare_, environment } from "./utils";
 import { bootstrapper } from "./workflows";
 
-export const api = new lib.aws.lambda.Function(
-  "Api",
-  {
-    handler: "packages/typescript/functions/api/src/index.default",
-    url: { authorization: "iam" },
-    link: [
-      appconfigAgent,
-      appconfigAllAtOnceDeploymentStrategy,
-      appconfigApplication,
-      appconfigEnvironment,
-      appconfigLinear20PercentEvery6MinutesDeploymentStrategy,
-      appconfigRoleTemplate,
-      appsyncApi,
-      appsyncChannelNamespacePublisherRoleTemplate,
-      appsyncChannelNamespaceSubscriberRoleTemplate,
-      assetsBucketTemplate,
-      aws_,
-      bootstrapper,
-      cloudflare_,
-      dsql,
-      dynamo,
-      hostnames,
-      papercutMfApiAuthTokenConfigurationProfileTemplate,
-      identityProviders,
-      invoicesProcessorQueueSenderRoleTemplate,
-      issuer,
-      r2S3Credentials,
-      userAvatarsQueueProperties,
-    ],
-    permissions: [invokeIssuerFunctionUrl],
-    environment: {
-      AWS_APPCONFIG_EXTENSION_HTTP_PORT: appconfigAgent.properties.port.apply(String),
-      AWS_APPCONFIG_EXTENSION_LOG_LEVEL: isProdStage ? "info" : "error",
-    },
-    transform: { function: appconfigAgentExtensionTransform },
-  },
-  { dependsOn: appconfigAgentDevContainer ? [appconfigAgentDevContainer] : [] },
-);
-
-export const invokeApiFunctionUrl = sst.aws.permission({
-  actions: ["lambda:InvokeFunctionUrl"],
-  resources: [api.arn],
+export const api = new lib.aws.lambda.WebFunction("Api", {
+  entrypoint: "packages/typescript/functions/api/src/index.ts",
+  dev: { port: 3001 },
+  url: { authorization: "iam" },
+  link: [
+    appconfigAllAtOnceDeploymentStrategy,
+    appconfigApplication,
+    appconfigEnvironment,
+    appconfigLinear20PercentEvery6MinutesDeploymentStrategy,
+    appconfigRoleTemplate,
+    appsyncApi,
+    appsyncChannelNamespacePublisherRoleTemplate,
+    appsyncChannelNamespaceSubscriberRoleTemplate,
+    assetsBucketTemplate,
+    aws_,
+    bootstrapper,
+    cloudflare_,
+    dsql,
+    dynamo,
+    environment,
+    hmacSigningSecret,
+    hostnames,
+    papercutMfApiAuthTokenConfigurationProfileTemplate,
+    identityProviders,
+    invoicesProcessorQueueSenderRoleTemplate,
+    issuer,
+    r2S3Credentials,
+    userAvatarsQueueProperties,
+  ],
 });

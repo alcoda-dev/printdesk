@@ -160,7 +160,16 @@ export namespace Constants {
 
   export const FORWARDED_HEADERS = {
     AUTHORIZATION: "x-forwarded-authorization",
+    HOST: "x-forwarded-host",
   } as const;
 
   export const APPCONFIG_MINIMUM_POLL_INTERVAL_DURATION = "2 minutes" satisfies Duration.Input;
+
+  export const WEB_FUNCTION_ENV = {
+    DEV_BRIDGE_CLIENT_ID: "DEV_BRIDGE_CLIENT_ID",
+    DEV_BRIDGE_CLIENT_SECRET: "DEV_BRIDGE_CLIENT_SECRET",
+    DEV_BRIDGE_WORKER_URL: "DEV_BRIDGE_WORKER_URL",
+    DEV_SERVER_PORT: "DEV_SERVER_PORT",
+    HTTP_ENDPOINT: "AWS_LAMBDA_HTTP_ENDPOINT",
+  } as const;
 }

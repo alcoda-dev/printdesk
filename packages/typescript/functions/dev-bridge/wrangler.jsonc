@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dev-bridge-worker",
+  "main": "src/worker/index.ts",
+  "compatibility_date": "2026-05-05",
+  "vpc_networks": [
+    {
+      "binding": "DEV_BRIDGE_VPC",
+      "tunnel_id": "PLACEHOLDER",
+    },
+  ],
+}

@@ -1,6 +1,5 @@
-import { LambdaHandler } from "@effect-aws/lambda";
+import { serve } from "@hono/node-server";
 
-import { handler } from "./handler";
-import { layer } from "./handler/layer";
+import { fetch, host, port } from "./server";
 
-export default LambdaHandler.make({ layer, handler });
+serve({ fetch, hostname: host.toString(), port });

@@ -18,11 +18,17 @@ import type { BlankInput } from "hono/types";
 const services = {
   api: {
     baseUrl: new URL(resource.Api.pipe(Redacted.value).url),
-    customFetch: (req) => lambda.fetch(req, { redirect: "manual" }),
+    customFetch: (req) => {
+      req.headers.set("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
+      return lambda.fetch(req, { redirect: "manual" });
+    },
   },
   auth: {
     baseUrl: new URL(resource.Issuer.pipe(Redacted.value).url),
-    customFetch: (req) => lambda.fetch(req, { redirect: "manual" }),
+    customFetch: (req) => {
+      req.headers.set("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
+      return lambda.fetch(req, { redirect: "manual" });
+    },
   },
   assets: {
     baseUrl: new URL("https://assets.printdesk.internal"),
@@ -53,13 +59,12 @@ export const proxy = (service: keyof typeof services) =>
           headerRemovalFilterSet.pipe(HashSet.has(String.toLowerCase(name)), Boolean.not),
         ),
       );
+
       const authorization = c.req.header("Authorization");
       if (authorization) headers.set(Constants.FORWARDED_HEADERS.AUTHORIZATION, authorization);
+      const host = c.req.header("Host");
+      if (host) headers.set(Constants.FORWARDED_HEADERS.HOST, host);
 
-      return honoProxy(url, {
-        customFetch,
-        headers,
-        raw: c.req.raw,
-      });
+      return honoProxy(url, { customFetch, headers, raw: c.req.raw });
     }),
   );

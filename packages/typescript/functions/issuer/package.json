@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vpx --watch ./src/index.ts"
+    "dev": "vpx --require ./css-preload.cjs --watch ./src/index.ts"
   },
   "dependencies": {
     "@effect-aws/lambda": "catalog:",

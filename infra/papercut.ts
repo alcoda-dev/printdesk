@@ -1,7 +1,7 @@
 import Path from "node:path";
 
 import { codeBucket } from "./assets";
-import { invokeIssuerFunctionUrl } from "./auth";
+import { issuer } from "./auth";
 import {
   appconfigAgent,
   invoicesProcessorClientCredentialsConfigurationProfileTemplate,
@@ -54,10 +54,10 @@ export const papercutMfApiGatewayScriptObject = new aws.s3.BucketObjectv2(
 
 export const papercutMfApiGatewayAwsAccessKey = new lib.aws.iam.AccessKey(
   "PapercutMfApiGatewayAwsAccessKey",
-  { permissions: [invokeIssuerFunctionUrl] },
+  { permissions: [issuer.permission] },
 );
 
-export const papercutMfSync = new lib.aws.lambda.Function("PapercutMfSync", {
+export const papercutMfSync = new lib.aws.lambda.EventFunction("PapercutMfSync", {
   handler: "packages/typescript/functions/papercut-mf-sync/src/index.default",
   link: [
     appconfigAgent,
@@ -68,7 +68,7 @@ export const papercutMfSync = new lib.aws.lambda.Function("PapercutMfSync", {
   ],
 });
 
-export const invoicesProcessor = new lib.aws.lambda.Function("InvoicesProcessor", {
+export const invoicesProcessor = new lib.aws.lambda.EventFunction("InvoicesProcessor", {
   handler: "packages/typescript/functions/invoices-processor/src/index.default",
   link: [
     appconfigAgent,

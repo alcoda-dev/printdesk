@@ -25,7 +25,7 @@ export default $config({
         aws: {
           profile: input?.stage === "prod" ? "prod" : "dev",
           region: awsRegion,
-          version: "7.48.0",
+          version: "7.54.0",
         },
         azuread: { version: "6.11.1" },
         cloudflare: {
@@ -131,6 +131,12 @@ export default $config({
       properties: {
         clientId: app.clientId,
         displayName: app.displayName,
+      },
+    }));
+
+    sst.Linkable.wrap(random.RandomBytes, (bytes) => ({
+      properties: {
+        base64: bytes.base64,
       },
     }));
 

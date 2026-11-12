@@ -1,6 +1,6 @@
-import { api, invokeApiFunctionUrl } from "./api";
+import { api } from "./api";
 import { assets } from "./assets";
-import { invokeIssuerFunctionUrl, issuer } from "./auth";
+import { issuer } from "./auth";
 import { hostnames } from "./dns";
 import * as lib from "./lib";
 import { aws_ } from "./utils";
@@ -11,11 +11,6 @@ export const rateLimit = new sst.cloudflare.RateLimit("RateLimit", {
   period: "1 minute",
 });
 
-export const apiGatewayAwsPermissions = new sst.Linkable("ApiGatewayAwsPermissions", {
-  properties: {},
-  include: [invokeApiFunctionUrl, invokeIssuerFunctionUrl],
-});
-
 export const apiGateway = new lib.cloudflare.Worker("ApiGateway", {
   handler: "packages/typescript/functions/api-gateway/src/index.ts",
   domains: {
@@ -24,5 +19,5 @@ export const apiGateway = new lib.cloudflare.Worker("ApiGateway", {
     assets: hostnames.properties.assets,
   },
   placement: { region: `aws:${aws_.properties.region}` },
-  link: [api, assets, aws_, hostnames, issuer, rateLimit, apiGatewayAwsPermissions],
+  link: [api, assets, aws_, hostnames, issuer, rateLimit],
 });

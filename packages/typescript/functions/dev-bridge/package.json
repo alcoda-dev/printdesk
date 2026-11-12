@@ -1,0 +1,20 @@
+{
+  "name": "@printdesk/dev-bridge",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:worker": "vpx wrangler deploy --dry-run --outdir dist/worker --minify",
+    "typegen:worker": "vpx wrangler types"
+  },
+  "dependencies": {
+    "@hono/node-server": "catalog:",
+    "@printdesk/core": "workspace:^",
+    "effect": "catalog:",
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/tsgo": "catalog:",
+    "@types/node": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

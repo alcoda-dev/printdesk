@@ -9,13 +9,11 @@ class Resource:
         value: str
     class Api:
         arn: str
-        name: str
+        endpointArn: str
         roleArn: str
         type: str
         url: str
     class ApiGateway:
-        type: str
-    class ApiGatewayAwsPermissions:
         type: str
     class ApiGatewayProperties:
         type: str
@@ -147,6 +145,9 @@ class Resource:
         isDevMode: bool
         isProdStage: bool
         type: str
+    class HmacSigningSecret:
+        base64: str
+        type: str
     class Hostnames:
         api: str
         assets: str
@@ -180,10 +181,13 @@ class Resource:
         type: str
     class Issuer:
         arn: str
-        name: str
+        endpointArn: str
         roleArn: str
         type: str
         url: str
+    class LambdaEncryptionKey:
+        base64: str
+        type: str
     class Migrator:
         name: str
         type: str
@@ -240,6 +244,9 @@ class Resource:
         id: str
         type: str
     class Web:
+        type: str
+        url: str
+    class WebFunctionDevBridgeWorker:
         type: str
         url: str
     class Www:

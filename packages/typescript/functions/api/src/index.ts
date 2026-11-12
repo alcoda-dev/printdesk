@@ -1,8 +1,8 @@
-import { LambdaHandler } from "@effect-aws/lambda";
+import * as NodeRuntime from "@effect/platform-node/NodeRuntime";
 import { Api } from "@printdesk/core/api";
 import * as Effect from "effect/Effect";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
-import * as HttpServer from "effect/http/HttpServer";
+import * as HttpRouter from "effect/http/HttpRouter";
 import * as Layer from "effect/Layer";
 
 import { bootstrapGroupLayer } from "./groups/bootstrap";
@@ -12,13 +12,15 @@ import { papercutMfGroupsLayer } from "./groups/papercut";
 import { realtimeGroupLayer } from "./groups/realtime";
 import { replicacheGroupLayer } from "./groups/replicache";
 import { scimGroupsLayer } from "./groups/scim";
+import { httpServerLayer } from "./lib/server";
 
-export default Api.pipe(
+Api.pipe(
   HttpApiBuilder.layer,
+  HttpRouter.serve,
   Layer.provide([
-    HttpServer.layerServices,
     bootstrapGroupLayer,
     configGroupsLayer,
+    httpServerLayer,
     ordersGroupLayer,
     papercutMfGroupsLayer,
     realtimeGroupLayer,
@@ -26,5 +28,6 @@ export default Api.pipe(
     scimGroupsLayer,
   ]),
   Layer.tapCause(Effect.logError),
-  LambdaHandler.fromHttpApi,
+  Layer.launch,
+  NodeRuntime.runMain,
 );

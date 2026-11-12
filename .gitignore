@@ -32,6 +32,7 @@ pnpm-debug.log*
 # wrangler
 .wrangler
 wrangler.jsonc
+!packages/typescript/functions/dev-bridge/wrangler.jsonc
 !packages/typescript/functions/papercut-mf-api-gateway/wrangler.jsonc
 .dev.vars*
 worker-configuration.d.ts

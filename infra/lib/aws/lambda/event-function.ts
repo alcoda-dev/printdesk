@@ -1,6 +1,6 @@
-export type FunctionArgs = sst.aws.FunctionArgs;
+export type EventFunctionArgs = sst.aws.FunctionArgs;
 
-export class Function extends sst.aws.Function {
+export class EventFunction extends sst.aws.Function {
   public constructor(
     name: string,
     args: sst.aws.FunctionArgs,
