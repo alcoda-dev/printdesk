@@ -1,5 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
-import { existsSync } from "node:fs";
+import Fs from "node:fs";
 import Path from "node:path";
 
 import * as R from "remeda";
@@ -11,7 +10,6 @@ import { siteBuilder } from "~/sst/aws/helpers/site-builder";
 import { binding, DEFAULT_ACCOUNT_ID } from "~/sst/cloudflare";
 import { toMilliseconds } from "~/sst/duration";
 import type { DurationMinutes, DurationSeconds } from "~/sst/duration";
-import { VisibleError } from "~/sst/error";
 import { Link } from "~/sst/link";
 
 export interface WorkerArgs extends Omit<sst.cloudflare.WorkerArgs, "domain"> {
@@ -229,12 +227,12 @@ export class Worker extends $util.ComponentResource implements Link.Linkable {
       ),
     }).apply(({ packagePath, config, secrets }) => {
       const configPath = Path.resolve(Path.join(packagePath, "wrangler.jsonc"));
-      mkdirSync(Path.dirname(configPath), { recursive: true });
-      writeFileSync(configPath, config);
+      Fs.mkdirSync(Path.dirname(configPath), { recursive: true });
+      Fs.writeFileSync(configPath, config);
 
       const secretsPath = Path.resolve(Path.join(packagePath, ".dev.vars"));
-      mkdirSync(Path.dirname(secretsPath), { recursive: true });
-      writeFileSync(secretsPath, secrets);
+      Fs.mkdirSync(Path.dirname(secretsPath), { recursive: true });
+      Fs.writeFileSync(secretsPath, secrets);
 
       siteBuilder(
         `${name}Typegen`,
