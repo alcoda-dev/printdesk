@@ -44,7 +44,7 @@ export const migratorInvocationSuccess = $jsonParse(migratorInvocation.result).a
 new sst.x.DevCommand("Studio", {
   link: [aws_, dsql],
   dev: {
-    command: "vp run drizzle:studio",
+    command: "vpr drizzle:studio",
     directory: "packages/typescript/core",
     autostart: true,
   },

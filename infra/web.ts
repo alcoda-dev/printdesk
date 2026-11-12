@@ -7,7 +7,7 @@ import { environment, injectLinkables, isProdStage } from "./utils";
 
 export const web = new lib.cloudflare.StaticSite("Web", {
   path: "packages/typescript/web",
-  build: { command: "vp run build", output: "dist" },
+  build: { command: "vpr build", output: "dist" },
   environment: injectLinkables(
     Constants.VITE_RESOURCE_PREFIX,
     apexDomain,
@@ -24,7 +24,7 @@ export const web = new lib.cloudflare.StaticSite("Web", {
 
 export const www = new sst.cloudflare.TanStackStart("Www", {
   path: "packages/typescript/www",
-  buildCommand: "vp run build",
+  buildCommand: "vpr build",
   environment: injectLinkables(
     Constants.VITE_RESOURCE_PREFIX,
     apexDomain,
