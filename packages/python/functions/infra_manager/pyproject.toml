@@ -3,8 +3,8 @@ name = "infra-manager"
 version = "0.0.0"
 requires-python = "==3.14.*"
 dependencies = [
-  "aws-lambda-powertools>=3.39.0",
-  "boto3>=1.43.126",
+  "aws-lambda-powertools>=3.40.0",
+  "boto3>=1.44.1",
   "pulumi>=3.274.1",
   "pulumi-aws>=7.54.0",
   "pulumi-cloudflare>=6.23.3",
@@ -12,7 +12,7 @@ dependencies = [
   "pyawscron>=1.0.7",
   "pydantic>=2.14.3",
   "sst-sdk>=4.17.2",
-  "types-boto3-lambda>=1.43.123",
+  "types-boto3-lambda>=1.44.0",
 ]
 
 [build-system]
