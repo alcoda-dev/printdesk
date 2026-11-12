@@ -134,7 +134,7 @@ export class Migrator extends Context.Service<Migrator>()("@printdesk/core/datab
             migration.sql,
             Effect.fn(function* (statement, index) {
               const hash = yield* digest
-                .digest(Digest.sha256, textEncoder.encode(statement.trim()))
+                .digest(Digest.sha256, textEncoder.encode(String.trim(statement)))
                 .pipe(Effect.flatMap(Schema.encodeEffect(Schema.Uint8ArrayFromHex)));
 
               const storedHash = statements.pipe(
@@ -149,10 +149,12 @@ export class Migrator extends Context.Service<Migrator>()("@printdesk/core/datab
                     `Warning: Migration statement ${index} in migration ${
                       migration.folderMillis
                     } has been modified since it was applied.` +
-                      `The stored hash (${storedHash.value.slice(
+                      `The stored hash (${String.slice(
                         0,
                         8,
-                      )}) differs from the current hash (${hash.slice(0, 8)}).` +
+                      )(
+                        storedHash.value,
+                      )}) differs from the current hash (${String.slice(0, 8)(hash)}).` +
                       `This statement will be skipped, but the change may indicate a problem.\n` +
                       `Action: If this change is intentional, create a new migration. If not, investigate why this migration file changed.`,
                   );

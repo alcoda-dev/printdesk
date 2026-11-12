@@ -66,7 +66,7 @@ export class CachedAssets extends WorkerEntrypoint<Env, typeof AssetsContract.Pr
       Layer.unwrap,
       (layer) =>
         Effect.scope.pipe(Effect.flatMap((scope) => Layer.buildWithMemoMap(layer, memoMap, scope))),
-      Effect.flatMap((context) => Effect.tryPromise(() => handler(request, context))),
+      Effect.flatMap((context) => Effect.promise(() => handler(request, context))),
       Effect.scoped,
       orErrorResponse,
       runtime.runPromise,

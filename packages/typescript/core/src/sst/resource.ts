@@ -1,6 +1,7 @@
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
+import * as Record from "effect/Record";
 import * as Redacted from "effect/Redacted";
 import { Resource } from "sst/resource";
 
@@ -12,7 +13,7 @@ export class SstResource extends Context.Service<SstResource>()("@printdesk/core
       {
         get: (_, key: keyof Resource) => Redacted.make(Resource[key]),
         getOwnPropertyDescriptor: () => ({ configurable: true, enumerable: true }),
-        ownKeys: () => Object.keys(Resource),
+        ownKeys: () => Record.keys(Resource),
       },
     ) as { readonly [TKey in keyof Resource]: Redacted.Redacted<Resource[TKey]> },
   ),

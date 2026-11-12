@@ -42,7 +42,7 @@ export const fetch = Effect.fn(
     if (parsed._tag === "AuthHeaders")
       forwarded.headers.delete(Constants.FORWARDED_AUTHORIZATION_HEADER_NAME);
 
-    const response = yield* Effect.tryPromise((signal) =>
+    const response = yield* Effect.promise((signal) =>
       ctx.exports
         .CachedAssets({ props: { tenantId: user.tenantId } })
         .fetch(forwarded, { cf: { cacheKey }, signal }),

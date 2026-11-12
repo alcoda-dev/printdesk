@@ -24,7 +24,7 @@ export const makeService = Effect.gen(function* () {
               user.tenantId,
             )
             .pipe(
-              Effect.map(() => true),
+              Effect.as(true),
               Effect.catchTag("NoSuchElementError", () => Effect.succeed(false)),
             ),
         { name: SharedAccountWorkflowsContract.Table.name, id },
@@ -44,7 +44,7 @@ export const makeService = Effect.gen(function* () {
                 user.tenantId,
               )
               .pipe(
-                Effect.map(() => true),
+                Effect.as(true),
                 Effect.catchTag("NoSuchElementError", () => Effect.succeed(false)),
               ),
           { name: SharedAccountWorkflowsContract.Table.name, id },

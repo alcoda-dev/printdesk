@@ -50,7 +50,6 @@ export const ratelimit = (service: string) =>
           AttributesContract.ServiceIpFromString,
         ]),
       ),
-
       (key) => resource.RateLimit.pipe(Redacted.value).limit({ key }).then(next),
     ),
   );

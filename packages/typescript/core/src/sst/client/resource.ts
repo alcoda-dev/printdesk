@@ -57,6 +57,7 @@ export function makeResource<
     Record.empty<string, any>(),
     function (target, [key, value]) {
       if (String.startsWith(prefix)(key))
+        // oxlint-disable-next-line effecttsgo/global-json
         target[String.slice(prefix.length)(key)] = Redacted.make(JSON.parse(value));
       else if (!prefixedOnly) target[key] = Redacted.make(value);
       return target;

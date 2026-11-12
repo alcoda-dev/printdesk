@@ -69,6 +69,7 @@ export namespace XmlRpc {
           Schema.decodeTo(
             Schema.Struct({
               methodCall: Schema.Struct({ methodName: Schema.Literal(methodName) }),
+              // oxlint-disable-next-line effecttsgo/prefer-effect-array
               params: Schema.Struct({ param: Schema.Tuple(schemas.map(Struct.get("schema"))) }),
             }),
             {
@@ -86,6 +87,7 @@ export namespace XmlRpc {
         );
 
         return yield* encode(
+          // oxlint-disable-next-line effecttsgo/prefer-effect-array
           { methodCall: { methodName, params: { param: schemas.map(Struct.get("value")) } } },
           parseOptions,
         ).pipe(

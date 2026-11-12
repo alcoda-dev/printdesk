@@ -217,6 +217,8 @@ export namespace Replicache {
   export const make = Effect.fn(function* (opts: Options) {
     const { baseUrl, logLevel } = opts;
 
+    const context = yield* Effect.context();
+
     const user = yield* Actor.pipe(Effect.flatMap(Struct.get("assertUser")));
 
     const name = yield* Schema.encodeEffect(separatedString())([user.tenantId, user.id]);
@@ -289,7 +291,7 @@ export namespace Replicache {
             },
           }),
         ),
-        Effect.runPromise,
+        Effect.runPromiseWith(context),
       ) as Promise<PullerResult>;
 
     const pusher = (...[request, id]: Parameters<Pusher>) =>
@@ -325,7 +327,7 @@ export namespace Replicache {
             },
           }),
         ),
-        Effect.runPromise,
+        Effect.runPromiseWith(context),
       ) as Promise<PusherResult>;
 
     const client = yield* Effect.try({

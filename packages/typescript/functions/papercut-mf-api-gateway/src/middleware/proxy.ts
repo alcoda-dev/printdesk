@@ -23,7 +23,7 @@ const url =
 const papercutApi = resource.PAPERCUT_MF_API.pipe(Redacted.value);
 
 export const proxy = createMiddleware((c) =>
-  Effect.tryPromise((signal) =>
+  Effect.promise((signal) =>
     honoProxy(url, { raw: c.req.raw, signal, customFetch: (req) => papercutApi.fetch(req) }),
   )
     .pipe(
@@ -40,7 +40,6 @@ export const proxy = createMiddleware((c) =>
             Result.match({
               onSuccess: Match.valueTags({
                 TimeoutError: (error) => new HTTPException(504, { cause: error.cause }),
-                UnknownError: (error) => new HTTPException(500, { cause: error.cause }),
               }),
               onFailure: (cause) => new HTTPException(500, { cause }),
             }),

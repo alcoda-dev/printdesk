@@ -20,7 +20,7 @@ export const makeService = Effect.gen(function* () {
           repository
             .findActiveCustomerAuthorized(customerId.pipe(Option.getOrElse(() => user.id)), id)
             .pipe(
-              Effect.map(() => true),
+              Effect.as(true),
               Effect.catchTag("NoSuchElementError", () => Effect.succeed(false)),
             ),
         { name: SharedAccountWorkflowsContract.Table.name, id },
@@ -34,7 +34,7 @@ export const makeService = Effect.gen(function* () {
           repository
             .findActiveManagerAuthorized(managerId.pipe(Option.getOrElse(() => user.id)), id)
             .pipe(
-              Effect.map(() => true),
+              Effect.as(true),
               Effect.catchTag("NoSuchElementError", () => Effect.succeed(false)),
             ),
         { name: SharedAccountWorkflowsContract.Table.name, id },

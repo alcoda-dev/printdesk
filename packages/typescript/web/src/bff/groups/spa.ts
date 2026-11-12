@@ -20,7 +20,7 @@ export const baseSpaGroupLayer = HttpApiBuilder.group(
 
     return handlers.handle("assets", ({ request }) =>
       HttpServerRequest.toWeb(request).pipe(
-        Effect.flatMap((request) => Effect.tryPromise(() => assets.fetch(request))),
+        Effect.flatMap((request) => Effect.promise((signal) => assets.fetch(request, { signal }))),
         Effect.map(HttpServerResponse.fromWeb),
         Effect.orDie,
       ),

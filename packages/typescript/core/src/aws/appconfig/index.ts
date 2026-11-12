@@ -209,6 +209,7 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
         }),
       ).pipe(
         Effect.filterOrFail((output): output is Required<typeof output> =>
+          // oxlint-disable-next-line effecttsgo/prefer-effect-record
           Array.every(globalThis.Object.values(output), Predicate.isNotUndefined),
         ),
       ),
@@ -232,6 +233,7 @@ export class Appconfig extends Context.Service<Appconfig>()("@printdesk/core/aws
         }),
       ).pipe(
         Effect.filterOrFail((output): output is Required<typeof output> =>
+          // oxlint-disable-next-line effecttsgo/prefer-effect-record
           Array.every(globalThis.Object.values(output), Predicate.isNotUndefined),
         ),
       ),

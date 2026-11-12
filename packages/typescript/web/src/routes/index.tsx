@@ -15,6 +15,7 @@ export const Route = createFileRoute("/")({
       <div>
         <div>{'Hello "/"!'}</div>
         <div>{api}</div>
+        {/* oxlint-disable-next-line effecttsgo/global-json */}
         <div>{JSON.stringify(online)}</div>
       </div>
     );

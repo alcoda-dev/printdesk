@@ -32,7 +32,7 @@ export const basePapercutMfGroupLayer = HttpApiBuilder.group(
         "health",
         Effect.fn("Api.PapercutMf.health")(() =>
           api.getTotalUsers.pipe(
-            Effect.map(() => true),
+            Effect.as(true),
             Effect.catchTag(["HttpClientError", "FaultError"], () => Effect.succeed(false)),
             Effect.map((healthy) => new PapercutMfContract.HealthSuccess({ healthy })),
             AccessControl.enforce(AccessControl.permissionPolicy("papercut_mf_api_gateway:read")),
