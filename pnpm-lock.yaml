@@ -787,9 +787,6 @@ importers:
       '@effect/tsgo':
         specifier: 'catalog:'
         version: 0.67.7
-      tsx:
-        specifier: ^4.23.15
-        version: 4.23.15
 
   packages/typescript/ui:
     dependencies:
@@ -8915,6 +8912,7 @@ snapshots:
       esbuild: 0.28.2
     optionalDependencies:
       fsevents: 2.3.3
+    optional: true
 
   type-check@0.4.0:
     dependencies:

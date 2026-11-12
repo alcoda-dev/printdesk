@@ -1,9 +1,9 @@
 {
   "name": "@printdesk/scripts",
   "private": true,
+  "type": "module",
   "scripts": {
-    "seed": "tsx ./src/seed.ts",
-    "tsx": "tsx"
+    "seed": "vpx ./src/seed.ts"
   },
   "dependencies": {
     "@effect/platform-node": "catalog:",
@@ -12,7 +12,6 @@
     "effect": "catalog:"
   },
   "devDependencies": {
-    "@effect/tsgo": "catalog:",
-    "tsx": "^4.23.15"
+    "@effect/tsgo": "catalog:"
   }
 }
