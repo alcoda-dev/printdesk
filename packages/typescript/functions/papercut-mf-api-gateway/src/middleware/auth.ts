@@ -45,8 +45,8 @@ export const auth = createMiddleware((c, next) =>
     .then(
       Exit.match({
         onSuccess: next,
-        onFailure: (cause) =>
-          cause.pipe(
+        onFailure: function (cause) {
+          throw cause.pipe(
             Cause.findError,
             Result.flatMap((error) =>
               HttpServerRespondable.isRespondable(error)
@@ -54,8 +54,8 @@ export const auth = createMiddleware((c, next) =>
                 : Result.fail(error),
             ),
             Result.match({
-              onSuccess: (respondable) => {
-                throw respondable.pipe(
+              onSuccess: (respondable) =>
+                respondable.pipe(
                   HttpServerRespondable.toResponse,
                   Effect.map(HttpServerResponse.toWeb),
                   Effect.map(
@@ -70,13 +70,11 @@ export const auth = createMiddleware((c, next) =>
                       ),
                   ),
                   Effect.runSync,
-                );
-              },
-              onFailure: (cause) => {
-                throw new HTTPException(500, { cause });
-              },
+                ),
+              onFailure: (cause) => new HTTPException(500, { cause }),
             }),
-          ),
+          );
+        },
       }),
     ),
 );
