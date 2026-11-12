@@ -4,6 +4,7 @@ import Path from "node:path";
 
 import * as R from "remeda";
 
+import { findPackagePath } from "../../utils";
 import { WorkerDomain } from "./domain";
 
 import { siteBuilder } from "~/sst/aws/helpers/site-builder";
@@ -140,7 +141,7 @@ export class Worker extends $util.ComponentResource implements Link.Linkable {
     const { packagePath, mainPath } = $output(args.handler).apply(function (handler) {
       const handlerPath = Path.resolve(Path.join($cli.paths.root, handler));
 
-      const packagePath = findPackagePath(handlerPath);
+      const packagePath = findPackagePath(name, handlerPath);
       const mainPath = Path.relative(packagePath, handlerPath);
 
       return { packagePath, mainPath };
@@ -251,16 +252,6 @@ export class Worker extends $util.ComponentResource implements Link.Linkable {
         urls: this.urls,
       },
     });
-
-    function findPackagePath(path: string) {
-      if (existsSync(Path.join(path, "package.json"))) return path;
-
-      const parent = Path.dirname(path);
-      if (parent === path)
-        throw new VisibleError(`Arrived at root, could not find ${name}'s package.json`);
-
-      return findPackagePath(parent);
-    }
   }
 
   public get urls() {
