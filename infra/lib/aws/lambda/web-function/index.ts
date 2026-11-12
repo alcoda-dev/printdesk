@@ -61,10 +61,7 @@ export interface WebFunctionArgs extends Pick<
   }>;
   transform?: {
     webFunction?: Transform<aws.lambdaweb.FunctionArgs>;
-    bucket?: Transform<aws.s3.BucketArgs>;
-    bucketVersioning?: Transform<aws.s3.BucketVersioningArgs>;
-    bucketPublicAccessBlock?: Transform<aws.s3.BucketPublicAccessBlockArgs>;
-    bucketPolicy?: Transform<aws.s3.BucketPolicyArgs>;
+    bucket?: Transform<sst.aws.BucketArgs>;
     assetObject?: Transform<aws.s3.BucketObjectv2Args>;
     role?: Transform<aws.iam.RoleArgs>;
     localLogGroup?: Transform<aws.cloudwatch.LogGroupArgs>;
@@ -79,10 +76,7 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
   public static readonly __pulumiType = "pd:awscf:LambdaWebFunction";
 
   #webFunction: aws.lambdaweb.Function;
-  #bucket: aws.s3.Bucket;
-  #bucketVersioning: aws.s3.BucketVersioning;
-  #bucketPublicAccessBlock: aws.s3.BucketPublicAccessBlock;
-  #bucketPolicy: aws.s3.BucketPolicy;
+  #bucket: sst.aws.Bucket;
   #assetObject: $util.Output<aws.s3.BucketObjectv2>;
   #role: () => aws.iam.Role;
   #homeLogGroup: $util.Output<aws.cloudwatch.LogGroup | undefined>;
@@ -117,7 +111,7 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
     const environments = buildEnvironments();
 
     const webFunction = createWebFunction();
-    const { bucket, bucketVersioning, bucketPublicAccessBlock, bucketPolicy } = createBucket();
+    const bucket = createBucket();
     const assetObject = createAssetObject();
     const role = createRole();
     const logGroups = createLogGroups();
@@ -127,9 +121,6 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
 
     this.#webFunction = webFunction;
     this.#bucket = bucket;
-    this.#bucketVersioning = bucketVersioning;
-    this.#bucketPublicAccessBlock = bucketPublicAccessBlock;
-    this.#bucketPolicy = bucketPolicy;
     this.#assetObject = assetObject;
     this.#role = role;
     this.#homeLogGroup = logGroups.apply((groups) => groups?.home);
@@ -396,72 +387,35 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
     }
 
     function createBucket() {
-      const bucket = new aws.s3.Bucket(
+      return new sst.aws.Bucket(
         ...transform(
           args.transform?.bucket,
           `${name}Bucket`,
-          { forceDestroy: true },
-          { parent: self },
-        ),
-      );
-
-      const bucketVersioning = new aws.s3.BucketVersioning(
-        ...transform(
-          args.transform?.bucketVersioning,
-          `${name}BucketVersioning`,
-          { bucket: bucket.bucket, versioningConfiguration: { status: "Enabled" } },
-          { parent: self },
-        ),
-      );
-
-      const bucketPublicAccessBlock = new aws.s3.BucketPublicAccessBlock(
-        ...transform(
-          args.transform?.bucketPublicAccessBlock,
-          `${name}BucketPublicAccessBlock`,
           {
-            bucket: bucket.bucket,
-            blockPublicAcls: true,
-            blockPublicPolicy: true,
-            ignorePublicAcls: true,
-            restrictPublicBuckets: true,
+            versioning: true,
+            policy: [
+              {
+                principals: [{ type: "service", identifiers: ["lambda.amazonaws.com"] }],
+                actions: ["s3:GetObject", "s3:GetObjectVersion"],
+                paths: ["assets/*"],
+                conditions: [
+                  {
+                    test: "StringEquals",
+                    variable: "aws:SourceAccount",
+                    values: [accountId],
+                  },
+                  {
+                    test: "ArnLike",
+                    variable: "aws:SourceArn",
+                    values: [$interpolate`${webFunction.arn}/revision/*`],
+                  },
+                ],
+              },
+            ],
           },
           { parent: self },
         ),
       );
-
-      const bucketPolicy = new aws.s3.BucketPolicy(
-        ...transform(
-          args.transform?.bucketPolicy,
-          `${name}BucketPolicy`,
-          {
-            bucket: bucket.bucket,
-            policy: aws.iam.getPolicyDocumentOutput({
-              statements: [
-                {
-                  principals: [{ type: "Service", identifiers: ["lambda.amazonaws.com"] }],
-                  actions: ["s3:GetObject", "s3:GetObjectVersion"],
-                  resources: [$interpolate`${bucket.arn}/assets/*`],
-                  conditions: [
-                    {
-                      test: "StringEquals",
-                      variable: "aws:SourceAccount",
-                      values: [accountId],
-                    },
-                    {
-                      test: "ArnLike",
-                      variable: "aws:SourceArn",
-                      values: [$interpolate`${webFunction.arn}/revision/*`],
-                    },
-                  ],
-                },
-              ],
-            }).json,
-          },
-          { parent: self, dependsOn: bucketPublicAccessBlock },
-        ),
-      );
-
-      return { bucket, bucketVersioning, bucketPublicAccessBlock, bucketPolicy };
     }
 
     function createAssetObject() {
@@ -583,7 +537,7 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
             args.transform?.assetObject,
             `${name}${dev.enabled ? "DevBridge" : ""}Asset`,
             {
-              bucket: bucket.bucket,
+              bucket: bucket.name,
               key: `assets/${name}-${dev.enabled ? "dev-bridge-" : ""}code-${hash}.zip`,
               source: $asset(zipPath),
               sourceHash: hash,
@@ -739,7 +693,7 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
               ),
             },
           },
-          { parent: self, dependsOn: bucketPolicy },
+          { parent: self },
         ),
       );
     }
@@ -820,9 +774,6 @@ export class WebFunction extends $util.ComponentResource implements Link.Linkabl
     return {
       webFunction: this.#webFunction,
       bucket: this.#bucket,
-      bucketVersioning: this.#bucketVersioning,
-      bucketPublicAccessBlock: this.#bucketPublicAccessBlock,
-      bucketPolicy: this.#bucketPolicy,
       assetObject: this.#assetObject,
       role: this.#role(),
       homeLogGroup: this.#homeLogGroup,
