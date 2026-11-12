@@ -2,7 +2,6 @@ import { ActorsContract } from "@printdesk/core/actors/contract";
 import { OauthContract } from "@printdesk/core/oauth/contract";
 import { Openauth } from "@printdesk/core/oauth/openauth";
 import * as Array from "effect/Array";
-import * as Cause from "effect/Cause";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import * as HttpServerRequest from "effect/http/HttpServerRequest";
@@ -51,39 +50,38 @@ export const actor = createMiddleware((c, next) =>
     ),
   ])
     .pipe(
-      Effect.flatMap(
-        Effect.fn(function* ([cookies, headers]) {
-          if (Option.product(cookies, headers).pipe(Option.isSome))
-            return yield* new Cause.ExceededCapacityError();
-
-          if (Option.isSome(cookies))
-            return yield* cookies.pipe(
-              Option.getOrThrow,
-              Schema.decodeUnknownEffect(OauthContract.AuthCookies),
-            );
-
-          if (Option.isSome(headers))
-            return yield* headers.pipe(
-              Option.getOrThrow,
-              Schema.decodeUnknownEffect(OauthContract.AuthHeaders),
-            );
-
-          return yield* new Cause.NoSuchElementError();
-        }),
-      ),
-      Effect.flatMap(({ accessToken }) => Openauth.verify(accessToken)),
       Effect.provideService(
         HttpServerRequest.HttpServerRequest,
         HttpServerRequest.fromWeb(c.req.raw),
       ),
+      Effect.flatMap(
+        Effect.fn(function* ([cookies, headers]) {
+          if (Option.product(cookies, headers).pipe(Option.isSome))
+            return yield* new OauthContract.MultipleAuthenticationMethodsError();
+
+          if (Option.isSome(cookies))
+            return cookies.pipe(Option.map(Schema.decodeUnknownEffect(OauthContract.AuthCookies)));
+
+          if (Option.isSome(headers))
+            return headers.pipe(Option.map(Schema.decodeUnknownEffect(OauthContract.AuthHeaders)));
+
+          return Option.none<
+            Effect.Effect<
+              typeof OauthContract.AuthCookies.Type | typeof OauthContract.AuthHeaders.Type
+            >
+          >();
+        }),
+      ),
+      Effect.flatMap(Effect.transposeOption),
+      Effect.map(Option.map(({ accessToken }) => Openauth.verify(accessToken))),
+      Effect.flatMap(Effect.transposeOption),
       Effect.tapCause(Effect.logError),
+      Effect.flatMap(Effect.fromOption),
       openauthRuntime.runPromiseExit,
     )
     .then(
       Exit.match({
-        onSuccess: function ({ subject }) {
-          c.set("actor", subject.properties.actor.wrap);
-        },
+        onSuccess: ({ subject }) => c.set("actor", subject.properties.actor.wrap),
         onFailure: () => c.set("actor", ActorsContract.PublicActor.singleton.wrap),
       }),
     )
