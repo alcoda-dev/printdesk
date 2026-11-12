@@ -6,11 +6,15 @@ export type PhysicalNameArgs = {
   transform?: $util.Input<(name: string) => $util.Input<string>>;
 };
 
-export class PhysicalName extends $util.ComponentResource {
-  public readonly logical: string;
+export class PhysicalName<TLogical extends string> extends $util.ComponentResource {
+  public readonly logical: TLogical;
   public readonly result: $util.Output<string>;
 
-  public constructor(name: string, args: PhysicalNameArgs, opts?: $util.ComponentResourceOptions) {
+  public constructor(
+    name: TLogical,
+    args: PhysicalNameArgs,
+    opts?: $util.ComponentResourceOptions,
+  ) {
     super("pd:resource:PhysicalName", name, {}, opts);
 
     this.logical = name;
