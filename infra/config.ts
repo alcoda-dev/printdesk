@@ -1,10 +1,12 @@
 import * as R from "remeda";
 
 import * as lib from "./lib";
-import { aws_ } from "./utils";
+import { aws_, isProdStage } from "./utils";
 
+import type { Permission } from "~/sst/aws/permission";
 import type { Transform } from "~/sst/component";
 import { VisibleError } from "~/sst/error";
+import { env } from "~/sst/linkable";
 
 const applicationName = new lib.PhysicalName("AppconfigApplication", {
   max: 64,
@@ -18,12 +20,17 @@ export const appconfigEnvironment = new aws.appconfig.Environment("AppconfigEnvi
   name: $app.stage,
 });
 
+const appconfigAgentPort = $output(2772);
 export const appconfigAgent = new sst.Linkable("AppconfigAgent", {
-  properties: { port: $output(2772) },
+  properties: { port: appconfigAgentPort },
   include: [
     sst.aws.permission({
       actions: ["appconfig:StartConfigurationSession", "appconfig:GetLatestConfiguration"],
       resources: ["*"],
+    }),
+    env({
+      AWS_APPCONFIG_EXTENSION_HTTP_PORT: appconfigAgentPort.apply(String),
+      AWS_APPCONFIG_EXTENSION_LOG_LEVEL: isProdStage ? "info" : "error",
     }),
   ],
 });
@@ -42,7 +49,8 @@ if ($dev) {
             policy: aws.iam.getPolicyDocumentOutput({
               statements: appconfigAgent
                 .getSSTLink()
-                .include?.map(({ effect = "allow", ...statement }) => ({
+                .include?.filter((item): item is Permission => item.type === "aws.permission")
+                .map(({ effect = "allow", ...statement }) => ({
                   effect: effect.charAt(0).toUpperCase() + effect.slice(1),
                   ...R.omit(statement, ["type"]),
                 })),
@@ -61,13 +69,13 @@ if ($dev) {
       `AWS_REGION=${$app.providers!.aws.region}`,
       $interpolate`ROLE_ARN=${appconfigAgentDevRole.arn}`,
       $interpolate`ROLE_EXTERNAL_ID=${appconfigAgentDevRole.externalId}`,
-      $interpolate`HTTP_PORT=${appconfigAgent.properties.port}`,
+      $interpolate`HTTP_PORT=${appconfigAgentPort}`,
       "LOG_LEVEL=error",
     ],
     healthcheck: {
       tests: [
         "CMD-SHELL",
-        $interpolate`curl -fSs http://localhost:${appconfigAgent.properties.port}/ping || exit 1`,
+        $interpolate`curl -fSs http://localhost:${appconfigAgentPort}/ping || exit 1`,
       ],
       interval: "1s",
       timeout: "5s",

@@ -37,10 +37,6 @@ export const bootstrapper = new sst.aws.Workflow(
       invoicesProcessorClientCredentialsConfigurationProfileTemplate,
       issuer,
     ],
-    environment: {
-      AWS_APPCONFIG_EXTENSION_HTTP_PORT: appconfigAgent.properties.port.apply(String),
-      AWS_APPCONFIG_EXTENSION_LOG_LEVEL: isProdStage ? "info" : "error",
-    },
     transform: { function: { function: appconfigAgentExtensionTransform } },
   },
   { dependsOn: appconfigAgentDevContainer ? [appconfigAgentDevContainer] : [] },
