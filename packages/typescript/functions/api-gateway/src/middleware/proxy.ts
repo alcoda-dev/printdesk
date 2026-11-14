@@ -18,17 +18,11 @@ import type { BlankInput } from "hono/types";
 const services = {
   api: {
     baseUrl: new URL(resource.Api.pipe(Redacted.value).url),
-    customFetch: (req) => {
-      req.headers.set("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
-      return lambda.fetch(req, { redirect: "manual" });
-    },
+    customFetch: (req) => lambda.fetch(req),
   },
   auth: {
     baseUrl: new URL(resource.Issuer.pipe(Redacted.value).url),
-    customFetch: (req) => {
-      req.headers.set("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
-      return lambda.fetch(req, { redirect: "manual" });
-    },
+    customFetch: (req) => lambda.fetch(req),
   },
   assets: {
     baseUrl: new URL("https://assets.printdesk.internal"),
