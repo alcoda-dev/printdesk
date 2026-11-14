@@ -692,7 +692,7 @@ export function createClient(input: ClientInput): Client {
           type: keyof T;
           properties: StandardTypedV1.InferInput<T[keyof T]>;
         }>(token, jwks, {
-          issuer,
+          issuer: options?.issuer ?? issuer,
         });
         const validated = await subjects[result.payload.type]!["~standard"].validate(
           result.payload.properties,
@@ -715,7 +715,7 @@ export function createClient(input: ClientInput): Client {
           if (refreshed.err) return refreshed;
           const verified = await result.verify(subjects, refreshed.tokens!.access, {
             refresh: refreshed.tokens!.refresh,
-            issuer,
+            issuer: options.issuer ?? issuer,
             fetch: options?.fetch,
           });
           if (verified.err) return verified;
