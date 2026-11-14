@@ -1,4 +1,5 @@
 import { identityProviders, issuer } from "./auth";
+import { hostnames } from "./dns";
 import * as lib from "./lib";
 import { aws_, cloudflare_ } from "./utils";
 
@@ -32,7 +33,15 @@ export const assets = new lib.cloudflare.Worker("Assets", {
     invalidation: { queueId: assetsInvalidationQueue.id },
     userAvatars: { queueId: userAvatarsQueue.id },
   },
-  link: [assetsBucketTemplate, aws_, cloudflare_, identityProviders, issuer, r2S3Credentials],
+  link: [
+    assetsBucketTemplate,
+    aws_,
+    cloudflare_,
+    hostnames,
+    identityProviders,
+    issuer,
+    r2S3Credentials,
+  ],
   transform: {
     worker: {
       cacheOptions: { enabled: true, crossVersionCache: true },
