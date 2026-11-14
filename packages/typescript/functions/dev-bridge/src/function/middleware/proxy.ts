@@ -29,6 +29,9 @@ export const proxy = createMiddleware<BlankInput, `/:path{.+}`>((c) =>
           ...c.req.header(),
           "CF-Access-Client-Id": config.devBridgeClientId,
           "CF-Access-Client-Secret": config.devBridgeClientSecret.pipe(Redacted.value),
+          ...(c.req.header(Constants.FORWARDED_HEADERS.HOST)
+            ? {}
+            : { [Constants.FORWARDED_HEADERS.HOST]: c.req.header("Host") }),
           [devServerPortHeaderName]: config.devServerPort,
         }).pipe(
           Effect.mapError((issue) => new Schema.SchemaError(issue)),
