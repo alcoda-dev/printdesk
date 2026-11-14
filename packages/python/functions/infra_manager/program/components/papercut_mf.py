@@ -302,6 +302,11 @@ class PapercutMf(pulumi.ComponentResource):
                     ),
                     cloudflare.WorkersScriptBindingArgs(
                         type="secret_text",
+                        name="SST_RESOURCE_Hostnames",
+                        text=pulumi.Output.secret(json.dumps(vars(Resource.Hostnames))),
+                    ),
+                    cloudflare.WorkersScriptBindingArgs(
+                        type="secret_text",
                         name="SST_RESOURCE_Issuer",
                         text=pulumi.Output.secret(json.dumps(vars(Resource.Issuer))),
                     ),
