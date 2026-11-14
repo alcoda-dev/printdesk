@@ -72,7 +72,6 @@ export const handler = Effect.fn(function* (event: typeof TenantActorFromEvent.E
             appconfigCredentialIdentityProviderLayerMap.get(actor),
           ),
         ),
-
         Layer.unwrap,
       ),
     ),
