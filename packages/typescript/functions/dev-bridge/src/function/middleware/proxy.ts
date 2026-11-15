@@ -20,7 +20,11 @@ export const proxy = createMiddleware<BlankInput, `/:path{.+}`>((c) =>
     devBridgeClientSecret: Config.Redacted(Constants.WEB_FUNCTION_ENV.DEV_BRIDGE_CLIENT_SECRET),
     devServerPort: Config.Port(Constants.WEB_FUNCTION_ENV.DEV_SERVER_PORT),
     url: Config.URL(Constants.WEB_FUNCTION_ENV.DEV_BRIDGE_WORKER_URL).pipe(
-      Config.map((url) => new URL(c.req.param("path"), url)),
+      Config.map(function (baseUrl) {
+        const url = new URL(c.req.param("path"), baseUrl);
+        url.search = new URL(c.req.url).search;
+        return url;
+      }),
     ),
   })
     .pipe(
