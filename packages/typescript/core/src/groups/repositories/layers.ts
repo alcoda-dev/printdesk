@@ -75,7 +75,7 @@ export const makeRepository = Effect.gen(function* () {
             ),
           )
           .where(and(eq(table.id, id), eq(table.tenantId, tenantId)))
-          .for("update"),
+          .for("update", { of: table }),
       )
       .pipe(Effect.filterOrFail(Array.isArrayNonEmpty)),
   );
