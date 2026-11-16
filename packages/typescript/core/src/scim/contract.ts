@@ -22,6 +22,8 @@ import { UsersContract } from "../users/contract";
 import { BooleanFromString, BulkId, EntityId, IntFromString, NonEmptyString } from "../utils";
 import { ScimLocator } from "./locator";
 
+import type * as SqlError from "effect/sql/SqlError";
+
 export namespace ScimContract {
   export const V2ResourceTypeName = Schema.Literals([
     "Schema",
@@ -1129,7 +1131,13 @@ export namespace ScimContract {
   export class V2ConflictError extends V2Error.extend<V2ConflictError>("V2ConflictError")(
     { status: StatusFromString(409) },
     { httpApiStatus: 409 },
-  ) {}
+  ) {
+    public static readonly fromUniqueViolation = (reason: SqlError.UniqueViolation) =>
+      new V2ConflictError({
+        scimType: "uniqueness",
+        detail: `The resource failed the "${reason.constraint}" constraint.`,
+      });
+  }
 
   export class V2ContentTooLargeError extends V2Error.extend<V2ContentTooLargeError>(
     "V2ContentTooLargeError",

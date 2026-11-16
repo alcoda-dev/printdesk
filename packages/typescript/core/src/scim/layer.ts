@@ -376,15 +376,11 @@ export const makeService = Effect.gen(function* () {
           );
         }),
       ),
-    (effect) =>
-      effect.pipe(
-        Effect.catchReason(
-          "SqlError",
-          "UniqueViolation",
-          (reason) =>
-            new ScimContract.V2ConflictError({ scimType: "uniqueness", detail: reason.message }),
-        ),
-      ),
+    Effect.catchReason(
+      "SqlError",
+      "UniqueViolation",
+      ScimContract.V2ConflictError.fromUniqueViolation,
+    ),
   );
 
   const replaceGroup = Effect.fn("Scim.replaceGroup")(
@@ -420,16 +416,12 @@ export const makeService = Effect.gen(function* () {
           );
         }),
       ),
-    (effect) =>
-      effect.pipe(
-        Effect.catchTag("NoSuchElementError", () => new ScimContract.V2NotFoundError()),
-        Effect.catchReason(
-          "SqlError",
-          "UniqueViolation",
-          (reason) =>
-            new ScimContract.V2ConflictError({ scimType: "uniqueness", detail: reason.message }),
-        ),
-      ),
+    Effect.catchTag("NoSuchElementError", () => new ScimContract.V2NotFoundError()),
+    Effect.catchReason(
+      "SqlError",
+      "UniqueViolation",
+      ScimContract.V2ConflictError.fromUniqueViolation,
+    ),
   );
 
   const modifyGroup = Effect.fn("Scim.modifyGroup")(
@@ -456,8 +448,7 @@ export const makeService = Effect.gen(function* () {
         Effect.catchReason(
           "SqlError",
           "UniqueViolation",
-          (reason) =>
-            new ScimContract.V2ConflictError({ scimType: "uniqueness", detail: reason.message }),
+          ScimContract.V2ConflictError.fromUniqueViolation,
         ),
       ),
   );
@@ -539,8 +530,7 @@ export const makeService = Effect.gen(function* () {
     Effect.catchReason(
       "SqlError",
       "UniqueViolation",
-      (reason) =>
-        new ScimContract.V2ConflictError({ scimType: "uniqueness", detail: reason.message }),
+      ScimContract.V2ConflictError.fromUniqueViolation,
     ),
     Effect.tap(({ user, identityProvider }) =>
       AssetsContract.UserAvatarQueueMessage.makeEffect({
@@ -567,8 +557,7 @@ export const makeService = Effect.gen(function* () {
       Effect.catchReason(
         "SqlError",
         "UniqueViolation",
-        (reason) =>
-          new ScimContract.V2ConflictError({ scimType: "uniqueness", detail: reason.message }),
+        ScimContract.V2ConflictError.fromUniqueViolation,
       ),
     ),
   );
@@ -593,11 +582,7 @@ export const makeService = Effect.gen(function* () {
         Effect.catchReason(
           "SqlError",
           "UniqueViolation",
-          (reason) =>
-            new ScimContract.V2ConflictError({
-              scimType: "uniqueness",
-              detail: reason.message,
-            }),
+          ScimContract.V2ConflictError.fromUniqueViolation,
         ),
       ),
   );
