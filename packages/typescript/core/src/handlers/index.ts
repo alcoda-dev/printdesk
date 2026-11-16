@@ -123,7 +123,7 @@ export namespace Handler {
               name: Schema.tag(handler.name),
               args: handler.Input,
               timestamp: Schema.Finite,
-              clientId: Schema.String.pipe(Schema.check(Schema.isUUID())),
+              clientId: Schema.String.check(Schema.isUUID()),
             }).pipe(Schema.encodeKeys({ clientId: "clientID" })) as {
               readonly [TName in keyof TRecord]: TName extends string
                 ? Schema.encodeKeys<

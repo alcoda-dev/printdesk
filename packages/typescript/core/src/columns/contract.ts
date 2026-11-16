@@ -6,9 +6,7 @@ import { EntityId, ShortId, Version } from "../utils";
 import { Constants } from "../utils/constants";
 
 export namespace ColumnsContract {
-  export const VarChar = Schema.Trim.pipe(
-    Schema.check(Schema.isMaxLength(Constants.VARCHAR_LENGTH)),
-  );
+  export const VarChar = Schema.Trim.check(Schema.isMaxLength(Constants.VARCHAR_LENGTH));
   export type VarChar = typeof VarChar.Type;
 
   export const Timestamp = Schema.DateTimeUtcFromString.pipe(

@@ -16,12 +16,10 @@ export namespace AwsCron {
       catch: (error) => new ParseExpressionError({ cause: error }),
     });
 
-  export const Expression = NonEmptyString.pipe(
-    Schema.check(
-      Schema.makeFilter((expression) => {
-        const result = parseExpression(expression);
-        if (Result.isFailure(result)) return result.failure.message;
-      }),
-    ),
+  export const Expression = NonEmptyString.check(
+    Schema.makeFilter((expression) => {
+      const result = parseExpression(expression);
+      if (Result.isFailure(result)) return result.failure.message;
+    }),
   );
 }

@@ -41,7 +41,7 @@ export namespace ReplicacheClientsModel {
   export class Table extends TablesContract.InternalTable<ReplicacheClientsTable>(
     "replicache_clients",
   )({
-    id: Schema.String.pipe(Schema.check(Schema.isUUID())),
+    id: Schema.String.check(Schema.isUUID()),
     tenantId: TenantId,
     clientGroupId: ReplicacheContract.ClientGroupId,
     lastMutationId: Schema.Int.pipe(

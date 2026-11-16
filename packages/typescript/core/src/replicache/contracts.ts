@@ -97,7 +97,7 @@ export namespace ReplicachePullerContract {
     schemaVersion: Schema.String,
     profileId: Schema.String,
     cookie: Cookie,
-    clientId: Schema.String.pipe(Schema.check(Schema.isUUID())),
+    clientId: Schema.String.check(Schema.isUUID()),
     lastMutationId: Schema.Int,
   }).pipe(
     Schema.encodeKeys({
@@ -236,7 +236,7 @@ export namespace ReplicachePullerContract {
   export const ResponseOkV1 = Schema.Struct({
     cookie: Cookie,
     lastMutationIdChanges: Schema.Record(
-      Schema.String.pipe(Schema.check(Schema.isUUID())),
+      Schema.String.check(Schema.isUUID()),
       Version.pipe(Schema.toType),
     ),
     patch: PatchOperation.pipe(ChunkFromArray),
@@ -281,7 +281,7 @@ export namespace ReplicachePusherContract {
 
   export const RequestV0 = Schema.Struct({
     pushVersion: Schema.tag(0),
-    clientID: Schema.String.pipe(Schema.check(Schema.isUUID())),
+    clientID: Schema.String.check(Schema.isUUID()),
     mutations: MutationV0.pipe(Schema.Array),
     profileID: Schema.String,
     schemaVersion: Schema.String,
@@ -292,7 +292,7 @@ export namespace ReplicachePusherContract {
     pushVersion: Schema.tag(1),
     clientGroupId: ReplicacheContract.ClientGroupId,
     mutations: MutationV1.pipe(Schema.Array),
-    profileId: Schema.String.pipe(Schema.check(Schema.isUUID())),
+    profileId: Schema.String.check(Schema.isUUID()),
     schemaVersion: Schema.String,
   }).pipe(Schema.encodeKeys({ clientGroupId: "clientGroupID", profileId: "profileID" }));
   export type RequestV1 = typeof RequestV1.Type;

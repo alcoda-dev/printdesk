@@ -87,11 +87,11 @@ export namespace WorkflowStatusesContract {
   export type Type = (typeof types)[number];
 
   class BaseModel extends TablesContract.BaseSyncModel.extend<BaseModel>("BaseModel")({
-    name: Schema.Trim.pipe(Schema.check(Schema.isMaxLength(Constants.VARCHAR_LENGTH))),
+    name: Schema.Trim.check(Schema.isMaxLength(Constants.VARCHAR_LENGTH)),
     type: Schema.Literals(types),
     charging: Schema.Boolean,
     color: HexColor.pipe(Schema.NullOr),
-    index: Schema.Int.pipe(Schema.check(Schema.isGreaterThanOrEqualTo(0))),
+    index: Schema.Int.check(Schema.isGreaterThanOrEqualTo(0)),
   }) {}
 
   export class RoomWorkflowModel extends BaseModel.extend<RoomWorkflowModel>("RoomWorkflow")({

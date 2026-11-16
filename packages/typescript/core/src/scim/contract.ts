@@ -1284,13 +1284,11 @@ export namespace ScimContract {
       bulkId: Schema.NonEmptyString,
       status: Schema.Struct({ code: IntFromString }),
       response: V2Error.pipe(Schema.optionalKey),
-    }).pipe(
-      Schema.check(
-        Schema.makeFilter((operation) =>
-          operation.response && operation.response.status !== operation.status.code
-            ? ["response operation error status mismatch"]
-            : [],
-        ),
+    }).check(
+      Schema.makeFilter((operation) =>
+        operation.response && operation.response.status !== operation.status.code
+          ? ["response operation error status mismatch"]
+          : [],
       ),
     ),
   ) {}

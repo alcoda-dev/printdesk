@@ -33,7 +33,7 @@ export namespace PapercutMfContract {
   )({
     protocol: Schema.Literals(["http", "https"]),
     host: Schema.Union([ApiHostNameConfig, ApiHostIpv4Config]).pipe(Schema.toTaggedUnion("_tag")),
-    port: Schema.Int.pipe(Schema.check(Schema.isGreaterThan(0), Schema.isLessThan(2 ** 16))),
+    port: Schema.Int.check(Schema.isGreaterThan(0), Schema.isLessThan(2 ** 16)),
   }) {}
 
   export class SyncConfig extends Schema.Class<SyncConfig, { readonly brand: unique symbol }>(

@@ -19,7 +19,7 @@ import { Constants } from "./constants";
 
 import type * as SchemaAST from "effect/SchemaAST";
 
-export const NanoId = Schema.String.pipe(Schema.check(Schema.isPattern(Constants.NANOID_REGEX)));
+export const NanoId = Schema.String.check(Schema.isPattern(Constants.NANOID_REGEX));
 
 export const EntityId = NanoId.pipe(Schema.brand("EntityId"));
 export type EntityId = typeof EntityId.Type;
@@ -59,7 +59,7 @@ interface _NonEmptyString extends Schema.Bottom<
 export const NonEmptyString = Schema.NonEmptyString as _NonEmptyString;
 export type NonEmptyString = typeof NonEmptyString.Type;
 
-export const Base64 = Schema.NonEmptyString.pipe(Schema.check(Schema.isBase64()));
+export const Base64 = Schema.NonEmptyString.check(Schema.isBase64());
 
 export const Separator = Schema.Literal(Constants.SEPARATOR);
 
@@ -79,15 +79,11 @@ export const separatedString = (separator = Constants.SEPARATOR) =>
 
 export const Cost = Schema.Union([Schema.Finite, Schema.FiniteFromString]);
 
-export const IsoTimestamp = Schema.String.pipe(
-  Schema.check(Schema.isPattern(Constants.ISO_TIMESTAMP_REGEX)),
-);
+export const IsoTimestamp = Schema.String.check(Schema.isPattern(Constants.ISO_TIMESTAMP_REGEX));
 
-export const IsoDate = Schema.String.pipe(Schema.check(Schema.isPattern(Constants.ISO_DATE_REGEX)));
+export const IsoDate = Schema.String.check(Schema.isPattern(Constants.ISO_DATE_REGEX));
 
-export const HexColor = Schema.String.pipe(
-  Schema.check(Schema.isPattern(Constants.HEX_COLOR_REGEX)),
-);
+export const HexColor = Schema.String.check(Schema.isPattern(Constants.HEX_COLOR_REGEX));
 
 export const StringFromUnknown = Schema.Unknown.pipe(
   Schema.decodeTo(Schema.String, {
@@ -96,7 +92,7 @@ export const StringFromUnknown = Schema.Unknown.pipe(
   }),
 );
 
-export const Ipv4 = Schema.String.pipe(Schema.check(Schema.isPattern(Constants.IPV4_REGEX)));
+export const Ipv4 = Schema.String.check(Schema.isPattern(Constants.IPV4_REGEX));
 
 export const ChunkFromArray = <TValue extends Schema.Top>(value: TValue) =>
   value.pipe(
@@ -124,7 +120,7 @@ export const BooleanFromString = Schema.String.pipe(
   }),
 );
 
-export const IntFromString = Schema.FiniteFromString.pipe(Schema.check(Schema.isInt()));
+export const IntFromString = Schema.FiniteFromString.check(Schema.isInt());
 
 export const BulkId = Schema.TemplateLiteralParser([
   Schema.Literal("bulkId:"),

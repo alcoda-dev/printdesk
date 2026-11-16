@@ -50,18 +50,16 @@ export namespace SharedAccountsContract {
         Schema.NullOr,
         Schema.withDecodingDefaultType(Effect.succeed(null)),
       ),
-    }).pipe(
-      Schema.check(
-        Schema.makeFilter((sharedAccount) => {
-          if (sharedAccount.origin === "papercut" && sharedAccount.papercutMfId === null)
-            return ["papercutMfId must be non-null."];
+    }).check(
+      Schema.makeFilter((sharedAccount) => {
+        if (sharedAccount.origin === "papercut" && sharedAccount.papercutMfId === null)
+          return ["papercutMfId must be non-null."];
 
-          if (sharedAccount.origin === "internal" && sharedAccount.papercutMfId !== null)
-            return ["papercutMfId must be null."];
+        if (sharedAccount.origin === "internal" && sharedAccount.papercutMfId !== null)
+          return ["papercutMfId must be null."];
 
-          return [];
-        }),
-      ),
+        return [];
+      }),
     ).fields,
     ["create", "read", "update", "delete"],
   ) {}

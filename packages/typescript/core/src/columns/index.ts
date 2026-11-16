@@ -58,7 +58,7 @@ export namespace Columns {
     members: ReadonlyArray<TMember>,
     length = Constants.VARCHAR_LENGTH,
   ) {
-    const Union = Schema.Literals(members).pipe(Schema.check(Schema.isMaxLength(length)));
+    const Union = Schema.Literals(members).check(Schema.isMaxLength(length));
 
     const make = customType<{ driverData: typeof Union.Encoded; data: typeof Union.Type }>({
       dataType: () => `varchar(${length})`,
