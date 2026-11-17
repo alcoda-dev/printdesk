@@ -98,7 +98,7 @@ export namespace ScimContract {
         required: true,
         caseExact: true,
         mutability: "readOnly",
-        returned: "default",
+        returned: "always",
         uniqueness: "server",
       }),
       V2SchemaAttribute.make({
@@ -243,7 +243,7 @@ export namespace ScimContract {
         required: true,
         caseExact: true,
         mutability: "readOnly",
-        returned: "default",
+        returned: "always",
         uniqueness: "server",
       }),
       V2SchemaAttribute.make({
