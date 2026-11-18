@@ -134,7 +134,7 @@ export namespace GroupsContract {
               };
             }),
           ),
-          encode: SchemaGetter.forbidden(() => "Not implemented"),
+          encode: SchemaGetter.forbiddenEncoding,
         }),
       );
     }

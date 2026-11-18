@@ -154,7 +154,7 @@ export const TenantIdFromTemplate = Schema.TemplateLiteralParser([
 ]).pipe(
   Schema.decodeTo(TenantId, {
     decode: SchemaGetter.transform(Tuple.get(1)),
-    encode: SchemaGetter.forbidden(() => "Not implemented"),
+    encode: SchemaGetter.forbiddenEncoding,
   }),
 );
 

@@ -77,7 +77,7 @@ export namespace XmlRpcContract {
           code: code.value.int,
         });
       }),
-      encode: SchemaGetter.forbidden(() => "Not implemented"),
+      encode: SchemaGetter.forbiddenEncoding,
     }),
   );
 
@@ -86,7 +86,7 @@ export namespace XmlRpcContract {
   }).pipe(
     Schema.decodeTo(Schema.Boolean, {
       decode: SchemaGetter.transform((response) => response.params.param.value.boolean === 1),
-      encode: SchemaGetter.forbidden(() => "Not implemented"),
+      encode: SchemaGetter.forbiddenEncoding,
     }),
   );
 
@@ -95,7 +95,7 @@ export namespace XmlRpcContract {
   }).pipe(
     Schema.decodeTo(Schema.Int, {
       decode: SchemaGetter.transform((response) => response.params.param.value.int),
-      encode: SchemaGetter.forbidden(() => "Not implemented"),
+      encode: SchemaGetter.forbiddenEncoding,
     }),
   );
 
@@ -118,7 +118,7 @@ export namespace XmlRpcContract {
     }).pipe(
       Schema.decodeTo(Schema.Tuple(Codecs), {
         decode: SchemaGetter.transform((response) => response.params.param.value.array.data.value),
-        encode: SchemaGetter.forbidden(() => "Not implemented"),
+        encode: SchemaGetter.forbiddenEncoding,
       }),
     );
 
@@ -139,7 +139,7 @@ export namespace XmlRpcContract {
     }).pipe(
       Schema.decodeTo(Codec.pipe(Schema.Array), {
         decode: SchemaGetter.transform((response) => response.params.param.value.array.data.value),
-        encode: SchemaGetter.forbidden(() => "Not implemented"),
+        encode: SchemaGetter.forbiddenEncoding,
       }),
     );
 
@@ -156,7 +156,7 @@ export namespace XmlRpcContract {
     }).pipe(
       Schema.decodeTo(Schema.Tuple(Codecs), {
         decode: SchemaGetter.transform((response) => response.params.param.value.struct.member),
-        encode: SchemaGetter.forbidden(() => "Not implemented"),
+        encode: SchemaGetter.forbiddenEncoding,
       }),
     );
 }

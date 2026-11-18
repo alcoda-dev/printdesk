@@ -111,7 +111,7 @@ export namespace XmlRpc {
                 ),
               ),
             ),
-            encode: SchemaGetter.forbidden(() => "Not implemented"),
+            encode: SchemaGetter.forbiddenEncoding,
           }),
           Schema.decodeEffect,
         );

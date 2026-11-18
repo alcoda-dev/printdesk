@@ -60,7 +60,7 @@ export const DsqlStatement = Schema.Trim.pipe(
 
       return statement;
     }),
-    encode: SchemaGetter.forbidden(() => "Not implemented"),
+    encode: SchemaGetter.forbiddenEncoding,
   }),
 );
 

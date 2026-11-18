@@ -25,7 +25,7 @@ export const TenantActorFromEvent = Schema.Struct({ tenantId: TenantId }).pipe(
     decode: SchemaGetter.transformEffect(({ tenantId }) =>
       ActorsContract.TenantActor.makeEffect({ id: tenantId }),
     ),
-    encode: SchemaGetter.forbidden(() => "Not implemented"),
+    encode: SchemaGetter.forbiddenEncoding,
   }),
 );
 

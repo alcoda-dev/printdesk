@@ -33,7 +33,7 @@ const FromHostname = Schema.TemplateLiteralParser([
         return slug;
       }),
     ),
-    encode: SchemaGetter.forbidden(() => "Not implemented"),
+    encode: SchemaGetter.forbiddenEncoding,
   }),
 );
 
@@ -41,7 +41,7 @@ const FromQuery = Schema.Struct({ slug: TenantsContract.Slug }).pipe(
   Schema.encodeKeys({ slug: Constants.URL_PARAM_NAMES.TENANT_SLUG }),
   Schema.decodeTo(TenantsContract.Slug, {
     decode: SchemaGetter.transform(Struct.get("slug")),
-    encode: SchemaGetter.forbidden(() => "Not implemented"),
+    encode: SchemaGetter.forbiddenEncoding,
   }),
 );
 
