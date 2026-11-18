@@ -307,7 +307,7 @@ export namespace OrdersContract {
   ]) {}
 
   export class Item extends Schema.Class<Item, { readonly brand: unique symbol }>("Item")({
-    [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantRoomIdFromString,
+    [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantRoomId.FromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.OrderShortIdFromString,
   }) {}
 

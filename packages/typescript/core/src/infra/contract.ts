@@ -16,7 +16,7 @@ export namespace InfraContract {
   )({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.InfraInput,
-    [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentIdFromString,
+    [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentId.FromString,
     [Constants.DYNAMO_KEYS.GSI1_SK]: AttributesContract.InfraInput,
     callbackId: CallbackId.pipe(Schema.OptionFromNullOr),
     papercutMfConfig: PapercutMfContract.Config,
@@ -32,7 +32,7 @@ export namespace InfraContract {
   )({
     [Constants.DYNAMO_KEYS.PK]: AttributesContract.TenantIdFromString,
     [Constants.DYNAMO_KEYS.SK]: AttributesContract.InfraOutput,
-    [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentIdFromString,
+    [Constants.DYNAMO_KEYS.GSI1_PK]: AttributesContract.TenantDeploymentId.FromString,
     [Constants.DYNAMO_KEYS.GSI1_SK]: AttributesContract.InfraOutput,
     papercutMfApiTunnelId: CloudflareContract.TunnelId.pipe(Schema.OptionFromNullOr),
     deployedAt: Schema.DateTimeUtcFromString,

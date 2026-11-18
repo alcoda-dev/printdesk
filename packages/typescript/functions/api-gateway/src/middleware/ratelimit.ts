@@ -45,9 +45,9 @@ export const ratelimit = (service: string) =>
       // oxlint-disable-next-line effecttsgo/schema-sync
       Schema.encodeSync(
         Schema.Union([
-          AttributesContract.ServiceTenantClientIdFromString,
-          AttributesContract.ServiceTenantUserIdFromString,
-          AttributesContract.ServiceIpFromString,
+          AttributesContract.ServiceTenantClientId.FromString,
+          AttributesContract.ServiceTenantUserId.FromString,
+          AttributesContract.ServiceIp.FromString,
         ]),
       ),
       (key) => resource.RateLimit.pipe(Redacted.value).limit({ key }).then(next),

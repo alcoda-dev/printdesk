@@ -35,35 +35,36 @@ export namespace AttributesContract {
 
   export class ServiceIp extends Schema.Class<ServiceIp, { readonly brand: unique symbol }>(
     "ServiceIp",
-  )({ service: Schema.String, ip: Schema.IpAddress }) {}
-  export const ServiceIpFromString = Schema.TemplateLiteralParser([
-    Service,
-    Separator,
-    Schema.String,
-    Separator,
-    Ip,
-    Separator,
-    Schema.String,
-  ]).pipe(
-    Schema.decodeTo(ServiceIp, {
-      decode: SchemaGetter.transformEffect(([, , service, , , , ip]) =>
-        NetAddress.ipFromString(ip).pipe(
-          Effect.fromResult,
-          Effect.mapError((e) => new SchemaIssue.InvalidValue({ message: e.message })),
-          Effect.map((ip) => ({ service, ip })),
+  )({ service: Schema.String, ip: Schema.IpAddress }) {
+    public static readonly FromString = Schema.TemplateLiteralParser([
+      Service,
+      Separator,
+      Schema.String,
+      Separator,
+      Ip,
+      Separator,
+      Schema.String,
+    ]).pipe(
+      Schema.decodeTo(this, {
+        decode: SchemaGetter.transformEffect(([, , service, , , , ip]) =>
+          NetAddress.ipFromString(ip).pipe(
+            Effect.fromResult,
+            Effect.mapError((e) => new SchemaIssue.InvalidValue({ message: e.message })),
+            Effect.map((ip) => ({ service, ip })),
+          ),
         ),
-      ),
-      encode: SchemaGetter.transform(({ service, ip }) => [
-        Service.literal,
-        Separator.literal,
-        service,
-        Separator.literal,
-        Ip.literal,
-        Separator.literal,
-        NetAddress.formatIp(ip),
-      ]),
-    }),
-  );
+        encode: SchemaGetter.transform(({ service, ip }) => [
+          Service.literal,
+          Separator.literal,
+          service,
+          Separator.literal,
+          Ip.literal,
+          Separator.literal,
+          NetAddress.formatIp(ip),
+        ]),
+      }),
+    );
+  }
 
   export const OrderShortIdFromString = Schema.TemplateLiteralParser([
     Order,
@@ -108,134 +109,138 @@ export namespace AttributesContract {
   export class ServiceTenantClientId extends Schema.Class<
     ServiceTenantClientId,
     { readonly brand: unique symbol }
-  >("TenantClientId")({ service: Schema.String, tenantId: TenantId, clientId: EntityId }) {}
-  export const ServiceTenantClientIdFromString = Schema.TemplateLiteralParser([
-    Service,
-    Separator,
-    Schema.String,
-    Separator,
-    Tenant,
-    Separator,
-    TenantId,
-    Separator,
-    Client,
-    Separator,
-    EntityId,
-  ]).pipe(
-    Schema.decodeTo(ServiceTenantClientId, {
-      decode: SchemaGetter.transform(([, , service, , , , tenantId, , , , clientId]) => ({
-        service,
-        tenantId,
-        clientId,
-      })),
-      encode: SchemaGetter.transform(({ service, tenantId, clientId }) => [
-        Service.literal,
-        Separator.literal,
-        service,
-        Separator.literal,
-        Tenant.literal,
-        Separator.literal,
-        TenantId.make(tenantId),
-        Separator.literal,
-        Client.literal,
-        Separator.literal,
-        EntityId.make(clientId),
-      ]),
-    }),
-  );
+  >("TenantClientId")({ service: Schema.String, tenantId: TenantId, clientId: EntityId }) {
+    public static readonly FromString = Schema.TemplateLiteralParser([
+      Service,
+      Separator,
+      Schema.String,
+      Separator,
+      Tenant,
+      Separator,
+      TenantId,
+      Separator,
+      Client,
+      Separator,
+      EntityId,
+    ]).pipe(
+      Schema.decodeTo(this, {
+        decode: SchemaGetter.transform(([, , service, , , , tenantId, , , , clientId]) => ({
+          service,
+          tenantId,
+          clientId,
+        })),
+        encode: SchemaGetter.transform(({ service, tenantId, clientId }) => [
+          Service.literal,
+          Separator.literal,
+          service,
+          Separator.literal,
+          Tenant.literal,
+          Separator.literal,
+          TenantId.make(tenantId),
+          Separator.literal,
+          Client.literal,
+          Separator.literal,
+          EntityId.make(clientId),
+        ]),
+      }),
+    );
+  }
 
   export class TenantDeploymentId extends Schema.Class<
     TenantDeploymentId,
     { readonly brand: unique symbol }
-  >("TenantDeploymentId")({ tenantId: TenantId, deploymentId: EntityId }) {}
-  export const TenantDeploymentIdFromString = Schema.TemplateLiteralParser([
-    Tenant,
-    Separator,
-    TenantId,
-    Separator,
-    Deployment,
-    Separator,
-    EntityId,
-  ]).pipe(
-    Schema.decodeTo(TenantDeploymentId, {
-      decode: SchemaGetter.transform(([, , tenantId, , , , deploymentId]) => ({
-        tenantId,
-        deploymentId,
-      })),
-      encode: SchemaGetter.transform(({ tenantId, deploymentId }) => [
-        Tenant.literal,
-        Separator.literal,
-        TenantId.make(tenantId),
-        Separator.literal,
-        Deployment.literal,
-        Separator.literal,
-        EntityId.make(deploymentId),
-      ]),
-    }),
-  );
+  >("TenantDeploymentId")({ tenantId: TenantId, deploymentId: EntityId }) {
+    public static readonly FromString = Schema.TemplateLiteralParser([
+      Tenant,
+      Separator,
+      TenantId,
+      Separator,
+      Deployment,
+      Separator,
+      EntityId,
+    ]).pipe(
+      Schema.decodeTo(this, {
+        decode: SchemaGetter.transform(([, , tenantId, , , , deploymentId]) => ({
+          tenantId,
+          deploymentId,
+        })),
+        encode: SchemaGetter.transform(({ tenantId, deploymentId }) => [
+          Tenant.literal,
+          Separator.literal,
+          TenantId.make(tenantId),
+          Separator.literal,
+          Deployment.literal,
+          Separator.literal,
+          EntityId.make(deploymentId),
+        ]),
+      }),
+    );
+  }
 
   export class TenantRoomId extends Schema.Class<TenantRoomId, { readonly brand: unique symbol }>(
     "TenantIdRoomId",
-  )({ tenantId: TenantId, roomId: EntityId }) {}
-  export const TenantRoomIdFromString = Schema.TemplateLiteralParser([
-    Tenant,
-    Separator,
-    TenantId,
-    Separator,
-    Room,
-    Separator,
-    EntityId,
-  ]).pipe(
-    Schema.decodeTo(TenantRoomId, {
-      decode: SchemaGetter.transform(([, , tenantId, , , , roomId]) => ({ tenantId, roomId })),
-      encode: SchemaGetter.transform(({ tenantId, roomId }) => [
-        Tenant.literal,
-        Separator.literal,
-        TenantId.make(tenantId),
-        Separator.literal,
-        Room.literal,
-        Separator.literal,
-        EntityId.make(roomId),
-      ]),
-    }),
-  );
+  )({ tenantId: TenantId, roomId: EntityId }) {
+    public static readonly FromString = Schema.TemplateLiteralParser([
+      Tenant,
+      Separator,
+      TenantId,
+      Separator,
+      Room,
+      Separator,
+      EntityId,
+    ]).pipe(
+      Schema.decodeTo(this, {
+        decode: SchemaGetter.transform(([, , tenantId, , , , roomId]) => ({ tenantId, roomId })),
+        encode: SchemaGetter.transform(({ tenantId, roomId }) => [
+          Tenant.literal,
+          Separator.literal,
+          TenantId.make(tenantId),
+          Separator.literal,
+          Room.literal,
+          Separator.literal,
+          EntityId.make(roomId),
+        ]),
+      }),
+    );
+  }
 
   export class ServiceTenantUserId extends Schema.Class<
     ServiceTenantUserId,
     { readonly brand: unique symbol }
-  >("TenantUserId")({ service: Schema.String, tenantId: TenantId, userId: EntityId }) {}
-  export const ServiceTenantUserIdFromString = Schema.TemplateLiteralParser([
-    Service,
-    Separator,
-    Schema.String,
-    Separator,
-    Tenant,
-    Separator,
-    TenantId,
-    Separator,
-    User,
-    Separator,
-    EntityId,
-  ]).pipe(
-    Schema.decodeTo(ServiceTenantUserId, {
-      decode: SchemaGetter.transform(([, , service, , , , tenantId, , , , userId]) => ({
-        service,
-        tenantId,
-        userId,
-      })),
-      encode: SchemaGetter.transform(({ service, tenantId, userId }) => [
-        Service.literal,
-        Separator.literal,
-        service,
-        Separator.literal,
-        Tenant.literal,
-        Separator.literal,
-        TenantId.make(tenantId),
-        Separator.literal,
-        User.literal,
-        Separator.literal,
-        EntityId.make(userId),
-      ]),
-    }),
-  );
+  >("TenantUserId")({ service: Schema.String, tenantId: TenantId, userId: EntityId }) {
+    public static readonly FromString = Schema.TemplateLiteralParser([
+      Service,
+      Separator,
+      Schema.String,
+      Separator,
+      Tenant,
+      Separator,
+      TenantId,
+      Separator,
+      User,
+      Separator,
+      EntityId,
+    ]).pipe(
+      Schema.decodeTo(this, {
+        decode: SchemaGetter.transform(([, , service, , , , tenantId, , , , userId]) => ({
+          service,
+          tenantId,
+          userId,
+        })),
+        encode: SchemaGetter.transform(({ service, tenantId, userId }) => [
+          Service.literal,
+          Separator.literal,
+          service,
+          Separator.literal,
+          Tenant.literal,
+          Separator.literal,
+          TenantId.make(tenantId),
+          Separator.literal,
+          User.literal,
+          Separator.literal,
+          EntityId.make(userId),
+        ]),
+      }),
+    );
+  }
 }
