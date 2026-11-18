@@ -5,7 +5,6 @@ import { CachedAssetsApi } from "@printdesk/core/api";
 import { AssetsContract } from "@printdesk/core/assets/contract";
 import { R2CredentialIdentityProviderLayerMap } from "@printdesk/core/aws/credential-identity/r2";
 import { CloudflareClient } from "@printdesk/core/cloudflare/client";
-import { Jose } from "@printdesk/core/crypto/jose";
 import { WorkerEntrypoint } from "cloudflare:workers";
 import * as Effect from "effect/Effect";
 import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
@@ -57,10 +56,11 @@ export class CachedAssets extends WorkerEntrypoint<Env, typeof AssetsContract.Pr
             ActorLayerMap.layerNoDeps,
             assetsS3BucketLayer,
             CloudflareClient.layer,
-            Jose.layer,
             NodeCrypto.layerDigest,
+            NodeCrypto.layerMac,
+            r2S3CredentialsLayer,
           ]),
-          Layer.provide([cloudflareLayer, NodeCrypto.layerSecureRandom, r2S3CredentialsLayer]),
+          Layer.provide([cloudflareLayer, NodeCrypto.layerSecureRandom]),
         ),
       ),
       Layer.unwrap,

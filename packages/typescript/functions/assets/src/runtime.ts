@@ -1,6 +1,5 @@
 import * as NodeCrypto from "@effect/platform-node/NodeCrypto";
 import { AssetsPresigner } from "@printdesk/core/assets/presigner";
-import { Jose } from "@printdesk/core/crypto/jose";
 import { Graph } from "@printdesk/core/graph";
 import { ImagesPresigner } from "@printdesk/core/images/presigner";
 import * as Effect from "effect/Effect";
@@ -19,11 +18,11 @@ export const memoMap = Layer.makeMemoMapUnsafe();
 export const runtime = ManagedRuntime.make(
   Layer.mergeAll(
     cloudflareLayer,
-    Jose.layer,
     entraIdClientCredentials,
     Graph.layer,
     ImagesPresigner.layer,
     NodeCrypto.layerDigest,
+    NodeCrypto.layerMac,
     NodeCrypto.layerSecureRandom,
     openauthLayer,
     SstResource.layer,

@@ -1,6 +1,9 @@
 import * as Digest from "effect/crypto/Digest";
+import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
+import * as Jwk from "effect/jose/Jwk";
+import * as Jwt from "effect/jose/Jwt";
 import * as Layer from "effect/Layer";
 import * as LayerMap from "effect/LayerMap";
 import * as Redacted from "effect/Redacted";
@@ -10,14 +13,12 @@ import * as String from "effect/String";
 import { AwsCredentialIdentityProvider, AwsCredentialIdentityProviderError } from ".";
 import { Actor, ActorLayerMap } from "../../actors";
 import { Cloudflare } from "../../cloudflare";
-import { Jose } from "../../crypto/jose";
 import { Constants } from "../../utils/constants";
 import { S3Bucket } from "../s3/bucket";
 import { S3Credentials } from "../s3/credentials";
 
 export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
   const { account } = yield* Cloudflare;
-  const jose = yield* Jose;
   const digest = yield* Digest.Digest;
 
   const s3Bucket = yield* S3Bucket;
@@ -25,20 +26,30 @@ export const makeR2CredentialIdentityProvider = Effect.gen(function* () {
 
   const textEncoder = new globalThis.TextEncoder();
 
-  const claims: Record<string, unknown> = {
-    actions: ["PutObject", "GetObject"],
-    bucket: yield* s3Bucket.name,
-    scope: "object-read-write",
-  };
-
-  const jwt = yield* jose.signJwt({
-    claims,
-    subject: account.id,
-    issuer: r2S3Credentials.accessKeyId.pipe(Redacted.value),
-    audience: yield* s3Bucket.endpoint,
-    ttl: Duration.hours(1),
-    key: textEncoder.encode(r2S3Credentials.secretAccessKey.pipe(Redacted.value)),
-  });
+  const jwt = yield* Jwt.sign(
+    Jwt.RegisteredClaims.pipe(
+      Schema.fieldsAssign({
+        actions: Schema.String.pipe(Schema.Array),
+        bucket: Schema.String,
+        scope: Schema.String,
+      }),
+    ),
+    {
+      actions: ["PutObject", "GetObject"],
+      bucket: yield* s3Bucket.name,
+      scope: "object-read-write",
+      sub: account.id,
+      iss: r2S3Credentials.accessKeyId.pipe(Redacted.value),
+      aud: yield* s3Bucket.endpoint,
+      iat: yield* DateTime.now.pipe(Effect.map(DateTime.toEpochSeconds)),
+      exp: Duration.hours(1).pipe(Duration.toSeconds),
+    },
+    yield* Jwk.importSecret(
+      Redacted.make({ kty: "oct", k: r2S3Credentials.secretAccessKey.pipe(Redacted.value) }),
+      "HS256",
+    ),
+    { typ: "JWT" },
+  ).pipe(Effect.map(Redacted.value));
 
   const secretAccessKey = yield* digest.digestHex(Digest.sha256, textEncoder.encode(jwt));
 
