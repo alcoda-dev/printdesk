@@ -56,28 +56,29 @@ export const tenantSlugValidatorMiddlewareLayer = Effect.gen(function* () {
   );
 
   return Auth.TenantSlugValidatorMiddleware.of(
-    Effect.fn(
-      function* (httpEffect) {
-        if (fromHostname)
-          return yield* httpEffect.pipe(
-            Effect.provideServiceEffect(
-              TenantSlug,
-              HttpServerRequest.HttpServerRequest.pipe(
-                Effect.map((request) => new URL(request.originalUrl).hostname),
-                Effect.flatMap(Schema.decodeUnknownEffect(FromHostname)),
-                Effect.provideContext(resourceContext),
-              ),
-            ),
-          );
-
+    Effect.fn(function* (httpEffect) {
+      if (fromHostname)
         return yield* httpEffect.pipe(
           Effect.provideServiceEffect(
             TenantSlug,
-            FromQuery.pipe(HttpServerRequest.schemaSearchParams),
+            HttpServerRequest.HttpServerRequest.pipe(
+              Effect.map((request) => new URL(request.originalUrl).hostname),
+              Effect.flatMap(Schema.decodeUnknownEffect(FromHostname)),
+              Effect.catchTag("SchemaError", () => new HttpApiError.BadRequest()),
+              Effect.provideContext(resourceContext),
+            ),
           ),
         );
-      },
-      (effect) => effect.pipe(Effect.catchTag("SchemaError", () => new HttpApiError.BadRequest())),
-    ),
+
+      return yield* httpEffect.pipe(
+        Effect.provideServiceEffect(
+          TenantSlug,
+          FromQuery.pipe(
+            HttpServerRequest.schemaSearchParams,
+            Effect.catchTag("SchemaError", () => new HttpApiError.BadRequest()),
+          ),
+        ),
+      );
+    }),
   );
 }).pipe(Layer.effect(Auth.TenantSlugValidatorMiddleware), Layer.provide(ViteResource.layer));
