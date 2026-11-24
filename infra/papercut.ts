@@ -54,7 +54,7 @@ export const papercutMfApiGatewayScriptObject = new aws.s3.BucketObjectv2(
 
 export const papercutMfApiGatewayAwsAccessKey = new lib.aws.iam.AccessKey(
   "PapercutMfApiGatewayAwsAccessKey",
-  { permissions: [issuer.permission] },
+  { permissions: issuer.getSSTLink().include },
 );
 
 export const papercutMfSync = new lib.aws.lambda.EventFunction("PapercutMfSync", {

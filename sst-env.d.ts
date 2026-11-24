@@ -14,7 +14,7 @@ declare module "sst" {
       "arn": string
       "endpointArn": string
       "roleArn": string
-      "type": "pd.awscf.LambdaWebFunction"
+      "type": "sst.aws.WebFunction"
       "url": string
     }
     "ApiGateway": import("@cloudflare/workers-types").Service
@@ -221,7 +221,7 @@ declare module "sst" {
       "arn": string
       "endpointArn": string
       "roleArn": string
-      "type": "pd.awscf.LambdaWebFunction"
+      "type": "sst.aws.WebFunction"
       "url": string
     }
     "LambdaEncryptionKey": {
@@ -299,7 +299,6 @@ declare module "sst" {
       "type": "pd.cloudflare.StaticSite"
       "url": string
     }
-    "WebFunctionDevBridgeWorker": import("@cloudflare/workers-types").Service
     "Www": {
       "type": "sst.cloudflare.TanStackStart"
       "url": string

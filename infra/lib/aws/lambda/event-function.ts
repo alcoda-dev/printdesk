@@ -1,11 +1,7 @@
 export type EventFunctionArgs = sst.aws.FunctionArgs;
 
 export class EventFunction extends sst.aws.Function {
-  public constructor(
-    name: string,
-    args: sst.aws.FunctionArgs,
-    opts?: $util.ComponentResourceOptions,
-  ) {
+  public constructor(name: string, args: EventFunctionArgs, opts?: $util.ComponentResourceOptions) {
     args.architecture ??= "arm64";
     args.runtime ??= "nodejs24.x";
 

@@ -246,9 +246,6 @@ class Resource:
     class Web:
         type: str
         url: str
-    class WebFunctionDevBridgeWorker:
-        type: str
-        url: str
     class Www:
         type: str
         url: str

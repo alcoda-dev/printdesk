@@ -91,7 +91,7 @@ export const identityProviders = new sst.Linkable("IdentityProviders", {
 
 export const issuer = new lib.aws.lambda.WebFunction("Issuer", {
   entrypoint: "packages/typescript/functions/issuer/src/index.ts",
-  dev: { port: 3000 },
+  dev: { command: "vpr dev", live: true, url: "http://localhost:3000" },
   url: { authorization: "iam" },
   link: [aws_, dsql, dynamo, environment, hmacSigningSecret, identityProviders],
   environment: {

@@ -22,7 +22,7 @@ import { bootstrapper } from "./workflows";
 
 export const api = new lib.aws.lambda.WebFunction("Api", {
   entrypoint: "packages/typescript/functions/api/src/index.ts",
-  dev: { port: 3001 },
+  dev: { command: "vpr dev", live: true, url: "http://localhost:3001" },
   url: { authorization: "iam" },
   link: [
     appconfigAllAtOnceDeploymentStrategy,
